@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "53291687012",
+    "firebase_url": "https://retrogames-nullpointer.firebaseio.com",
+    "project_id": "retrogames-nullpointer",
+    "storage_bucket": "retrogames-nullpointer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53291687012:android:3c966cbd22b2fb72431371",
+        "android_client_info": {
+          "package_name": "com.nullpointerexception.retrogames"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53291687012-ku38nhi8pdbpsaqg6jdarsl1sd7ep47d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nullpointerexception.retrogames",
+            "certificate_hash": "0e772aaad0f345bc6357778870a9ef7e3b05f0f4"
+          }
+        },
+        {
+          "client_id": "53291687012-4up0n1mq3uqln262vugtii5sjr1klat3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhPux5w54k6tN7_aMchWyMwx30rbp2ZuU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53291687012-4up0n1mq3uqln262vugtii5sjr1klat3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
