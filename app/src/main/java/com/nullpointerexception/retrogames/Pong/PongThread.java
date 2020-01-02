@@ -36,7 +36,7 @@ public class PongThread extends Thread {
     private static final int    PHYS_PADDLE_SPEED     = 8;
     private static final int    PHYS_FPS              = 60;
     //todo: Eventualmente modificare l'angolo del rimbalzo per una migliore giocabilità
-    private static final double PHYS_MAX_BOUNCE_ANGLE = 5 * Math.PI / 12; // 75 degrees in radians
+    private static final double PHYS_MAX_BOUNCE_ANGLE = 5 * Math.PI / 12; //75 degrees in radians
     private static final int    PHYS_COLLISION_FRAMES = 5;
 
     private static final String KEY_HUMAN_PLAYER_DATA    = "humanPlayer";
