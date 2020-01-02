@@ -24,4 +24,13 @@
     <string name="menu_resume">Resume</string>
     <string name="default_score">0    0</string>
 
+    <!-- Login activity -->
+    <string name="emailTextFieldHint">Email</string>
+    <string name="passwordTextFieldHint">Password</string>
+    <string name="login">Login</string>
+    <string name="login_phrase">Do you don\'t have an account?</string>
+    <string name="signIn"><u>Sign in</u></string>
+    <string name="or">OR</string>
+    <string name="signInGoogle">SIGN IN WITH GOOGLE</string>
+
 </resources>
