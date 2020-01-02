@@ -3,7 +3,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    //Pacman
+    <!-- Pacman -->
     <string name="resume">Resume</string>
     <string name="play">New Game</string>
     <string name="help">How To Play</string>
@@ -13,4 +13,15 @@
     <string name="controls">Up: Swipe Up\nDown: Swipe Down\nLeft: Swipe Left\nRight: Swipe Right\n"Pause: Hold Screen " </string>
     <string name="settingsLabel">Settings</string>
     <string name="resumeLabel">Resume</string>
+
+    <!--MainActivityPong -->
+    <string name="mode_ready">Touch to play</string>
+    <string name="mode_pause">Paused</string>
+    <string name="mode_win">Good work :-)</string>
+    <string name="mode_lose">Sorry :-(</string>
+    <string name="menu_new_game">New game</string>
+    <string name="menu_exit">Exit</string>
+    <string name="menu_resume">Resume</string>
+    <string name="default_score">0    0</string>
+
 </resources>
