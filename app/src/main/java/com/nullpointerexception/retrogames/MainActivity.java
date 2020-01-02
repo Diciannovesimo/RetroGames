@@ -12,7 +12,6 @@ import com.nullpointerexception.retrogames.Pacman.MainActivityPacman;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.SpaceInvaders.MainActivitySpaceInvaders;
 import com.nullpointerexception.retrogames.Tetris.Tetris;
-import com.nullpointerexception.retrogames.Tetris.TetrisCtrl;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -27,22 +27,17 @@
             android:screenOrientation="portrait" >
         </activity>
 
-        <activity
-            android:name=".Pacman.MainActivityPacman"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".Pacman.HelpActivity"/>
-        <activity android:name=".Pacman.PlayActivity"/>
-        <activity android:name=".Pacman.PauseActivity"/>
-        <service android:name=".Pacman.BackgroundMusicService"/>
-
 
         <activity android:name=".Breakout.GameActivity" />
         <activity android:name=".Breakout.MainActivityBreakout" />
         <activity
             android:name=".Breakout.Scoreboard"
             android:parentActivityName=".Breakout.MainActivityBreakout" />
+
+        <activity
+            android:name=".Pacman.MainActivityPacman"
+            android:label="@string/app_name" >
+        </activity>
 
 
     </application>
