@@ -19,8 +19,6 @@
 
         <activity android:name=".Tetris.Tetris" />
 
-        <activity android:screenOrientation="landscape" android:configChanges="orientation" android:name=".Pong.MainActivityPong" />
-
         <activity
             android:name=".SpaceInvaders.MainActivitySpaceInvaders"
             android:configChanges="orientation|keyboardHidden"
