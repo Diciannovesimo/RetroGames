@@ -1,53 +1,36 @@
 package com.nullpointerexception.retrogames.Pacman;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.Matrix;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nullpointerexception.retrogames.R;
 
-import org.w3c.dom.Text;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.sql.SQLOutput;
-import java.sql.Wrapper;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.StringTokenizer;
@@ -166,15 +149,15 @@ public class MainActivityPacman extends Activity implements View.OnTouchListener
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //rotacion
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_pacman);
 
         soundPool=new SoundPool(8,AudioManager.STREAM_MUSIC,0);
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 
 
-        image_menu=(ImageView) findViewById(R.id.image_menu);
-        animacion_next=(ImageView)findViewById(R.id.animacion_next);
+        image_menu= findViewById(R.id.image_menu);
+        animacion_next = findViewById(R.id.animacion_next);
         Frame_Generic=(FrameLayout) findViewById(R.id.Frame_Generic);
         Frame_level=(FrameLayout) findViewById(R.id.Frame_level);
         FrameScore=(FrameLayout) findViewById(R.id.FrameScore);
@@ -205,20 +188,20 @@ public class MainActivityPacman extends Activity implements View.OnTouchListener
         btBack = (Button) findViewById(R.id.btBack);
         btPlay = (Button) findViewById(R.id.btPlay);
         btPause = (Button) findViewById(R.id.btPause);
-        Grid=(GridLayout) findViewById(R.id.Grid);
-        Point=(TextView) findViewById(R.id.Point);
-        Next=(ImageView)findViewById(R.id.Next);
-        pac1=(ImageView)findViewById(R.id.pac1);
-        pac2=(ImageView)findViewById(R.id.pac2);
-        pac3=(ImageView)findViewById(R.id.pac3);
-        pac4=(ImageView)findViewById(R.id.pac4);
-        pac5=(ImageView)findViewById(R.id.pac5);
-        pac6=(ImageView)findViewById(R.id.pac6);
-        fruit1=(ImageView)findViewById(R.id.fruit1);
-        fruit2=(ImageView)findViewById(R.id.fruit2);
-        fruit3=(ImageView)findViewById(R.id.fruit3);
-        fruit4=(ImageView)findViewById(R.id.fruit4);
-        btOk=(Button)findViewById(R.id.btOk);
+        Grid = (GridLayout) findViewById(R.id.Grid);
+        Point = (TextView) findViewById(R.id.Point);
+        Next =(ImageView)findViewById(R.id.Next);
+        pac1 = (ImageView)findViewById(R.id.pac1);
+        pac2 = (ImageView)findViewById(R.id.pac2);
+        pac3 = (ImageView)findViewById(R.id.pac3);
+        pac4 = (ImageView)findViewById(R.id.pac4);
+        pac5 = (ImageView)findViewById(R.id.pac5);
+        pac6 = (ImageView)findViewById(R.id.pac6);
+        fruit1 =(ImageView)findViewById(R.id.fruit1);
+        fruit2 = (ImageView)findViewById(R.id.fruit2);
+        fruit3 = (ImageView)findViewById(R.id.fruit3);
+        fruit4 = (ImageView)findViewById(R.id.fruit4);
+        btOk = (Button)findViewById(R.id.btOk);
         animacion_next.setBackgroundResource(R.drawable.animacion_next);
         savingAnimation=(AnimationDrawable)animacion_next.getBackground();
         savingAnimation.start();

@@ -2,12 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Esame android/1 - Tetris" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Esame android/2 - Pong-Android" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Esame android/3 - android-space-invaders" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Esame android/4 - PacmanAndroid" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/Esame android/5 - Asteroid" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/versioni/7/trunk" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/versioni/8/trunk" vcs="Git" />
   </component>
 </project>
