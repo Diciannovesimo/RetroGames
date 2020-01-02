@@ -7,6 +7,8 @@
     android:background="@drawable/background_green"
     tools:context=".Welcome.Class_welcome">
 
+    <!-- TODO: mettere un immage view rotonda-->
+
     <Button
         android:id="@+id/button_login_first"
         android:layout_width="108dp"
