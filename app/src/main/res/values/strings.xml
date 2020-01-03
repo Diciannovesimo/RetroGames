@@ -34,4 +34,15 @@
     <string name="first_access_info">By logging in you can share your scores and compete with the network in the ranking</string>
     <string name="continue_without_logging_in"><u>Continue without logging in</u></string>
 
+    <!--Fragment_Home-->
+    <string name="tetris">Tetris</string>
+    <string name="highscore">Highscore:</string>
+    <string name="games">Games</string>
+    <string name="textview">TextView</string>
+    <string name="play_game">Play!</string>
+    <string name="pac_man">PAC-MAN</string>
+    <string name="pac_man">PAC-MAN</string>
+    <string name="pong">Pong</string>
+    <string name="space_invaders">Space Invaders</string>
+    <string name="brick_breaker">Brick-breaker</string>
 </resources>
