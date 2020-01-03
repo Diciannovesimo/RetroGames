@@ -24,4 +24,14 @@
     <string name="menu_resume">Resume</string>
     <string name="default_score">0    0</string>
 
+    <!--Fragment_welcome-->
+    <string name="next">Next</string>
+    <string name="welcome">Welcome!</string>
+    <string name="welcome_info">In RetroGames you have all your favorite arcade video games handly smartphone.</string>
+
+    <!--Fragment_first_access-->
+    <string name="login">Login</string>
+    <string name="first_access_info">by logging in you can share your scores and compete with the network in the ranking</string>
+    <string name="continue_without_logging_in"><u>continue without logging in</u></string>
+
 </resources>

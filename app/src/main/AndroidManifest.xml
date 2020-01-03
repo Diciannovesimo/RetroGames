@@ -11,39 +11,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".Welcome.Class_welcome"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".Tetris.Tetris" />
-
         <activity
             android:name=".SpaceInvaders.MainActivitySpaceInvaders"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" >
-        </activity>
-
-
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".Breakout.GameActivity" />
         <activity android:name=".Breakout.MainActivityBreakout" />
         <activity
             android:name=".Breakout.Scoreboard"
             android:parentActivityName=".Breakout.MainActivityBreakout" />
-
         <activity
             android:name=".Pacman.MainActivityPacman"
-            android:label="@string/app_name" >
-        </activity>
-
-        <activity android:name=".Pong.MainActivityPong"
-            android:theme="@android:style/Theme.NoTitleBar"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name=".Pong.MainActivityPong"
+            android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
-            android:configChanges="keyboardHidden|orientation">
-        </activity>
-
+            android:theme="@android:style/Theme.NoTitleBar"></activity>
     </application>
 
 </manifest>
