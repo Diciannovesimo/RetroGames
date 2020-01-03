@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         btnPacman = findViewById(R.id.button5);
         btnBreakout = findViewById(R.id.button6);
 
+        provaDatabase();
 
         btnTetris.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,4 +75,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void provaDatabase() {
+
+
+        //Scrittura sul database
+        BackEndInterface.get().writeScoreFirebase(App.PACMAN,"ilmatty98", 10, 50);
+        BackEndInterface.get().writeScoreFirebase(App.PACMAN,"diciannovesimo", 20, 70);
+        BackEndInterface.get().writeScoreFirebase(App.PACMAN,"sgrulu", 30, 50);
+        BackEndInterface.get().writeScoreFirebase(App.PACMAN,"cioscos", 40, 50);
+
+        BackEndInterface.get().writeScoreFirebase(App.TETRIS,"ilmatty98", 50, 50);
+        BackEndInterface.get().writeScoreFirebase(App.TETRIS,"diciannovesimo", 60, 50);
+        BackEndInterface.get().writeScoreFirebase(App.TETRIS,"sgrulu", 70, 50);
+        BackEndInterface.get().writeScoreFirebase(App.TETRIS,"cioscos", 80, 50);
+
+        BackEndInterface.get().writeScoreFirebase(App.PONG,"ilmatty98", 90, 50);
+        BackEndInterface.get().writeScoreFirebase(App.PONG,"diciannovesimo", 100, 50);
+        BackEndInterface.get().writeScoreFirebase(App.PONG,"sgrulu", 110, 50);
+        BackEndInterface.get().writeScoreFirebase(App.PONG,"cioscos", 120, 50);
+
+        BackEndInterface.get().writeScoreFirebase(App.SPACEINVADERS,"ilmatty98", 130, 50);
+        BackEndInterface.get().writeScoreFirebase(App.SPACEINVADERS,"diciannovesimo", 140, 50);
+        BackEndInterface.get().writeScoreFirebase(App.SPACEINVADERS,"sgrulu", 150, 50);
+        BackEndInterface.get().writeScoreFirebase(App.SPACEINVADERS,"cioscos", 160, 50);
+
+        BackEndInterface.get().writeScoreFirebase(App.BREAKOUT,"ilmatty98", 170, 500);
+        BackEndInterface.get().writeScoreFirebase(App.BREAKOUT,"diciannovesimo", 180, 506);
+        BackEndInterface.get().writeScoreFirebase(App.BREAKOUT,"sgrulu", 190, 508);
+        BackEndInterface.get().writeScoreFirebase(App.BREAKOUT,"cioscos", 200, 510);
+
+
+
+        //Leggo lo score di un singolo giocatore in un determinato gioco o ne,la
+        BackEndInterface.get().readScoreFirebase(App.BREAKOUT, "ilmatty98", new BackEndInterface.OnDataReceivedListener() {
+            @Override
+            public void onDataReceived(boolean success, long value) {
+                Toast.makeText(getApplicationContext(), String.valueOf(value), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+
 }
