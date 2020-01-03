@@ -15,17 +15,17 @@ import com.nullpointerexception.retrogames.R;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    Button next;
-    Button login;
+    private FragmentManager fm;
+    private FragmentTransaction tx;
 
-    FragmentManager fm = getSupportFragmentManager();
-    FragmentTransaction tx = fm.beginTransaction();
-    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        fm = getSupportFragmentManager();
+        tx = fm.beginTransaction();
 
         // Primo fragment
         WelcomeFragment welcome = new WelcomeFragment();
@@ -33,31 +33,8 @@ public class WelcomeActivity extends AppCompatActivity {
         tx.add(R.id.fragment , welcome);
         tx.commit();
 
-        //TODO Per Luca perchè io non ho voglia di aggiustarlo e perdere tempo
-        next = findViewById(R.id.button_welcome);
-
-
-        next.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Secondo fragment
-                FragmentFirstAccessActivity first_access = new FragmentFirstAccessActivity();
-
-                tx.add(R.id.fragment,first_access);
-                tx.commit();
-            }
-        });
-
-        login = findViewById(R.id.button_login_first);
-
-        // Passo ad un'altra activity
-        login.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                intent = new Intent(WelcomeActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
     }
+
+
+
 }
