@@ -41,8 +41,15 @@
     <string name="textview">TextView</string>
     <string name="play_game">Play!</string>
     <string name="pac_man">PAC-MAN</string>
-    <string name="pac_man">PAC-MAN</string>
     <string name="pong">Pong</string>
     <string name="space_invaders">Space Invaders</string>
     <string name="brick_breaker">Brick-breaker</string>
+
+    <!-- Login activity -->
+    <string name="emailTextFieldHint">Email</string>
+    <string name="passwordTextFieldHint">Password</string>
+    <string name="login_phrase">Do you don\'t have an account?</string>
+    <string name="signIn"><u>Sign in</u></string>
+    <string name="or">OR</string>
+    <string name="signInGoogle">SIGN IN WITH GOOGLE</string>
 </resources>
