@@ -14,10 +14,11 @@ import com.nullpointerexception.retrogames.Pacman.MainActivityPacman;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.SpaceInvaders.MainActivitySpaceInvaders;
 import com.nullpointerexception.retrogames.Tetris.Tetris;
+import com.nullpointerexception.retrogames.Welcome.WelcomeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnTetris, btnPong, btnSpaceInvaders, btnPacman, btnBreakout, btnLogin;
+    private Button btnTetris, btnPong, btnSpaceInvaders, btnPacman, btnBreakout, btnLogin, btnWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         btnPacman = findViewById(R.id.button5);
         btnBreakout = findViewById(R.id.button6);
         btnLogin = findViewById(R.id.login_btn);
+        btnWelcome = findViewById(R.id.button7);
 
         provaDatabase();
 
@@ -77,10 +79,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        btnWelcome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
                 startActivity(intent);
             }
         });

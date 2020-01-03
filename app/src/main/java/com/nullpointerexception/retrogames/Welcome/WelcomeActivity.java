@@ -33,7 +33,7 @@ public class WelcomeActivity extends AppCompatActivity {
         tx.add(R.id.fragment , welcome);
         tx.commit();
 
-        //TODO Per Luca
+        //TODO Per Luca perchè io non ho voglia di aggiustarlo e perdere tempo
         next = findViewById(R.id.button_welcome);
 
 
