@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private void provaDatabase() {
 
 
-        //Scrittura sul database
+        //Scrittura sul database dello score
         BackEndInterface.get().writeScoreFirebase(App.PACMAN,"ilmatty98", 10, 50);
         BackEndInterface.get().writeScoreFirebase(App.PACMAN,"diciannovesimo", 20, 70);
         BackEndInterface.get().writeScoreFirebase(App.PACMAN,"sgrulu", 30, 50);
@@ -106,16 +106,31 @@ public class MainActivity extends AppCompatActivity {
         BackEndInterface.get().writeScoreFirebase(App.BREAKOUT,"sgrulu", 190, 508);
         BackEndInterface.get().writeScoreFirebase(App.BREAKOUT,"cioscos", 200, 510);
 
-
-
-        //Leggo lo score di un singolo giocatore in un determinato gioco o ne,la
-        BackEndInterface.get().readScoreFirebase(App.BREAKOUT, "ilmatty98", new BackEndInterface.OnDataReceivedListener() {
+        //Leggo lo score di un singolo giocatore in un determinato gioco o il suo totalscore
+        BackEndInterface.get().readScoreFirebase(App.TOTALSCORE, "ilmatty98", new BackEndInterface.OnDataReceivedListener() {
             @Override
-            public void onDataReceived(boolean success, long value) {
-                Toast.makeText(getApplicationContext(), String.valueOf(value), Toast.LENGTH_SHORT).show();
+            public void onDataReceived(boolean success, String value) {
+                Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
             }
+
         });
 
+
+
+
+
+        //Scrittura sul database di un user
+        BackEndInterface.get().writeUser("ilmatty98s@gmail.com","ilMatty98");
+        BackEndInterface.get().writeUser("cicacica98@gmail.com","Cischi98");
+        BackEndInterface.get().writeUser("slab98@gmail.com","sLab98");
+
+        //Leggo il nickname di un determinato giocatore
+        BackEndInterface.get().readUser("cicacica98@gmail.com", new BackEndInterface.OnDataReceivedListener() {
+            @Override
+            public void onDataReceived(boolean success, String value) {
+                Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 

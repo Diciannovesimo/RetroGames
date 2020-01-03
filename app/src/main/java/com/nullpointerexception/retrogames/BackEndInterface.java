@@ -1,8 +1,6 @@
 package com.nullpointerexception.retrogames;
 
-import android.app.DatePickerDialog;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +11,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 
 public class BackEndInterface{
 
@@ -55,7 +54,7 @@ public class BackEndInterface{
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Write failed
-                        Log.d("writeFirebase", "Elemento non scritto");
+                        Log.d("writeScoreFirebase", "Elemento non scritto");
                     }
                 });
 
@@ -72,7 +71,7 @@ public class BackEndInterface{
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Write failed
-                        Log.d("writeFirebase", "Elemento non scritto");
+                        Log.d("writeScoreFirebase", "Elemento non scritto");
                     }
                 });
     }
@@ -91,17 +90,85 @@ public class BackEndInterface{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 long value = dataSnapshot.getValue(Long.class);
                 if(listener != null)
-                    listener.onDataReceived(true, value);
+                    listener.onDataReceived(true, String.valueOf(value));
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
                 if(listener != null)
-                    listener.onDataReceived(false, -1);
+                    listener.onDataReceived(false, String.valueOf(-1));
             }
         });
 
+    }
+
+    /**
+     * Scrivi sul database il nickname dell'utente
+     * @param email stringa contenente l'email che l'utente ha utilizzato per la registrazione
+     * @param nickname stringa contenente il nickname scelto dall'utente durante la registrazione
+     */
+    public void writeUser(String email, String nickname) {
+        String newEmail = changeChars(email,'.', '%');
+        myRef = database.getReference(App.USER).child(newEmail);
+        myRef.setValue(nickname)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Write was successful!
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Write failed
+                        Log.d("writeUserFirebase", "Elemento non scritto");
+                    }
+                });
+    }
+
+
+    /**
+     * Legge sul database il nickname di un giocatore
+     * @param email stringa contenente l'email dell'utente da cui si vuole recuperare la stringa
+     * @param listener definizione delle operazioni da compiere una volta ricevuto il dato
+     */
+    public void readUser(String email, final OnDataReceivedListener listener) {
+        String newEmail = changeChars(email,'.', '%');
+        myRef = database.getReference(App.USER).child(newEmail);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String nickname = dataSnapshot.getValue(String.class);
+                if(listener != null)
+                    listener.onDataReceived(true, nickname);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                if(listener != null)
+                    listener.onDataReceived(true, "");
+            }
+        });
+    }
+
+    /**
+     * Sostituisce un carattere della stringa con uno nuovo
+     * @param input stringa in input da modificare
+     * @param toRemove carattere da togliere
+     * @param nuovo carattere nuovo da inserire al posto di quello da rimuovere
+     * @return restiruisce la nuova stringa con i caratteri sostituiti
+     */
+    private String changeChars(String input, char toRemove, char nuovo) {
+        String output = "";
+        for(int i = 0; i < input.length(); i++){
+            if(input.charAt(i) == toRemove)
+                output += nuovo;
+            else
+                output += input.charAt(i);
+        }
+        return output;
     }
 
 
@@ -110,7 +177,7 @@ public class BackEndInterface{
      * una volta ricevuto il dato da Firebase
      */
     public interface OnDataReceivedListener {
-        void onDataReceived(boolean success, long value);
+        void onDataReceived(boolean success, String value);
     }
 
 }

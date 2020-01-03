@@ -7,4 +7,5 @@ public class App {
     static final String SPACEINVADERS = "spaceInvaders";
     static final String TETRIS = "tetris";
     static final String TOTALSCORE = "totalscore";
+    static final String USER = "user";
 }
