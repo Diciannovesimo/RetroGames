@@ -76,9 +76,8 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), currentUser.getEmail()
                                         + currentUser.getId(), Toast.LENGTH_LONG).show();
                                             //showUserInfo();
-                                        }else{
+                                        }else
                                             Log.i("claudio", "errore nel log in");
-                                        }
                                     }
                                 });
                     } else {

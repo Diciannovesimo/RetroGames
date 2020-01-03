@@ -4,9 +4,6 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *      User
  *
@@ -23,9 +20,7 @@ public class User
     /** URL of profile picture */
     profileImageUrl,
     /** Name of user */
-    name,
-    /** Surname of user */
-    surname;
+    displayName;
 
     public User() {}
 
@@ -34,6 +29,7 @@ public class User
     {
         id = user.getUid();
         email = user.getEmail();
+        displayName = user.getDisplayName();
 
         if(user.getPhotoUrl() != null)
             profileImageUrl = user.getPhotoUrl().toString();
@@ -52,35 +48,14 @@ public class User
     /**
      *      @return Return name and surname concatenated
      */
-    public String getDisplayName()
-    {
-        return name + " " + surname;
-    }
 
     public String getProfileImageUrl()
     {
         return profileImageUrl;
     }
 
-    public void setProfileImageUrl(String profileImageUrl)
-    {
+    public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public void setId(String id) {
@@ -95,22 +70,6 @@ public class User
     public String getFieldId()
     {
         return id;
-    }
-
-    public Map<String, String> getSubFields()
-    {
-        Map<String, String> map = new HashMap<>();
-
-        String displayName = getDisplayName();
-        String imageUrl = getProfileImageUrl();
-
-        if(displayName != null)
-            map.put("displayName", displayName);
-
-        if(imageUrl != null)
-            map.put("profileImageUrl", imageUrl);
-
-        return map;
     }
 
     public void restoreId(String id)
