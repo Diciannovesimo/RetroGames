@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.nullpointerexception.retrogames.R;
 
 
-public class Fragment_welcome extends Fragment {
+public class WelcomeFragment extends Fragment {
 
 
     @Override

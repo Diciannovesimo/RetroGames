@@ -13,7 +13,7 @@ import android.widget.Button;
 import com.nullpointerexception.retrogames.MainActivity;
 import com.nullpointerexception.retrogames.R;
 
-public class Class_welcome extends AppCompatActivity {
+public class WelcomeActivity extends AppCompatActivity {
 
     Button next;
     Button login;
@@ -28,7 +28,7 @@ public class Class_welcome extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         // Primo fragment
-        Fragment_welcome welcome = new Fragment_welcome();
+        WelcomeFragment welcome = new WelcomeFragment();
 
         tx.add(R.id.fragment , welcome);
         tx.commit();
@@ -41,7 +41,7 @@ public class Class_welcome extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Secondo fragment
-                Fragment_first_access first_access = new Fragment_first_access();
+                FragmentFirstAccessActivity first_access = new FragmentFirstAccessActivity();
 
                 tx.add(R.id.fragment,first_access);
                 tx.commit();
@@ -55,7 +55,7 @@ public class Class_welcome extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                intent = new Intent(Class_welcome.this, MainActivity.class);
+                intent = new Intent(WelcomeActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });

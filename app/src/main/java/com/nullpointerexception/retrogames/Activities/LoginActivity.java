@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.nullpointerexception.retrogames.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.Components.User;
@@ -113,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if(result){
                                         Log.i("claudio", "Loggato con successo");
                                         currentUser = AuthenticationManager.get().getUserLogged();
+                                        BackEndInterface.get().writeUser(currentUser.getEmail(), currentUser.getDisplayName());
                                     }else
                                         Log.i("claudio", "errore nel log in");
                                 }

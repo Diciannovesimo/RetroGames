@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".Welcome.Class_welcome" />
+        <activity android:name=".Welcome.WelcomeActivity" />
 
         <activity android:name=".Activities.LoginActivity" />
 

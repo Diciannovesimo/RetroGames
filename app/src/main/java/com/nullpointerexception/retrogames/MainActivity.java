@@ -130,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Scrittura sul database di un user
-        BackEndInterface.get().writeUser("ilmatty98s@gmail.com","ilMatty98");
-        BackEndInterface.get().writeUser("cicacica98@gmail.com","Cischi98");
+     //   BackEndInterface.get().writeUser("ilmatty98s@gmail.com","ilMatty98");
+     //   BackEndInterface.get().writeUser("cicacica98@gmail.com","Cischi98");
         BackEndInterface.get().writeUser("slab98@gmail.com","sLab98");
 
         //Leggo il nickname di un determinato giocatore

@@ -14,12 +14,15 @@ import com.google.firebase.auth.FirebaseUser;
 public class User
 {
     /**  Id of account (generally provided by FireBase)   */
-    protected String id,
-    /** Email of account */
-    email,
-    /** URL of profile picture */
-    profileImageUrl,
-    /** Name of user */
+    protected String id;
+    protected String /** Email of account */
+    email;
+    protected String /** URL of profile picture */
+    profileImageUrl;
+
+
+
+    protected String /** Name of user */
     displayName;
 
     public User() {}
@@ -76,5 +79,10 @@ public class User
     {
         this.id = id;
     }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
 
 }

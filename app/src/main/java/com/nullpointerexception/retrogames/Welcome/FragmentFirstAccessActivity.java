@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import com.nullpointerexception.retrogames.R;
 
 
-public class Fragment_first_access extends Fragment {
+public class FragmentFirstAccessActivity extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
