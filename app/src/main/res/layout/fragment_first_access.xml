@@ -7,25 +7,34 @@
     android:background="@drawable/background_green"
     tools:context=".Welcome.Class_welcome">
 
-    <!-- TODO: mettere un immage view rotonda-->
+    <ImageView
+        android:id="@+id/imageLogin"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="64dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/login_icon" />
 
     <Button
         android:id="@+id/button_login_first"
         android:layout_width="108dp"
         android:layout_height="44dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="64dp"
         android:background="@drawable/roundedbutton"
         android:text="@string/login"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_info_first" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_info_first"
+        android:elevation="4dp"/>
 
     <TextView
         android:id="@+id/textView_log_first"
         android:layout_width="204dp"
         android:layout_height="60dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="64dp"
         android:alpha="0.87"
         android:gravity="center"
         android:text="@string/login"
@@ -33,13 +42,13 @@
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageLogin"/>
 
     <TextView
         android:id="@+id/textView_info_first"
         android:layout_width="279dp"
         android:layout_height="76dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="32dp"
         android:alpha="0.87"
         android:gravity="center"
         android:text="@string/first_access_info"
@@ -53,7 +62,7 @@
         android:id="@+id/textView_dont_log_first"
         android:layout_width="284dp"
         android:layout_height="48dp"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="64dp"
         android:alpha="0.87"
         android:gravity="center"
         android:text="@string/continue_without_logging_in"
@@ -64,10 +73,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_login_first" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
 </androidx.constraintlayout.widget.ConstraintLayout>
