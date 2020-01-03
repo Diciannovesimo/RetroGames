@@ -1,6 +1,5 @@
 package com.nullpointerexception.retrogames.Activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.Components.User;
@@ -29,17 +27,14 @@ public class LoginActivity extends AppCompatActivity {
     private Button mLogin;
     private TextView mSignin;
     private View googleSignInButton;
-
-    private FirebaseAuth auth;
+    
     private User currentUser;
-    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        context = getApplicationContext();
         AuthenticationManager.LoginAttempt loginAttempt = AuthenticationManager.get().initialize(this);
 
         if(loginAttempt != null)
