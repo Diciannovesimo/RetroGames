@@ -25,11 +25,7 @@ public class User
     /** Name of user */
     name,
     /** Surname of user */
-    surname,
-    /** Birth date of user */
-    dateBirth,
-    /** Phone number of user */
-    phoneNumber;
+    surname;
 
     public User() {}
 
@@ -38,28 +34,9 @@ public class User
     {
         id = user.getUid();
         email = user.getEmail();
-        phoneNumber = user.getPhoneNumber();
-        if(user.getDisplayName() != null)
-        {
-            if(user.getDisplayName().contains(" "))
-            {
-                name = user.getDisplayName().substring(0, user.getDisplayName().indexOf(" "));
-                surname = user.getDisplayName().substring(user.getDisplayName().indexOf(" ")+1);
-            }
-            else
-            {
-                name = user.getDisplayName();
-                surname = "";
-            }
-        }
 
         if(user.getPhotoUrl() != null)
-        {
             profileImageUrl = user.getPhotoUrl().toString();
-
-            if(profileImageUrl.contains("facebook"))
-                profileImageUrl += "?type=large";
-        }
     }
 
     public String getEmail()
@@ -104,22 +81,6 @@ public class User
 
     public void setSurname(String surname) {
         this.surname = surname;
-    }
-
-    public String getDateBirth() {
-        return dateBirth;
-    }
-
-    public void setDateBirth(String dateBirth) {
-        this.dateBirth = dateBirth;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     public void setId(String id) {
