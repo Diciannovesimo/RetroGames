@@ -74,11 +74,10 @@ public class LoginActivity extends AppCompatActivity {
                                         if(result){
                                             Log.i("claudio", "Loggato con successo");
                                             currentUser = AuthenticationManager.get().getUserLogged();
-                                        Toast.makeText(getApplicationContext(), currentUser.getEmail()
-                                        + currentUser.getId(), Toast.LENGTH_LONG).show();
-                                            //showUserInfo();
+                                            Toast.makeText(getApplicationContext(), "Loggato con successo", Toast.LENGTH_LONG).show();
                                         }else
                                             Log.i("claudio", "errore nel log in");
+                                            Toast.makeText(getApplicationContext(), "Errore nel login", Toast.LENGTH_LONG).show();
                                     }
                                 });
                     } else {
@@ -95,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!mBlocker.block()) {
-
+                    startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
                 }
             }
         });

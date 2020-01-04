@@ -117,7 +117,7 @@ public class AuthenticationManager
                         if (task.isSuccessful())
                         {
                             //  Check if user exists and if it's verified
-                            if(auth.getCurrentUser() != null /*&& auth.getCurrentUser().isEmailVerified()*/)
+                            if(auth.getCurrentUser() != null && auth.getCurrentUser().isEmailVerified())
                             {
                                 //  Set current user
                                 currentUser = new User(auth.getCurrentUser());
