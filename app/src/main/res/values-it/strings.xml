@@ -1,4 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Retro Games</string>
+    <string name="registration_title">Nuovo account</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="confirm_password">Conferma Password</string>
+    <string name="continue_without_logging_in"><u>Continua senza registrazione</u></string>
+    <string name="controls">Su: Scorri verso l\'alto: Scorri verso sinistra: Scorri verso sinistra Destra: Scorri verso destra Pausa: Mantieni schermo</string>
+    <string name="controlsLabel">CONTROLLI</string>
+    <string name="first_access_info">Effettuando il login puoi condividere i tuoi punteggi e competere con la rete in classifica.</string>
+    <string name="games">Giochi</string>
+    <string name="help">Come giocare</string>
+    <string name="highscore">Miglior punteggio:</string>
+    <string name="howToPlay">Pacman, il nostro eroe, sgranocchia tutto andando in giro per la mappa, mangiando tutti i thedots. Tuttavia, la vita non è facile per il nostro giovane piccolo eroe. Durante il suo viaggio, affronta fantasmi spettrali che cercheranno di fargli del male. Evitali! In ogni angolo della mappa c\'è un pallino di potenza. Se Pacman mangia una pallina di potere, ottiene temporaneamente il potere di mangiare i nemici.</string>
+    <string name="howToPlayLabel">COME GIOCARE</string>
+    <string name="login">Accesso</string>
+    <string name="login_phrase">Non hai un account?</string>
+    <string name="menu_exit">Esci</string>
+    <string name="menu_new_game">Nuovo gioco</string>
+    <string name="menu_resume">Riprendi</string>
+    <string name="mode_lose">Scusa :-(</string>
+    <string name="mode_pause">Gioco in pausa</string>
+    <string name="mode_ready">Tocca per giocare</string>
+    <string name="mode_win">Buon lavoro :-)</string>
+    <string name="next">Prossimo</string>
+    <string name="or">O</string>
+    <string name="play">Nuovo gioco</string>
+    <string name="play_game">Gioca!</string>
+    <string name="register">Registrati</string>
+    <string name="resume">Riprendi</string>
+    <string name="resumeLabel">Riprendi</string>
+    <string name="settingsLabel">Impostazioni</string>
+    <string name="signIn"><u>Registrati</u></string>
+    <string name="signInGoogle" translatable="false">REGISTRATI CON GOOGLE</string>
+    <string name="welcome">Benvenuto!</string>
+    <string name="welcome_info">In RetroGames hai tutti i tuoi videogiochi arcade preferiti sul tuo smartphone.</string>
 </resources>
