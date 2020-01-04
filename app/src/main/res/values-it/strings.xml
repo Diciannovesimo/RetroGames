@@ -34,4 +34,13 @@
     <string name="signInGoogle" translatable="false">REGISTRATI CON GOOGLE</string>
     <string name="welcome">Benvenuto!</string>
     <string name="welcome_info">In RetroGames hai tutti i tuoi videogiochi arcade preferiti sul tuo smartphone.</string>
+    <string name="global_ranking"># in classifica globale</string>
+    <string name="logout_img">immagine di logout</string>
+    <string name="name">Nome</string>
+    <string name="position"># posto</string>
+    <string name="profile">Profilo</string>
+    <string name="profile_img">Immagine di profilo</string>
+    <string name="single_score">Punteggi Singoli</string>
+    <string name="total_score">Punteggio totale</string>
+    <string name="zero">zero</string>
 </resources>

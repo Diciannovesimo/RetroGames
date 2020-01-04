@@ -57,6 +57,16 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="register">Register</string>
 
-    <!-- Registration activity -->
-    <string name="registration_title">New account</string>
+    <!-- Fragment_Profile -->
+    <string name="profile">Profile</string>
+    <string name="total_score">Total score</string>
+    <string name="global_ranking"># global ranking</string>
+    <string name="single_score">Single score</string>
+    <string name="position"># position</string>
+    <string name="zero">zero</string>
+    <string name="name">Name</string>
+    <string name="logout_img">logout image</string>
+    <string name="profile_img">profile image</string>
+
+
 </resources>

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Profile">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/profile"
+        android:textSize="18sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_exit_to_app_black_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/logout_img" />
+
+    <ImageView
+        android:id="@+id/imageView_profile"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        android:src="@android:drawable/ic_menu_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        android:contentDescription="@string/profile_img" />
+
+    <TextView
+        android:id="@+id/textView_profile_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:alpha="0.87"
+        android:text="@string/name"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_profile" />
+
+    <TextView
+        android:id="@+id/textView_total_score_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="115dp"
+        android:text="@string/total_score"
+        android:textSize="18sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_profile_name" />
+
+    <TextView
+        android:id="@+id/textView_total_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/zero"
+        android:textSize="24sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintStart_toEndOf="@+id/textView_total_score_info"
+        app:layout_constraintTop_toBottomOf="@+id/textView_profile_name" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="225dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:alpha="0.87"
+        android:background="@drawable/textviewrounded"
+        android:text="@string/global_ranking"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_total_score_info" />
+
+    <View
+        android:layout_width="350dp"
+        android:layout_height="2dip"
+        android:background="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/textView_single_score"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/textView_single_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:alpha="0.87"
+        android:text="@string/single_score"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/textView_pacman"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/pac_man"
+        android:textSize="18sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_single_score" />
+
+    <TextView
+        android:id="@+id/textView_tetris"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/tetris"
+        android:textSize="18sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_pacman" />
+
+    <TextView
+        android:id="@+id/textView_pong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/pong"
+        android:textSize="18sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_tetris" />
+
+    <TextView
+        android:id="@+id/textView_brickbreak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/brick_breaker"
+        android:textSize="18sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_pong" />
+
+    <TextView
+        android:id="@+id/textView_spaceinvaders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/space_invaders"
+        android:textSize="18sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_brickbreak" />
+
+    <TextView
+        android:id="@+id/textView_score_pacman"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/zero"
+        android:textSize="24sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintStart_toEndOf="@+id/textView_pacman"
+        app:layout_constraintTop_toBottomOf="@+id/textView_single_score" />
+
+    <TextView
+        android:id="@+id/textView_score_tetris"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/zero"
+        android:textSize="24sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintStart_toEndOf="@+id/textView_tetris"
+        app:layout_constraintTop_toBottomOf="@+id/textView_score_pacman" />
+
+    <TextView
+        android:id="@+id/textView_score_pong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/zero"
+        android:textSize="24sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintStart_toEndOf="@+id/textView_pong"
+        app:layout_constraintTop_toBottomOf="@+id/textView_score_tetris" />
+
+    <TextView
+        android:id="@+id/textView_score_brickbreaker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/zero"
+        android:textSize="24sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintStart_toEndOf="@+id/textView_brickbreak"
+        app:layout_constraintTop_toBottomOf="@+id/textView_score_pong" />
+
+    <TextView
+        android:id="@+id/textView_score_spaceinvaders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/zero"
+        android:textSize="24sp"
+        android:alpha="0.87"
+        android:textColor="#000000"
+        app:layout_constraintStart_toEndOf="@+id/textView_spaceinvaders"
+        app:layout_constraintTop_toBottomOf="@+id/textView_score_brickbreaker" />
+
+    <TextView
+        android:id="@+id/textView_position_pacman"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/position"
+        android:alpha="0.54"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_single_score" />
+
+    <TextView
+        android:id="@+id/textView_position_tetris"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/position"
+        android:alpha="0.54"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_position_pacman" />
+
+    <TextView
+        android:id="@+id/textView_position_pong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/position"
+        android:alpha="0.54"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_position_tetris" />
+
+    <TextView
+        android:id="@+id/textView_position_brickbreaker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/position"
+        android:alpha="0.54"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_position_pong" />
+
+    <TextView
+        android:id="@+id/textView_position_spaceinvaders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/position"
+        android:alpha="0.54"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_position_brickbreaker" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
