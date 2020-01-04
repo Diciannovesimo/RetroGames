@@ -1,6 +1,8 @@
 package com.nullpointerexception.retrogames.Components;
 
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.firebase.auth.FirebaseUser;
 
@@ -11,19 +13,16 @@ import com.google.firebase.auth.FirebaseUser;
  *
  *      @author Luca
  */
+@Entity(tableName = "scoreboard")
 public class User
 {
-    /**  Id of account (generally provided by FireBase)   */
-    protected String id;
-    protected String /** Email of account */
-    email;
-    protected String /** URL of profile picture */
-    profileImageUrl;
 
-
-
-    protected String /** Name of user */
-    displayName;
+    //PROVA PER ROOM DATABASE
+    @PrimaryKey
+    @NonNull   String id;
+    public String email;
+    public String profileImageUrl;
+    public String displayName;
 
     public User() {}
 

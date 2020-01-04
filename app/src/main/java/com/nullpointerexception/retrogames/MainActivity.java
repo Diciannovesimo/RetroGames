@@ -1,20 +1,26 @@
 package com.nullpointerexception.retrogames;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.nullpointerexception.retrogames.Activities.LoginActivity;
 import com.nullpointerexception.retrogames.Breakout.MainActivityBreakout;
+import com.nullpointerexception.retrogames.Components.User;
 import com.nullpointerexception.retrogames.Pacman.MainActivityPacman;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.SpaceInvaders.MainActivitySpaceInvaders;
 import com.nullpointerexception.retrogames.Tetris.Tetris;
 import com.nullpointerexception.retrogames.Welcome.WelcomeActivity;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -35,7 +41,19 @@ public class MainActivity extends AppCompatActivity
         btnLogin = findViewById(R.id.registration_btn);
         btnWelcome = findViewById(R.id.button7);
 
-        provaDatabase();
+        provaDatabaseFirebase();
+
+
+
+        new Database(getApplicationContext()).execute();
+
+
+
+
+
+
+
+
 
         btnTetris.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +112,7 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void provaDatabase()
+    private void provaDatabaseFirebase()
     {
         //Scrittura sul database dello score
         BackEndInterface.get().writeScoreFirebase(App.PACMAN,"ilmatty98", 10, 50);
@@ -126,7 +144,7 @@ public class MainActivity extends AppCompatActivity
         BackEndInterface.get().readScoreFirebase(App.TOTALSCORE, "ilmatty98", new BackEndInterface.OnDataReceivedListener() {
             @Override
             public void onDataReceived(boolean success, String value) {
-                Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -140,10 +158,44 @@ public class MainActivity extends AppCompatActivity
         BackEndInterface.get().readUser("cicacica98@gmail.com", new BackEndInterface.OnDataReceivedListener() {
             @Override
             public void onDataReceived(boolean success, String value) {
-                Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+
+    private class Database extends AsyncTask<Context, Void, List<User>> {
+
+        private Context context;
+
+        public Database(Context context) {
+            this.context = context;
+        }
+
+
+        @Override
+        protected List<User> doInBackground(Context... contexts) {
+            DatabaseManager databaseManager = Room.databaseBuilder(getApplicationContext(),
+                    DatabaseManager.class, "scoreboard").build();
+
+            UserDao userDao = databaseManager.userDao();
+            User user = new User();
+            user.setEmail("vito@vito.it");
+            user.setId("01");
+            userDao.delete(user);       //Eventualmente da togliere, mi serve solo per non eliminare ogni volta i file del database che ha creato
+            userDao.insertAll(user);
+            List<User> users = userDao.getAll();
+            return users;
+        }
+
+        protected void onPostExecute(List<User> users) {
+            Toast.makeText(context,users.get(0).getId(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,users.get(0).getEmail(), Toast.LENGTH_SHORT).show();
+
+        }
+
+
+
+    }
 
 }
