@@ -16,7 +16,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_breakout);
 
         // Hide app title bar.
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
         // Make app full screen to hide top status bar.
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
