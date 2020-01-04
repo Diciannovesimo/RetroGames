@@ -16,12 +16,14 @@ import com.nullpointerexception.retrogames.SpaceInvaders.MainActivitySpaceInvade
 import com.nullpointerexception.retrogames.Tetris.Tetris;
 import com.nullpointerexception.retrogames.Welcome.WelcomeActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
 
     private Button btnTetris, btnPong, btnSpaceInvaders, btnPacman, btnBreakout, btnLogin, btnWelcome;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         btnPong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
         btnSpaceInvaders.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         btnPacman.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
         btnBreakout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
         btnWelcome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,10 +94,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    private void provaDatabase() {
-
-
+    private void provaDatabase()
+    {
         //Scrittura sul database dello score
         BackEndInterface.get().writeScoreFirebase(App.PACMAN,"ilmatty98", 10, 50);
         BackEndInterface.get().writeScoreFirebase(App.PACMAN,"diciannovesimo", 20, 70);
@@ -136,10 +130,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
-
-
-
 
         //Scrittura sul database di un user
      //   BackEndInterface.get().writeUser("ilmatty98s@gmail.com","ilMatty98");

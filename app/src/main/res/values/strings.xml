@@ -27,11 +27,11 @@
     <!--WelcomeFragment-->
     <string name="next">Next</string>
     <string name="welcome">Welcome!</string>
-    <string name="welcome_info">In RetroGames you have all your favorite arcade video games handly smartphone.</string>
+    <string name="welcome_info">In RetroGames you have all your favorite arcade video games on your smartphone.</string>
 
     <!--FragmentFirstAccessActivity-->
     <string name="login">Login</string>
-    <string name="first_access_info">By logging in you can share your scores and compete with the network in the ranking</string>
+    <string name="first_access_info">By logging in you can share your scores and compete with the network in the ranking.</string>
     <string name="continue_without_logging_in"><u>Continue without logging in</u></string>
 
     <!--Fragment_Home-->
@@ -48,7 +48,7 @@
     <!-- Login activity -->
     <string name="emailTextFieldHint">Email</string>
     <string name="passwordTextFieldHint">Password</string>
-    <string name="login_phrase">Do you don\'t have an account?</string>
+    <string name="login_phrase">Don\'t have an account?</string>
     <string name="signIn"><u>Sign in</u></string>
     <string name="or">OR</string>
     <string name="signInGoogle">SIGN IN WITH GOOGLE</string>

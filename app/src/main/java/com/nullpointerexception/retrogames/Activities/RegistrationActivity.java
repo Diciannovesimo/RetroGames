@@ -1,5 +1,6 @@
 package com.nullpointerexception.retrogames.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.google.firebase.auth.AuthResult;
 import com.nullpointerexception.retrogames.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.Blocker;
+import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.R;
 
 import java.util.regex.Matcher;
@@ -28,8 +30,10 @@ public class RegistrationActivity extends AppCompatActivity {
     private Button mRegister;
     private String email, password, confirmPassword, nickName;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
@@ -39,7 +43,8 @@ public class RegistrationActivity extends AppCompatActivity {
 
         initUI();
 
-        mRegister.setOnClickListener(new View.OnClickListener() {
+        mRegister.setOnTouchListener(new OnTouchAnimatedListener()
+        {
             private Blocker mBlocker = new Blocker();
 
             @Override

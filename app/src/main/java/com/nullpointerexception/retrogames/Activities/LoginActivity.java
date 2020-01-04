@@ -1,5 +1,6 @@
 package com.nullpointerexception.retrogames.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,13 +17,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.nullpointerexception.retrogames.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.Blocker;
+import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.Components.User;
 import com.nullpointerexception.retrogames.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity
+{
 
     private EditText mEmail, mPassword;
     private Button mLogin;
@@ -31,8 +34,10 @@ public class LoginActivity extends AppCompatActivity {
     
     private User currentUser;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -42,7 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         {
             loginAttempt.addOnLoginResultListener(new AuthenticationManager.LoginAttempt.OnLoginResultListener() {
                 @Override
-                public void onLoginResult(boolean result) {
+                public void onLoginResult(boolean result)
+                {
                     if(result)
                         Log.i("claudio", "inizializzazione fatta");
                 }
@@ -57,13 +63,17 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         //Listener login
-        mLogin.setOnClickListener(new View.OnClickListener() {
+        mLogin.setOnTouchListener(new OnTouchAnimatedListener()
+        {
             private Blocker mBlocker = new Blocker();
 
             @Override
-            public void onClick(View view) {
-                if (!mBlocker.block()) {
-                    if(checkFields()) {
+            public void onClick(View view)
+            {
+                if ( ! mBlocker.block())
+                {
+                    if(checkFields())
+                    {
                         AuthenticationManager.get().login(mEmail.getText().toString()
                                 , mPassword.getText().toString())
                                 .addOnLoginResultListener(new AuthenticationManager
@@ -80,15 +90,15 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "Errore nel login", Toast.LENGTH_LONG).show();
                                     }
                                 });
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Campi errati", Toast.LENGTH_SHORT).show();
                     }
+                    else
+                        Toast.makeText(getApplicationContext(), "Campi errati", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         //Listener registrazione
-        mSignin.setOnClickListener(new View.OnClickListener() {
+        mSignin.setOnTouchListener(new OnTouchAnimatedListener() {
             private Blocker mBlocker = new Blocker();
 
             @Override
