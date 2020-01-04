@@ -68,5 +68,8 @@
     <string name="logout_img">logout image</string>
     <string name="profile_img">profile image</string>
 
+    <!-- Registration activity -->
+    <string name="registration_title">New account</string>
+
 
 </resources>
