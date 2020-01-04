@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         btnSpaceInvaders = findViewById(R.id.button4);
         btnPacman = findViewById(R.id.button5);
         btnBreakout = findViewById(R.id.button6);
-        btnLogin = findViewById(R.id.login_btn);
+        btnLogin = findViewById(R.id.registration_btn);
         btnWelcome = findViewById(R.id.button7);
 
         provaDatabase();

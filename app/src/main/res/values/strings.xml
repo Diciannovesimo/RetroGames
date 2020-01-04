@@ -52,4 +52,8 @@
     <string name="signIn"><u>Sign in</u></string>
     <string name="or">OR</string>
     <string name="signInGoogle">SIGN IN WITH GOOGLE</string>
+    <string name="nickname">Nickname</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
 </resources>

@@ -149,9 +149,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        mEmail = findViewById(R.id.emailTextField);
-        mPassword = findViewById(R.id.passwordTextField);
-        mLogin = findViewById(R.id.login_btn);
+        mEmail = findViewById(R.id.nicknameTextField);
+        mPassword = findViewById(R.id.emailTextField);
+        mLogin = findViewById(R.id.registration_btn);
         mSignin = findViewById(R.id.signIn_tv);
         googleSignInButton = findViewById(R.id.googleSignInButton);
     }
