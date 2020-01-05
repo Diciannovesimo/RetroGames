@@ -18,30 +18,41 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class TetrisCtrl extends View {
     Context context;
-    final int MatrixSizeH = 10;
-    final int MatrixSizeV = 18;
+    final int MatrixSizeH = 10; //Numero di celle sull'asse x
+    final int MatrixSizeV = 18; //Numero di celle sull'asse Y
+
+    //Costanti per determinare da che lato il blocco deve ruotare
     final int DirRotate = 0;
     final int DirLeft = 1;
     final int DirRight = 2;
     final int DirDown = 3;
+
+    //Tempo in ms per far muovere un blcco da una cella all'altra
     final int TimerGapStart = 1000;
     int TimerGapNormal = TimerGapStart;
     int TimerGapFast = 50;
     int mTimerGap = TimerGapNormal;
 
-    int[][] mArMatrix = new int[MatrixSizeV][MatrixSizeH];
-    double mBlockSize = 0;
-    Point mScreenSize = new Point(0, 0);
-    int mNewBlockArea = 5;
-    int[][] mArNewBlock = new int[mNewBlockArea][mNewBlockArea];
-    int[][] mArNextBlock = new int[mNewBlockArea][mNewBlockArea];
-    Point mNewBlockPos = new Point(0, 0);
-    Bitmap[] mArBmpCell = new Bitmap[8];
-    AlertDialog mDlgMsg = null;
-    SharedPreferences mPref = null;
-    int mScore = 0;
-    int mTopScore = 0;
 
+    int[][] mArMatrix = new int[MatrixSizeV][MatrixSizeH]; //Matrice delle celle
+    double mBlockSize = 0; //Dimensione del blocco
+    Point mScreenSize = new Point(0, 0); //Dimensione dello schermo
+    int mNewBlockArea = 5; //Area massima del blocco
+    int[][] mArNewBlock = new int[mNewBlockArea][mNewBlockArea]; //Matrice contenente il blocco generato
+    int[][] mArNextBlock = new int[mNewBlockArea][mNewBlockArea]; //TODO da capire
+    Point mNewBlockPos = new Point(0, 0); //Posizione del blocco sullo schermo
+    Bitmap[] mArBmpCell = new Bitmap[8]; //Immagini delle celle
+    AlertDialog mDlgMsg = null;
+    SharedPreferences mPref = null; //TODO da togliere
+    int mScore = 0; //Punteggio corrente
+    int mTopScore = 0; //Punteggio massimo
+
+    /**
+     * Restituisce un oggetto di tipo rect contenente le coordinate intere per un rettangolo
+     * @param x contiene il numero di pixel per l'asse x del rettangolo
+     * @param y contiene il numero di pixel per l'asse y del rettangolo
+     * @return oggetto di tipo rect
+     */
     Rect getBlockArea(int x, int y) {
         Rect rtBlock = new Rect();
         rtBlock.left = (int)(x * mBlockSize);
@@ -51,11 +62,18 @@ public class TetrisCtrl extends View {
         return rtBlock;
     }
 
+    /**
+     * Restituisce un valore intero random compresto tra min e max
+     * @param min valore intero minimo
+     * @param max valore intero massimo
+     * @return numero random di tipo intero
+     */
     int random(int min, int max) {
         int rand = (int)(Math.random() * (max - min + 1)) + min;
         return rand;
     }
 
+    //TODO da togliere, sono le sharedPreferences
     public TetrisCtrl(Context context) {
         super(context);
         this.context = context;
@@ -63,25 +81,34 @@ public class TetrisCtrl extends View {
         mTopScore = mPref.getInt("TopScore", 0);
     }
 
+    /**
+     * Inizializzazione delle varibili
+     * @param canvas oggetto di tipo Canvas
+     */
     void initVariables(Canvas canvas) {
-        mScreenSize.x = canvas.getWidth();
-        mScreenSize.y = canvas.getHeight();
-        mBlockSize = mScreenSize.x / MatrixSizeH;
+        mScreenSize.x = canvas.getWidth();  //imposta larghezza schermo
+        mScreenSize.y = canvas.getHeight(); //imposta altezza schermo
+        mBlockSize = mScreenSize.x / MatrixSizeH; //determina dimensione del blocco
 
         startGame();
     }
 
+    /**
+     * Genera un nuovo blocco
+     * @param arBlock
+     */
     void addNewBlock(int[][] arBlock) {
+        //Imposta tutta la matrice a 0
         for(int i=0; i < mNewBlockArea; i++) {
-            for(int j=0; j < mNewBlockArea; j++) {
+            for(int j=0; j < mNewBlockArea; j++)
                 arBlock[i][j] = 0;
-            }
         }
-        mNewBlockPos.x = (MatrixSizeH - mNewBlockArea) / 2;
-        mNewBlockPos.y = MatrixSizeV - mNewBlockArea;
 
+        mNewBlockPos.x = (MatrixSizeH - mNewBlockArea) / 2; //Posiziona il nuovo blocco a centro dell'asse x
+        mNewBlockPos.y = MatrixSizeV - mNewBlockArea;   //Posiziona il nuovo blocco sopra lo schermo
+
+        //Genera il blocco random
         int blockType = random(1, 7);
-        //blockType = 6;
 
         switch(blockType) {
             case 1:
@@ -137,10 +164,19 @@ public class TetrisCtrl extends View {
         redraw();
     }
 
+    /**
+     * Ridisegna la View
+     */
     public void redraw() {
         this.invalidate();
     }
 
+    /**
+     * Controlla se il nuovo blocco può ruotare
+     * @param arNewBlock matrice contenente il nuovo blocco
+     * @param posBlock posizione del blocco
+     * @return true se il blocco può ruotare, altrimenti false
+     */
     boolean checkBlockSafe(int[][] arNewBlock, Point posBlock) {
         for(int i=0; i < mNewBlockArea ; i++) {
             for(int j=0; j < mNewBlockArea ; j++) {
@@ -155,6 +191,12 @@ public class TetrisCtrl extends View {
         return true;
     }
 
+    /**
+     * Controlla se la cella è disponibile
+     * @param x posizione sull'asse x della cella
+     * @param y posizione sull'asse y della cella
+     * @return true se la cella è disponibile, altrimenti false
+     */
     boolean checkCellSafe(int x, int y) {
         if( x < 0 )
             return false;
@@ -169,6 +211,12 @@ public class TetrisCtrl extends View {
         return true;
     }
 
+    /**
+     * Muove 
+     * @param dir
+     * @param arNewBlock
+     * @param posBlock
+     */
     void moveNewBlock(int dir, int[][] arNewBlock, Point posBlock) {
         switch( dir ) {
             case DirRotate :
