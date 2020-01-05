@@ -45,8 +45,8 @@ public class Scoreboard extends AppCompatActivity {
         currentDate = DateFormat.getDateInstance().format(calendar.getTime());
         //Config des Widgets
 
-        AddScoreButton = (Button) findViewById(R.id.activity_score_addScore);
-        RemScoreButton = (Button) findViewById(R.id.activity_score_removescore);
+        AddScoreButton =  findViewById(R.id.activity_score_addScore);
+        RemScoreButton =  findViewById(R.id.activity_score_removescore);
         LastScore = (TextView) findViewById(R.id.activity_score_lastscore);
         WinLose = (TextView) findViewById(R.id.activity_score_winlose);
         ScoreBoard = (TextView) findViewById(R.id.activity_score_scoreboard);

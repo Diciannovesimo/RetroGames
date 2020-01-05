@@ -31,9 +31,9 @@ public class MainActivityBreakout extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         title = (TextView) findViewById(R.id.activity_main_title);
-        background = (LinearLayout) findViewById(R.id.activity_main);
-        btPlay = (Button) findViewById(R.id.activity_main_bt_play);
-        btScore = (Button) findViewById(R.id.activity_main_bt_score);
+        background =  findViewById(R.id.activity_main);
+        btPlay =  findViewById(R.id.activity_main_bt_play);
+        btScore =  findViewById(R.id.activity_main_bt_score);
 
         // Couleurs
         background.setBackgroundColor(Color.BLACK);

@@ -73,6 +73,7 @@
 
     <!-- Fragment Leaderboard -->
     <string name="leaderboard">Leaderboard</string>
+    <string name="title_activity_prova">prova</string>
 
 
 </resources>
