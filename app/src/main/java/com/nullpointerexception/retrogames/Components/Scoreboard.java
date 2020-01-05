@@ -16,12 +16,24 @@ public class Scoreboard {
     @ColumnInfo(name = "score")
     private int score;
 
+    private String nickname;
+
+    public Scoreboard() { }
 
     public Scoreboard(String game, int score) {
         this.game = game;
         this.score = score;
     }
 
+    public String getNickname()
+    {
+        return nickname;
+    }
+
+    public void setNickname(String nickname)
+    {
+        this.nickname = nickname;
+    }
 
     public String getGame() {
         return game;
