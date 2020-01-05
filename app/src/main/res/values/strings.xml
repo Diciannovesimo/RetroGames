@@ -29,7 +29,7 @@
     <string name="welcome">Welcome!</string>
     <string name="welcome_info">In RetroGames you have all your favorite arcade video games on your smartphone.</string>
 
-    <!--FragmentFirstAccessActivity-->
+    <!--LoginFragment-->
     <string name="login">Login</string>
     <string name="first_access_info">By logging in you can share your scores and compete with the network in the ranking.</string>
     <string name="continue_without_logging_in"><u>Continue without logging in</u></string>
@@ -59,7 +59,7 @@
 
     <!-- Fragment_Profile -->
     <string name="profile">Profile</string>
-    <string name="total_score">Total score:</string>
+    <string name="total_score_profile">Total score:</string>
     <string name="global_ranking"># global ranking</string>
     <string name="single_score">Single score</string>
     <string name="position"># position</string>
@@ -72,6 +72,7 @@
     <string name="registration_title">New account</string>
 
     <!-- Fragment Leaderboard -->
+    <string name="total_score">Total score</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="title_activity_prova">prova</string>
 

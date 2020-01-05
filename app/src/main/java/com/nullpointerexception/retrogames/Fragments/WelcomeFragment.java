@@ -33,7 +33,7 @@ public class WelcomeFragment extends Fragment
                         .beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_from_right,
                                 R.anim.slide_out_to_left)
-                        .replace(R.id.fragment, new FragmentFirstAccessActivity())
+                        .replace(R.id.fragment, new LoginFragment())
                         .commit();
             }
         });

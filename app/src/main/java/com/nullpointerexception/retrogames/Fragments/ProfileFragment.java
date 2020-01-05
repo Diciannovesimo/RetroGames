@@ -49,6 +49,7 @@ public class ProfileFragment extends Fragment
         new ProfileImageFetcher(getContext())
                 .fetchImageOf(user, drawable -> profileImage.setImageDrawable(drawable));
 
+        //  TODO Rimuovere dopo i test
         profileImage.setOnClickListener(v ->
                 startActivity(new Intent(getContext(), MainActivity.class)));
 
