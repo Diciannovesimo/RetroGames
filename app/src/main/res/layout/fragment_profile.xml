@@ -165,7 +165,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="30dp"
-        android:text="@string/brick_breaker"
+        android:text="@string/breakout"
         android:textSize="18sp"
         android:alpha="0.87"
         android:textColor="#000000"
