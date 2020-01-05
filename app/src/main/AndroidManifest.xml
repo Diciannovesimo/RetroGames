@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.HomeActivity"/>
+        <activity android:name=".Activities.HomeActivity" />
         <activity
             android:name=".Activities.SplashScreen"
             android:theme="@style/AppTheme.SplashScreenTheme">
@@ -21,12 +21,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.RegistrationActivity"
-            android:theme="@style/AppTheme.StatusBar"/>
-        <activity android:name=".Activities.WelcomeActivity"
-            android:theme="@style/AppTheme.StatusBar"/>
-        <activity android:name=".Activities.LoginActivity"
-            android:theme="@style/AppTheme.StatusBar"/>
+        <activity
+            android:name=".Activities.RegistrationActivity"
+            android:theme="@style/AppTheme.StatusBar" />
+        <activity
+            android:name=".Activities.WelcomeActivity"
+            android:theme="@style/AppTheme.StatusBar" />
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:theme="@style/AppTheme.StatusBar" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Tetris.Tetris" />
         <activity
@@ -39,13 +42,19 @@
             android:name=".Breakout.Scoreboard"
             android:parentActivityName=".Breakout.MainActivityBreakout" />
         <activity
-            android:name=".Pacman.MainActivityPacman"
-            android:label="@string/app_name" />
-        <activity
             android:name=".Pong.MainActivityPong"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name=".Pacman.MainActivityPacman"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Pacman.PauseActivity" />
+        <activity android:name=".Pacman.PlayActivity" />
+        <activity android:name=".Pacman.HelpActivity" />
+
+        <service android:name=".Pacman.BackgroundMusicService" />
     </application>
 
 </manifest>

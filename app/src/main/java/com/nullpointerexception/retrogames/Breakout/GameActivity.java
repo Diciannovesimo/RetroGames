@@ -25,7 +25,7 @@ public class GameActivity extends AppCompatActivity {
         surfaceViewThread = new SurfaceViewThread(getApplicationContext());
 
         // Get text drawing LinearLayout canvas.
-        LinearLayout drawCanvas = (LinearLayout)findViewById(R.id.drawCanvas);
+        LinearLayout drawCanvas = findViewById(R.id.drawCanvas);
         // Add surfaceview object to the LinearLayout object.
         drawCanvas.addView(surfaceViewThread);
     }
