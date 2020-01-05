@@ -1,4 +1,4 @@
-package com.nullpointerexception.retrogames;
+package com.nullpointerexception.retrogames.Activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.Fragments.GamesFragment;
 import com.nullpointerexception.retrogames.Fragments.LeaderboardFragment;
 import com.nullpointerexception.retrogames.Fragments.ProfileFragment;
+import com.nullpointerexception.retrogames.R;
 
 public class HomeActivity extends AppCompatActivity
 {
@@ -91,7 +92,7 @@ public class HomeActivity extends AppCompatActivity
         runOnUiThread(() ->
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(R.anim.modal_in, R.anim.modal_out)
+                        .setCustomAnimations(R.anim.fragment_in, R.anim.fragment_out)
                         .replace(R.id.fragmentDisplay, currentFragment)
                         .commit());
     }
@@ -103,9 +104,9 @@ public class HomeActivity extends AppCompatActivity
             View currentView = buttonView.getChildAt(i);
 
             if(currentView instanceof TextView)
-                ((TextView) currentView).setTextColor( getResources().getColor(R.color.colorPrimary));
+                ((TextView) currentView).setTextColor( getResources().getColor(R.color.colorPrimaryDark));
             else if(currentView instanceof ImageView)
-                ((ImageView) currentView).getDrawable().setTint( getResources().getColor(R.color.colorPrimary));
+                ((ImageView) currentView).getDrawable().setTint( getResources().getColor(R.color.colorPrimaryDark));
         }
     }
 

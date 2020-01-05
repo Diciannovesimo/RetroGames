@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:background="@drawable/roundedbutton_forleaderboard"
-                android:text="@string/brick_breaker" />
+                android:text="@string/breakout" />
 
             <Button
                 android:id="@+id/button_pong"

@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".Activities.HomeActivity"/>
         <activity
             android:name=".Activities.SplashScreen"
             android:theme="@style/AppTheme.SplashScreenTheme">
@@ -21,9 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.RegistrationActivity" />
-        <activity android:name=".Activities.WelcomeActivity" />
-        <activity android:name=".Activities.LoginActivity" />
+        <activity android:name=".Activities.RegistrationActivity"
+            android:theme="@style/AppTheme.StatusBar"/>
+        <activity android:name=".Activities.WelcomeActivity"
+            android:theme="@style/AppTheme.StatusBar"/>
+        <activity android:name=".Activities.LoginActivity"
+            android:theme="@style/AppTheme.StatusBar"/>
         <activity android:name=".MainActivity" />
         <activity android:name=".Tetris.Tetris" />
         <activity
