@@ -15,7 +15,7 @@ import com.nullpointerexception.retrogames.Activities.LoginActivity;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.R;
 
-public class FragmentFirstAccessActivity extends Fragment
+public class LoginFragment extends Fragment
 {
 
     private Button login;

@@ -20,8 +20,8 @@ public class User
     protected String /** URL of profile picture */
     profileImageUrl;
 
-    protected String /** Name of user */
-    displayName;
+    /** Name of user */
+    protected String nickname;
 
     public User() {}
 
@@ -29,7 +29,7 @@ public class User
     public User(@NonNull FirebaseUser user) {
         id = user.getUid();
         email = user.getEmail();
-        displayName = user.getDisplayName();
+        nickname = user.getDisplayName();
 
         if(user.getPhotoUrl() != null)
             profileImageUrl = user.getPhotoUrl().toString();
@@ -51,6 +51,11 @@ public class User
         this.profileImageUrl = profileImageUrl;
     }
 
+    public void setNickname(String nickname)
+    {
+        this.nickname = nickname;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -70,8 +75,8 @@ public class User
     /**
      *      @return Return name and surname concatenated
      */
-    public String getDisplayName() {
-        return displayName;
+    public String getNickname() {
+        return nickname;
     }
 
 

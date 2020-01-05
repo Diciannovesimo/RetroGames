@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity
                                     if(result){
                                         Log.i("claudio", "Loggato con successo");
                                         currentUser = AuthenticationManager.get().getUserLogged();
-                                        BackEndInterface.get().writeUser(currentUser.getEmail(), currentUser.getDisplayName());
+                                        BackEndInterface.get().writeUser(currentUser.getEmail(), currentUser.getNickname());
                                     }else
                                         Log.i("claudio", "errore nel log in");
                                 }
