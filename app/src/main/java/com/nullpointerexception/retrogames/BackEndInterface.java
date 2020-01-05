@@ -12,24 +12,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
-public class BackEndInterface{
+public class BackEndInterface
+{
 
     private static BackEndInterface instance = null;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
 
-
-    public BackEndInterface() {
-    }
-
+    public BackEndInterface() { }
 
     public static synchronized BackEndInterface get() {
         if(instance==null)
             instance = new BackEndInterface();
         return instance;
     }
-
 
     /**
      * Scrive sul database di Firebase lo score ottenuto dall'utente in un determinato gioco
@@ -75,7 +71,6 @@ public class BackEndInterface{
                     }
                 });
     }
-
 
     /**
      * Legge dal database lo score ottenuto dall'utente in un determinato gioco o nella classifica globale
@@ -127,7 +122,6 @@ public class BackEndInterface{
                 });
     }
 
-
     /**
      * Legge sul database il nickname di un giocatore
      * @param email stringa contenente l'email dell'utente da cui si vuole recuperare la stringa
@@ -170,7 +164,6 @@ public class BackEndInterface{
         }
         return output;
     }
-
 
     /**
      * Interfaccia usata per gestire le azioni da compiere

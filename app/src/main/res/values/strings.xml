@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Retro Games</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world" translatable="false">Hello world!</string>
     <string name="action_settings">Settings</string>
 
     <!-- Pacman -->
@@ -10,7 +10,7 @@
     <string name="howToPlayLabel">HOW TO PLAY</string>
     <string name="howToPlay">Pacman, our hero, munches his way around the map, eating all of thedots. However, life isn\'t easy for our young little hero. Along his journey, he facesspooky ghosts who will try to hurt him. Avoid them! In each corner of the map, there is apower pellet. If Pacman eats a power pellet, he is temporarily gains the power to eat enemyghosts. </string>
     <string name="controlsLabel">CONTROLS</string>
-    <string name="controls">Up: Swipe Up\nDown: Swipe Down\nLeft: Swipe Left\nRight: Swipe Right\n"Pause: Hold Screen " </string>
+    <string name="controls">"Up: Swipe Up Down: Swipe Down Left: Swipe Left Right: Swipe Right Pause: Hold Screen  "</string>
     <string name="settingsLabel">Settings</string>
     <string name="resumeLabel">Resume</string>
 
@@ -22,7 +22,7 @@
     <string name="menu_new_game">New game</string>
     <string name="menu_exit">Exit</string>
     <string name="menu_resume">Resume</string>
-    <string name="default_score">0    0</string>
+    <string name="default_score" translatable="false">0    0</string>
 
     <!--WelcomeFragment-->
     <string name="next">Next</string>
@@ -35,27 +35,44 @@
     <string name="continue_without_logging_in"><u>Continue without logging in</u></string>
 
     <!--Fragment_Home-->
-    <string name="tetris">Tetris</string>
+    <string name="tetris" translatable="false">Tetris</string>
     <string name="highscore">Highscore:</string>
     <string name="games">Games</string>
-    <string name="textview">TextView</string>
+    <string name="textview" translatable="false">TextView</string>
     <string name="play_game">Play!</string>
-    <string name="pac_man">PAC-MAN</string>
-    <string name="pong">Pong</string>
-    <string name="space_invaders">Space Invaders</string>
-    <string name="brick_breaker">Brick-breaker</string>
+    <string name="pac_man" translatable="false">PAC-MAN</string>
+    <string name="pong" translatable="false">Pong</string>
+    <string name="space_invaders" translatable="false">Space Invaders</string>
+    <string name="brick_breaker" translatable="false">Brick-breaker</string>
 
     <!-- Login activity -->
-    <string name="emailTextFieldHint">Email</string>
-    <string name="passwordTextFieldHint">Password</string>
+    <string name="emailTextFieldHint" translatable="false">Email</string>
+    <string name="passwordTextFieldHint" translatable="false">Password</string>
     <string name="login_phrase">Don\'t have an account?</string>
     <string name="signIn"><u>Sign in</u></string>
     <string name="or">OR</string>
     <string name="signInGoogle">SIGN IN WITH GOOGLE</string>
-
-    <!-- Registration activity -->
-    <string name="nickname">Nickname</string>
-    <string name="password">Password</string>
+    <string name="nickname" translatable="false">Nickname</string>
+    <string name="password" translatable="false">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="register">Register</string>
+
+    <!-- Fragment_Profile -->
+    <string name="profile">Profile</string>
+    <string name="total_score">Total score</string>
+    <string name="global_ranking"># global ranking</string>
+    <string name="single_score">Single score</string>
+    <string name="position"># position</string>
+    <string name="zero">zero</string>
+    <string name="name">Name</string>
+    <string name="logout_img">logout image</string>
+    <string name="profile_img">profile image</string>
+
+    <!-- Registration activity -->
+    <string name="registration_title">New account</string>
+
+    <!-- Fragment Leaderboard -->
+    <string name="leaderboard">Leaderboard</string>
+
+
 </resources>

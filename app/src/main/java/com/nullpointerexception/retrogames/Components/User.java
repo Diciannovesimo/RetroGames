@@ -1,8 +1,6 @@
 package com.nullpointerexception.retrogames.Components;
 
 import androidx.annotation.NonNull;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import com.google.firebase.auth.FirebaseUser;
 
@@ -13,22 +11,22 @@ import com.google.firebase.auth.FirebaseUser;
  *
  *      @author Luca
  */
-@Entity(tableName = "scoreboard")
 public class User
 {
+    /**  Id of account (generally provided by FireBase)   */
+    protected String id;
+    protected String /** Email of account */
+    email;
+    protected String /** URL of profile picture */
+    profileImageUrl;
 
-    //PROVA PER ROOM DATABASE
-    @PrimaryKey
-    @NonNull   String id;
-    public String email;
-    public String profileImageUrl;
-    public String displayName;
+    protected String /** Name of user */
+    displayName;
 
     public User() {}
 
     /** Construct object from a FireBase user and set fields from it */
-    public User(@NonNull FirebaseUser user)
-    {
+    public User(@NonNull FirebaseUser user) {
         id = user.getUid();
         email = user.getEmail();
         displayName = user.getDisplayName();
@@ -37,22 +35,15 @@ public class User
             profileImageUrl = user.getPhotoUrl().toString();
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email)
-    {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    /**
-     *      @return Return name and surname concatenated
-     */
-
-    public String getProfileImageUrl()
-    {
+    public String getProfileImageUrl() {
         return profileImageUrl;
     }
 
@@ -64,21 +55,21 @@ public class User
         this.id = id;
     }
 
-    public String getId()
-    {
+    public String getId() {
         return id;
     }
 
-    public String getFieldId()
-    {
+    public String getFieldId() {
         return id;
     }
 
-    public void restoreId(String id)
-    {
+    public void restoreId(String id) {
         this.id = id;
     }
 
+    /**
+     *      @return Return name and surname concatenated
+     */
     public String getDisplayName() {
         return displayName;
     }
