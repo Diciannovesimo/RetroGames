@@ -37,9 +37,11 @@ public class MainActivity extends AppCompatActivity
 
         provaDatabase();
 
-        btnTetris.setOnClickListener(new View.OnClickListener() {
+        btnTetris.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 Intent intent = new Intent(getApplicationContext(), Tetris.class);
                 startActivity(intent);
             }

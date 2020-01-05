@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.nullpointerexception.retrogames.Activities.LoginActivity;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
-import com.nullpointerexception.retrogames.MainActivity;
+import com.nullpointerexception.retrogames.HomeActivity;
 import com.nullpointerexception.retrogames.R;
 
 public class FragmentFirstAccessActivity extends Fragment
@@ -46,7 +46,7 @@ public class FragmentFirstAccessActivity extends Fragment
             @Override
             public void onClick(View v)
             {
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                Intent intent = new Intent(v.getContext(), HomeActivity.class);
                 startActivity(intent);
 
                 if(getActivity() != null)

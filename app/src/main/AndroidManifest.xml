@@ -11,19 +11,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <activity android:name=".Activities.SplashScreen"
-                  android:theme="@style/AppTheme.SplashScreenTheme">
+        <activity android:name=".HomeActivity"></activity>
+        <activity
+            android:name=".Activities.SplashScreen"
+            android:theme="@style/AppTheme.SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".Activities.RegistrationActivity" />
         <activity android:name=".Welcome.WelcomeActivity" />
         <activity android:name=".Activities.LoginActivity" />
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity" />
         <activity android:name=".Tetris.Tetris" />
         <activity
             android:name=".SpaceInvaders.MainActivitySpaceInvaders"
