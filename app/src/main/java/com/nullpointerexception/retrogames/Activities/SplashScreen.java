@@ -6,9 +6,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.nullpointerexception.retrogames.App;
+import com.nullpointerexception.retrogames.Components.App;
 import com.nullpointerexception.retrogames.MainActivity;
-import com.nullpointerexception.retrogames.Welcome.WelcomeActivity;
 
 public class SplashScreen extends AppCompatActivity
 {

@@ -1,12 +1,10 @@
-package com.nullpointerexception.retrogames.Welcome;
+package com.nullpointerexception.retrogames.Components;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
-
-import com.nullpointerexception.retrogames.Scoreboard;
 
 import java.util.List;
 

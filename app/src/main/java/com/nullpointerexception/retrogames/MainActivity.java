@@ -9,12 +9,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nullpointerexception.retrogames.Activities.LoginActivity;
+import com.nullpointerexception.retrogames.Activities.WelcomeActivity;
 import com.nullpointerexception.retrogames.Breakout.MainActivityBreakout;
+import com.nullpointerexception.retrogames.Components.App;
+import com.nullpointerexception.retrogames.Components.BackEndInterface;
+import com.nullpointerexception.retrogames.Components.Scoreboard;
 import com.nullpointerexception.retrogames.Pacman.MainActivityPacman;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.SpaceInvaders.MainActivitySpaceInvaders;
 import com.nullpointerexception.retrogames.Tetris.Tetris;
-import com.nullpointerexception.retrogames.Welcome.WelcomeActivity;
 
 import java.util.List;
 

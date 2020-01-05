@@ -1,4 +1,4 @@
-package com.nullpointerexception.retrogames.Welcome;
+package com.nullpointerexception.retrogames.Fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

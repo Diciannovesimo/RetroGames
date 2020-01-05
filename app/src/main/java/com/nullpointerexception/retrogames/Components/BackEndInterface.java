@@ -1,4 +1,4 @@
-package com.nullpointerexception.retrogames;
+package com.nullpointerexception.retrogames.Components;
 
 import android.util.Log;
 

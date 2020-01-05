@@ -1,4 +1,4 @@
-package com.nullpointerexception.retrogames.Welcome;
+package com.nullpointerexception.retrogames.Activities;
 
 import android.os.Bundle;
 
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.nullpointerexception.retrogames.Fragments.WelcomeFragment;
 import com.nullpointerexception.retrogames.R;
 
 public class WelcomeActivity extends AppCompatActivity

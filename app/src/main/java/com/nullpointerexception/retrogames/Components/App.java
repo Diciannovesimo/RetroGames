@@ -1,10 +1,8 @@
-package com.nullpointerexception.retrogames;
+package com.nullpointerexception.retrogames.Components;
 
 import android.content.Context;
 
 import androidx.room.Room;
-
-import com.nullpointerexception.retrogames.Welcome.ScoreboardDao;
 
 public class App
 {
@@ -26,6 +24,9 @@ public class App
     public static final String APP_FIRST_OPENING = "app_first_opening";
 
 
+    /*
+            Room Database
+     */
     public static DatabaseManager databaseManager;
     public static ScoreboardDao scoreboardDao;
     public static void initializeRoomDatabase(Context context) {

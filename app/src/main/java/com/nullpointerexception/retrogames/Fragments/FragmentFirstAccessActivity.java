@@ -1,4 +1,4 @@
-package com.nullpointerexception.retrogames.Welcome;
+package com.nullpointerexception.retrogames.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -35,8 +35,11 @@ public class FragmentFirstAccessActivity extends Fragment
                 Intent intent = new Intent(v.getContext(), LoginActivity.class);
                 startActivity(intent);
 
+                /*
                 if(getActivity() != null)
                     getActivity().finish();
+
+                 */
             }
         });
 
@@ -51,6 +54,7 @@ public class FragmentFirstAccessActivity extends Fragment
 
                 if(getActivity() != null)
                     getActivity().finish();
+
             }
         });
 
