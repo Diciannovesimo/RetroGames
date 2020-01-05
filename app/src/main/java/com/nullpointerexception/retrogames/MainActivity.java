@@ -1,19 +1,15 @@
 package com.nullpointerexception.retrogames;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import com.nullpointerexception.retrogames.Activities.LoginActivity;
 import com.nullpointerexception.retrogames.Breakout.MainActivityBreakout;
-import com.nullpointerexception.retrogames.Components.User;
 import com.nullpointerexception.retrogames.Pacman.MainActivityPacman;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.SpaceInvaders.MainActivitySpaceInvaders;
@@ -33,6 +29,17 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initialUI();
+
+        provaDatabaseFirebase();
+
+        provaDatabaseLocale();
+
+        buttonListener();
+
+    }
+
+    private void initialUI() {
         btnTetris = findViewById(R.id.button2);
         btnPong = findViewById(R.id.button3);
         btnSpaceInvaders = findViewById(R.id.button4);
@@ -40,26 +47,12 @@ public class MainActivity extends AppCompatActivity
         btnBreakout = findViewById(R.id.button6);
         btnLogin = findViewById(R.id.registration_btn);
         btnWelcome = findViewById(R.id.button7);
+    }
 
-        provaDatabaseFirebase();
-
-
-
-        new Database(getApplicationContext()).execute();
-
-
-
-
-
-
-
-
-
-        btnTetris.setOnClickListener(new View.OnClickListener()
-        {
+    private void buttonListener() {
+        btnTetris.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), Tetris.class);
                 startActivity(intent);
             }
@@ -114,8 +107,58 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void provaDatabaseFirebase()
-    {
+    private void provaDatabaseLocale() {
+        //Inserimento Tetris
+        Scoreboard tetris = new Scoreboard(App.TETRIS, 10);
+        if(App.scoreboardDao.getGame(App.TETRIS) == null)
+            App.scoreboardDao.insertAll(tetris);
+        else
+            App.scoreboardDao.update(tetris);
+        //Toast.makeText(getApplicationContext(),App.scoreboardDao.getGame(App.TETRIS) + ": " + App.scoreboardDao.getScore(App.TETRIS), Toast.LENGTH_SHORT).show();
+
+
+        //Inserimanto Pacman
+        Scoreboard pacman = new Scoreboard(App.PACMAN,20);
+        if(App.scoreboardDao.getGame(App.PACMAN) == null)
+            App.scoreboardDao.insertAll(pacman);
+        else
+            App.scoreboardDao.update(pacman);
+        //Toast.makeText(getApplicationContext(),App.scoreboardDao.getGame(App.PACMAN) + ": " + App.scoreboardDao.getScore(App.PACMAN), Toast.LENGTH_SHORT).show();
+
+
+        //Inserimanto Pong
+        Scoreboard pong = new Scoreboard(App.PONG,30);
+        if(App.scoreboardDao.getGame(App.PONG) == null)
+            App.scoreboardDao.insertAll(pong);
+        else
+            App.scoreboardDao.update(pong);
+        //Toast.makeText(getApplicationContext(),App.scoreboardDao.getGame(App.PONG) + ": " + App.scoreboardDao.getScore(App.PONG), Toast.LENGTH_SHORT).show();
+
+        //Inserimanto SpaceInvaders
+        Scoreboard spaceInvaders = new Scoreboard(App.SPACEINVADERS,40);
+        if(App.scoreboardDao.getGame(App.SPACEINVADERS) == null)
+            App.scoreboardDao.insertAll(spaceInvaders);
+        else
+            App.scoreboardDao.update(spaceInvaders);
+        //Toast.makeText(getApplicationContext(),App.scoreboardDao.getGame(App.SPACEINVADERS) + ": " + App.scoreboardDao.getScore(App.SPACEINVADERS), Toast.LENGTH_SHORT).show();
+
+
+        //Inserimanto Breakout
+        Scoreboard breakout = new Scoreboard(App.BREAKOUT,50);
+        if(App.scoreboardDao.getGame(App.BREAKOUT) == null)
+            App.scoreboardDao.insertAll(breakout);
+        else
+            App.scoreboardDao.update(breakout);
+        //Toast.makeText(getApplicationContext(),App.scoreboardDao.getGame(App.BREAKOUT) + ": " + App.scoreboardDao.getScore(App.BREAKOUT), Toast.LENGTH_SHORT).show();
+
+
+        //Leggo tutti i giochi inseriti nel database
+        List<Scoreboard> scoreboards = App.scoreboardDao.getAll();
+        for(int i=0; i<scoreboards.size(); i++)
+            Toast.makeText(getApplicationContext(), scoreboards.get(i).getGame() + ": " + scoreboards.get(i).getScore(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void provaDatabaseFirebase() {
         //Scrittura sul database dello score
         BackEndInterface.get().writeScoreFirebase(App.PACMAN,"ilmatty98", 10, 50);
         BackEndInterface.get().writeScoreFirebase(App.PACMAN,"diciannovesimo", 20, 70);
@@ -152,8 +195,8 @@ public class MainActivity extends AppCompatActivity
         });
 
         //Scrittura sul database di un user
-     //   BackEndInterface.get().writeUser("ilmatty98s@gmail.com","ilMatty98");
-     //   BackEndInterface.get().writeUser("cicacica98@gmail.com","Cischi98");
+        BackEndInterface.get().writeUser("ilmatty98s@gmail.com","ilMatty98");
+        BackEndInterface.get().writeUser("cicacica98@gmail.com","Cischi98");
         BackEndInterface.get().writeUser("slab98@gmail.com","sLab98");
 
         //Leggo il nickname di un determinato giocatore
@@ -164,40 +207,4 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
-
-
-    private class Database extends AsyncTask<Context, Void, List<User>> {
-
-        private Context context;
-
-        public Database(Context context) {
-            this.context = context;
-        }
-
-
-        @Override
-        protected List<User> doInBackground(Context... contexts) {
-            DatabaseManager databaseManager = Room.databaseBuilder(getApplicationContext(),
-                    DatabaseManager.class, "scoreboard").build();
-
-            UserDao userDao = databaseManager.userDao();
-            User user = new User();
-            user.setEmail("vito@vito.it");
-            user.setId("01");
-            userDao.delete(user);       //Eventualmente da togliere, mi serve solo per non eliminare ogni volta i file del database che ha creato
-            userDao.insertAll(user);
-            List<User> users = userDao.getAll();
-            return users;
-        }
-
-        protected void onPostExecute(List<User> users) {
-            Toast.makeText(context,users.get(0).getId(), Toast.LENGTH_SHORT).show();
-            Toast.makeText(context,users.get(0).getEmail(), Toast.LENGTH_SHORT).show();
-
-        }
-
-
-
-    }
-
 }

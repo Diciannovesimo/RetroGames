@@ -21,7 +21,10 @@ public class SplashScreen extends AppCompatActivity
         /*
                 TODO Initialization Firebase and other components
                 TODO Login user
+
          */
+
+        App.initializeRoomDatabase(getApplicationContext());
 
         SharedPreferences prefs = getSharedPreferences(App.APP_VARIABLES, MODE_PRIVATE);
         prefs.edit().putBoolean(App.APP_FIRST_OPENING, true).apply();   // TODO Remove after testing
