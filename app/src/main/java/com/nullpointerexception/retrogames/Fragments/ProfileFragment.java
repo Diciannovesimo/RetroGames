@@ -15,6 +15,7 @@ import com.nullpointerexception.retrogames.Activities.LoginActivity;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.Components.ProfileImageFetcher;
 import com.nullpointerexception.retrogames.Components.User;
+import com.nullpointerexception.retrogames.MainActivity;
 import com.nullpointerexception.retrogames.R;
 
 public class ProfileFragment extends Fragment
@@ -47,6 +48,9 @@ public class ProfileFragment extends Fragment
         if(getContext() != null)
         new ProfileImageFetcher(getContext())
                 .fetchImageOf(user, drawable -> profileImage.setImageDrawable(drawable));
+
+        profileImage.setOnClickListener(v ->
+                startActivity(new Intent(getContext(), MainActivity.class)));
 
         logoutButton.setOnTouchListener(new OnTouchAnimatedListener()
         {

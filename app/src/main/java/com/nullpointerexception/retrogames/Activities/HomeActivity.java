@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
+import com.nullpointerexception.retrogames.Fragments.FragmentFirstAccessActivity;
 import com.nullpointerexception.retrogames.Fragments.GamesFragment;
 import com.nullpointerexception.retrogames.Fragments.LeaderboardFragment;
 import com.nullpointerexception.retrogames.Fragments.ProfileFragment;
@@ -60,6 +61,8 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
+                //  TODO Controllare se si è loggati, altrimenti piazzare quella di login
+                placeFragment(new FragmentFirstAccessActivity());
                 placeFragment(new ProfileFragment());
             }
         });
