@@ -71,5 +71,8 @@
     <!-- Registration activity -->
     <string name="registration_title">New account</string>
 
+    <!-- Fragment Leaderboard -->
+    <string name="leaderboard">Leaderboard</string>
+
 
 </resources>
