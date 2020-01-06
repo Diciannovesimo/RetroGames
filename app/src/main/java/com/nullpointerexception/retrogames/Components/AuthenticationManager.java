@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -64,23 +62,6 @@ public class AuthenticationManager
         if(auth.getCurrentUser() != null)
         {
             currentUser = new User(auth.getCurrentUser());
-
-            /*BackEndInterface.get().getEntity(currentUser, new BackEndInterface.OnOperationCompleteListener()
-            {
-                @Override
-                public void onSuccess()
-                {
-                    if(currentLoginAttempt != null && currentLoginAttempt.getOnLoginResultListener() != null)
-                        currentLoginAttempt.getOnLoginResultListener().onLoginResult(true);
-                }
-
-                @Override
-                public void onError()
-                {
-                    if(currentLoginAttempt != null && currentLoginAttempt.getOnLoginResultListener() != null)
-                        currentLoginAttempt.getOnLoginResultListener().onLoginResult(false);
-                }
-            });*/
         }
         else
         {
@@ -109,31 +90,26 @@ public class AuthenticationManager
             logout();
 
         auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>()
-                {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful())
                     {
-                        if (task.isSuccessful())
+                        //  Check if user exists and if it's verified
+                        if(auth.getCurrentUser() != null && auth.getCurrentUser().isEmailVerified())
                         {
-                            //  Check if user exists and if it's verified
-                            if(auth.getCurrentUser() != null && auth.getCurrentUser().isEmailVerified())
-                            {
-                                //  Set current user
-                                currentUser = new User(auth.getCurrentUser());
+                            //  Set current user
+                            currentUser = new User(auth.getCurrentUser());
 
-                                //  Call the callback method, if set, with positive result
-                                if(loginAttempt.getOnLoginResultListener() != null)
-                                    loginAttempt.getOnLoginResultListener().onLoginResult(true);
-                            }
-                            else if(loginAttempt.getOnLoginResultListener() != null)
-                                loginAttempt.getOnLoginResultListener().onLoginResult(false);
-                        }
-                        else {
-                            // Call the callback method, if set, with negative result
+                            //  Call the callback method, if set, with positive result
                             if(loginAttempt.getOnLoginResultListener() != null)
-                                loginAttempt.getOnLoginResultListener().onLoginResult(false);
+                                loginAttempt.getOnLoginResultListener().onLoginResult(true);
                         }
+                        else if(loginAttempt.getOnLoginResultListener() != null)
+                            loginAttempt.getOnLoginResultListener().onLoginResult(false);
+                    }
+                    else {
+                        // Call the callback method, if set, with negative result
+                        if(loginAttempt.getOnLoginResultListener() != null)
+                            loginAttempt.getOnLoginResultListener().onLoginResult(false);
                     }
                 });
 
@@ -158,35 +134,30 @@ public class AuthenticationManager
             logout();
 
         auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>()
-                {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful())
                     {
-                        if (task.isSuccessful())
+                        //  Check if user exists and if it's verified
+                        if(auth.getCurrentUser() != null)
                         {
-                            //  Check if user exists and if it's verified
-                            if(auth.getCurrentUser() != null)
-                            {
-                                String uid = auth.getUid();
+                            String uid = auth.getUid();
 
-                                //  Call the callback method, if set, with positive result
-                                if(loginAttempt.getOnUidListener() != null)
-                                    loginAttempt.getOnUidListener().onIdObtained(uid);
-                            }
-                            else
-                                //  Call the callback method, if set, with negative result
-                                if(loginAttempt.getOnUidListener() != null)
-                                    loginAttempt.getOnUidListener().onError();
+                            //  Call the callback method, if set, with positive result
+                            if(loginAttempt.getOnUidListener() != null)
+                                loginAttempt.getOnUidListener().onIdObtained(uid);
                         }
                         else
-                        {
                             //  Call the callback method, if set, with negative result
                             if(loginAttempt.getOnUidListener() != null)
                                 loginAttempt.getOnUidListener().onError();
-                        }
-
                     }
+                    else
+                    {
+                        //  Call the callback method, if set, with negative result
+                        if(loginAttempt.getOnUidListener() != null)
+                            loginAttempt.getOnUidListener().onError();
+                    }
+
                 });
 
         return loginAttempt;
@@ -209,18 +180,13 @@ public class AuthenticationManager
                 return;
             else if(auth.getCurrentUser().getEmail().equals(email))
             {
-                auth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>()
-                {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task)
+                auth.getCurrentUser().delete().addOnCompleteListener(task -> {
+                    if( ! task.isSuccessful())
                     {
-                        if( ! task.isSuccessful())
-                        {
-                            deleteUser(email, password);
-                        }
-                        else
-                            logout();
+                        deleteUser(email, password);
                     }
+                    else
+                        logout();
                 });
             }
             else
@@ -297,29 +263,24 @@ public class AuthenticationManager
                 {
                     AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
                     auth.signInWithCredential(credential)
-                            .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>()
-                            {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task)
+                            .addOnCompleteListener((Activity) context, task1 -> {
+                                if (task1.isSuccessful())
                                 {
-                                    if (task.isSuccessful())
-                                    {
-                                        if(auth.getCurrentUser() != null)
-                                            currentUser = new User(auth.getCurrentUser());
+                                    if(auth.getCurrentUser() != null)
+                                        currentUser = new User(auth.getCurrentUser());
 
-                                        // Call the callback method, if set, with positive result
-                                        if(currentLoginAttempt != null && currentLoginAttempt.getOnLoginResultListener() != null)
-                                            currentLoginAttempt.getOnLoginResultListener().onLoginResult(true);
+                                    // Call the callback method, if set, with positive result
+                                    if(currentLoginAttempt != null && currentLoginAttempt.getOnLoginResultListener() != null)
+                                        currentLoginAttempt.getOnLoginResultListener().onLoginResult(true);
 
-                                        currentLoginAttempt = null;
-                                    }
-                                    else
-                                    {
-                                        if (currentLoginAttempt != null && currentLoginAttempt.getOnLoginResultListener() != null)
-                                            currentLoginAttempt.getOnLoginResultListener().onLoginResult(false);
+                                    currentLoginAttempt = null;
+                                }
+                                else
+                                {
+                                    if (currentLoginAttempt != null && currentLoginAttempt.getOnLoginResultListener() != null)
+                                        currentLoginAttempt.getOnLoginResultListener().onLoginResult(false);
 
-                                        currentLoginAttempt = null;
-                                    }
+                                    currentLoginAttempt = null;
                                 }
                             });
                 }

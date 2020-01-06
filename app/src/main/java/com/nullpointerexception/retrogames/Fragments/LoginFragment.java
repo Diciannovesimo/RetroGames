@@ -35,10 +35,8 @@ public class LoginFragment extends Fragment
                 Intent intent = new Intent(v.getContext(), LoginActivity.class);
                 startActivity(intent);
 
-                /*
                     if(getActivity() != null)
                         getActivity().finish();
-                 */
             }
         });
 

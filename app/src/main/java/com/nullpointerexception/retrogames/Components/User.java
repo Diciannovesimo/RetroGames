@@ -19,7 +19,6 @@ public class User
     email;
     protected String /** URL of profile picture */
     profileImageUrl;
-
     /** Name of user */
     protected String nickname;
 

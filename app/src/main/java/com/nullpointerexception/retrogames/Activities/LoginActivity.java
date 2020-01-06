@@ -2,6 +2,7 @@ package com.nullpointerexception.retrogames.Activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.developer.kalert.KAlertDialog;
+import com.nullpointerexception.retrogames.Components.App;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.Blocker;
@@ -24,36 +27,20 @@ import com.nullpointerexception.retrogames.R;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LoginActivity extends AppCompatActivity
-{
+public class LoginActivity extends AppCompatActivity {
 
     private EditText mEmail, mPassword;
     private Button mLogin;
     private TextView mSignin;
     private View googleSignInButton;
-    
+
     private User currentUser;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        AuthenticationManager.LoginAttempt loginAttempt = AuthenticationManager.get().initialize(this);
-
-        if(loginAttempt != null)
-        {
-            loginAttempt.addOnLoginResultListener(new AuthenticationManager.LoginAttempt.OnLoginResultListener() {
-                @Override
-                public void onLoginResult(boolean result)
-                {
-                    if(result)
-                        Log.i("claudio", "inizializzazione fatta");
-                }
-            });
-        }
 
         //Inizializzo l'UI
         initUI();
@@ -63,38 +50,48 @@ public class LoginActivity extends AppCompatActivity
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         //Listener login
-        mLogin.setOnTouchListener(new OnTouchAnimatedListener()
-        {
+        mLogin.setOnTouchListener(new OnTouchAnimatedListener() {
             private Blocker mBlocker = new Blocker();
 
             @Override
-            public void onClick(View view)
-            {
-                if ( ! mBlocker.block())
-                {
-                    if(checkFields())
-                    {
+            public void onClick(View view) {
+                if (!mBlocker.block()) {
+                    if (checkFields()) {
                         AuthenticationManager.get().login(mEmail.getText().toString()
                                 , mPassword.getText().toString())
-                                .addOnLoginResultListener(new AuthenticationManager
-                                        .LoginAttempt
-                                        .OnLoginResultListener() {
-                                    @Override
-                                    public void onLoginResult(boolean result) {
-                                        if(result){
-                                            Log.i("claudio", "Loggato con successo");
-                                            currentUser = AuthenticationManager.get().getUserLogged();
-                                            Toast.makeText(getApplicationContext(), "Loggato con successo", Toast.LENGTH_LONG).show();
-                                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        }else
-                                            Log.i("claudio", "errore nel log in");
-                                            Toast.makeText(getApplicationContext(), "Errore nel login", Toast.LENGTH_LONG).show();
+                                .addOnLoginResultListener(result -> {
+
+                                    if (result) {
+                                        Log.i("claudio", "Loggato con successo");
+                                        currentUser = AuthenticationManager.get().getUserLogged();
+                                        BackEndInterface
+                                                .get()
+                                                .readUser(currentUser.getEmail(), new BackEndInterface.OnDataReceivedListener() {
+                                                    @Override
+                                                    public void onDataReceived(boolean success, String value) {
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                //TODO: Gestire salvataggio sharedPreferences
+                                                                currentUser.setNickname(value);
+                                                                SharedPreferences preferences = getSharedPreferences(App.USER, MODE_PRIVATE);
+                                                                preferences.edit().putString(currentUser.getNickname(),"lol").apply();
+                                                            }
+                                                        });
+                                                    }
+                                                });
+
+                                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                                        finish();
+                                    } else {
+                                        Log.i("claudio", "errore nel log in");
+                                        new KAlertDialog(LoginActivity.this, KAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Errore")
+                                                .setContentText("Nome utente o password errati")
+                                                .show();
                                     }
                                 });
-                    }
-                    else
+                    } else
                         Toast.makeText(getApplicationContext(), "Campi errati", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -118,21 +115,19 @@ public class LoginActivity extends AppCompatActivity
 
             @Override
             public void onClick(View view) {
-                if(!mBlocker.block()) {
+                if (!mBlocker.block()) {
                     AuthenticationManager.get().requestLoginWithGoogle(LoginActivity.this)
-                            .addOnLoginResultListener(new AuthenticationManager.LoginAttempt.OnLoginResultListener() {
-                                @Override
-                                public void onLoginResult(boolean result) {
-                                    if(result){
-                                        Log.i("claudio", "Loggato con successo");
-                                        currentUser = AuthenticationManager.get().getUserLogged();
-                                        BackEndInterface.get().writeUser(currentUser.getEmail(), currentUser.getNickname());
-                                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }else
-                                        Log.i("claudio", "errore nel log in");
-                                }
+                            .addOnLoginResultListener(result -> {
+                                if (result) {
+                                    Log.i("claudio", "Loggato con successo");
+                                    currentUser = AuthenticationManager.get().getUserLogged();
+                                    BackEndInterface.get().writeUser(currentUser.getEmail(), currentUser.getNickname());
+                                } else
+                                    Log.i("claudio", "errore nel log in");
+                                    new KAlertDialog(LoginActivity.this, KAlertDialog.ERROR_TYPE)
+                                            .setTitleText("Errore")
+                                            .setContentText("Accesso con Google non riuscito")
+                                            .show();
                             });
                 }
             }
@@ -143,11 +138,11 @@ public class LoginActivity extends AppCompatActivity
         boolean allRight = true;
 
         String email = mEmail.getText().toString();
-        if(!emailCheck(email) || email.isEmpty())
+        if (!emailCheck(email) || email.isEmpty())
             allRight = false;
 
         String psw = mPassword.getText().toString();
-        if(psw.isEmpty() || psw.length() > 8)
+        if (psw.isEmpty() || psw.length() > 8)
             allRight = false;
 
         return allRight;
@@ -157,17 +152,17 @@ public class LoginActivity extends AppCompatActivity
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
 
-        if(mat.matches())
+        if (mat.matches())
             return true;
         else
             return false;
     }
 
     private void initUI() {
-        mEmail = findViewById(R.id.nicknameTextField);
-        mPassword = findViewById(R.id.emailTextField);
-        mLogin = findViewById(R.id.registration_btn);
-        mSignin = findViewById(R.id.signIn_tv);
+        mEmail             = findViewById(R.id.nicknameTextField);
+        mPassword          = findViewById(R.id.emailTextField);
+        mLogin             = findViewById(R.id.registration_btn);
+        mSignin            = findViewById(R.id.signIn_tv);
         googleSignInButton = findViewById(R.id.googleSignInButton);
     }
 

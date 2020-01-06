@@ -31,7 +31,7 @@
     <string name="resumeLabel">Riprendi</string>
     <string name="settingsLabel">Impostazioni</string>
     <string name="signIn"><u>Registrati</u></string>
-    <string name="signInGoogle" translatable="false">REGISTRATI CON GOOGLE</string>
+    <string name="signInGoogle" translatable="false">ACCEDI CON GOOGLE</string>
     <string name="welcome">Benvenuto!</string>
     <string name="welcome_info">In RetroGames hai tutti i tuoi videogiochi arcade preferiti sul tuo smartphone.</string>
     <string name="global_ranking"># in classifica globale</string>

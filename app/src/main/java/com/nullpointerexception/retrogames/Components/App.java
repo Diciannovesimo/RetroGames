@@ -22,6 +22,7 @@ public class App
      */
     public static final String APP_VARIABLES = "app_variables";
     public static final String APP_FIRST_OPENING = "app_first_opening";
+    public static final String APP_NO_USER_FINDED = "app_no_user_finded";
 
 
     /*
