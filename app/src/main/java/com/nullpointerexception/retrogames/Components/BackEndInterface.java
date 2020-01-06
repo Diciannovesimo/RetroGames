@@ -10,6 +10,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class BackEndInterface
@@ -83,9 +84,12 @@ public class BackEndInterface
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                long value = dataSnapshot.getValue(Long.class);
-                if(listener != null)
-                    listener.onDataReceived(true, String.valueOf(value));
+                if(dataSnapshot.getValue() != null)
+                {
+                    long value = dataSnapshot.getValue(Long.class);
+                    if(listener != null)
+                        listener.onDataReceived(true, String.valueOf(value));
+                }
             }
 
             @Override
@@ -93,6 +97,45 @@ public class BackEndInterface
                 // Failed to read value
                 if(listener != null)
                     listener.onDataReceived(false, String.valueOf(-1));
+            }
+        });
+
+    }
+
+    /**
+     * Legge dal database lo score ottenuto dall'utente in un determinato gioco o nella classifica globale
+     * @param child stringa contenente il nodo dell'albero a cui si fa riferimento
+     * @param listener definizione delle operazioni da compiere una volta ricevuto il dato
+     */
+    public void readAllScoresFirebase(String child, final OnQueryResultListener listener)
+    {
+        Query query = database.getReference(child).orderByValue();
+
+        query.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                for(DataSnapshot childSnapshot : dataSnapshot.getChildren())
+                {
+                    Scoreboard scoreboard = new Scoreboard();
+                    scoreboard.setGame(child);
+                    scoreboard.setNickname(childSnapshot.getKey());
+
+                    long value = childSnapshot.getValue(Long.class);
+                    scoreboard.setScore(value);
+
+                    if(listener != null)
+                        listener.onQueryResult(true, scoreboard);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error)
+            {
+                // Failed to read value
+                if(listener != null)
+                    listener.onQueryResult(false, null);
             }
         });
 
@@ -171,6 +214,15 @@ public class BackEndInterface
      */
     public interface OnDataReceivedListener {
         void onDataReceived(boolean success, String value);
+    }
+
+    /**
+     * Interfaccia usata per gestire le azioni da compiere
+     * una volta ricevuto il risultato di una query assegnata a Firebase
+     */
+    public interface OnQueryResultListener
+    {
+        void onQueryResult(boolean success, Scoreboard scoreboard);
     }
 
 }

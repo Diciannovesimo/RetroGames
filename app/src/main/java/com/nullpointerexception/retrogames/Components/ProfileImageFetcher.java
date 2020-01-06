@@ -142,7 +142,7 @@ class ProfileImageLetter extends ShapeDrawable
     ProfileImageLetter(String name)
     {
         if( name != null && ! name.isEmpty())
-            this.letter = name.charAt(0);
+            this.letter = name.toUpperCase().charAt(0);
         setShape(new OvalShape());
         setIntrinsicWidth(512);
         setIntrinsicHeight(512);

@@ -1,6 +1,5 @@
 package com.nullpointerexception.retrogames.Components;
 
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -14,7 +13,7 @@ public class Scoreboard {
     private String game;
 
     @ColumnInfo(name = "score")
-    private int score;
+    private long score;
 
     private String nickname;
 
@@ -43,11 +42,24 @@ public class Scoreboard {
         this.game = game;
     }
 
-    public int getScore() {
+    public long getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(long score) {
         this.score = score;
+    }
+
+    public String getFormattedScore()
+    {
+        return formatScore( String.valueOf(score));
+    }
+
+    public static String formatScore(String s)
+    {
+        if(s.length() > 3)
+            return formatScore( s.substring(0, s.length() - 3)) + "," + s.substring(s.length() - 3);
+        else
+            return s;
     }
 }
