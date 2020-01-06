@@ -14,9 +14,9 @@ import com.nullpointerexception.retrogames.Breakout.MainActivityBreakout;
 import com.nullpointerexception.retrogames.Components.App;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.Scoreboard;
+import com.nullpointerexception.retrogames.Hole.FullscreenActivity;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.Snake.MainActivitySnake;
-import com.nullpointerexception.retrogames.SpaceInvaders.MainActivitySpaceInvaders;
 import com.nullpointerexception.retrogames.Tetris.Tetris;
 
 import java.util.List;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         btnSpaceInvaders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivitySpaceInvaders.class);
+                Intent intent = new Intent(getApplicationContext(), FullscreenActivity.class);
                 startActivity(intent);
             }
         });

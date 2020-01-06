@@ -1,10 +1,5 @@
 package com.nullpointerexception.retrogames.Snake;
 
-/**
- * Created by zhangman on 2018/1/10 20:40.
- * Email: zhangman523@126.com
- */
-
 public interface GameType {
   int GRID = 0;
   int FOOD = 1;

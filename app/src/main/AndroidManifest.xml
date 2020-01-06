@@ -32,10 +32,7 @@
             android:theme="@style/AppTheme.StatusBar" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Tetris.Tetris" />
-        <activity
-            android:name=".SpaceInvaders.MainActivitySpaceInvaders"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
+
         <activity android:name=".Breakout.GameActivity" />
         <activity android:name=".Breakout.MainActivityBreakout" />
         <activity
@@ -48,6 +45,14 @@
             android:theme="@android:style/Theme.NoTitleBar" />
 
         <activity android:name=".Snake.MainActivitySnake" />
+
+        <activity
+            android:name=".Hole.FullscreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="landscape">
+        </activity>
 
     </application>
 

@@ -2,10 +2,6 @@ package com.nullpointerexception.retrogames.Snake;
 
 import android.graphics.Color;
 
-/**
- * Created by zhangman on 2018/1/8 14:43
- * Email: zhangman523@126.com
- */
 
 public class GridSquare {
   private int mType;//元素类型

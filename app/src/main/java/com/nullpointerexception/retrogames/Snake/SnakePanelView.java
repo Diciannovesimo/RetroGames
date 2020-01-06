@@ -16,10 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by zhangman on 2018/1/8 14:43.
- * Email: zhangman523@126.com
- */
 
 public class SnakePanelView extends View {
   private final static String TAG = SnakePanelView.class.getSimpleName();

@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment;
 
 import com.nullpointerexception.retrogames.Breakout.MainActivityBreakout;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
+import com.nullpointerexception.retrogames.Hole.FullscreenActivity;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.R;
 import com.nullpointerexception.retrogames.Snake.MainActivitySnake;
-import com.nullpointerexception.retrogames.SpaceInvaders.MainActivitySpaceInvaders;
 import com.nullpointerexception.retrogames.Tetris.Tetris;
 
 public class GamesFragment extends Fragment
@@ -71,7 +71,7 @@ public class GamesFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(getContext(), MainActivitySpaceInvaders.class);
+                Intent intent = new Intent(getContext(), FullscreenActivity.class);
                 startActivity(intent);
             }
         });

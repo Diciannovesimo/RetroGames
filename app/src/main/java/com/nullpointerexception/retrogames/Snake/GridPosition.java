@@ -1,9 +1,5 @@
 package com.nullpointerexception.retrogames.Snake;
 
-/**
- * Created by zhangman on 2018/1/8 14:43
- * Email: zhangman523@126.com
- */
 
 public class GridPosition {
   private int x;
