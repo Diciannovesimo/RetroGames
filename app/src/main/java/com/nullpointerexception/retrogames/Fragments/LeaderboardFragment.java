@@ -66,7 +66,7 @@ public class LeaderboardFragment extends Fragment
         if(selectedView != null)
             selectedView.setBackground( getResources().getDrawable(R.drawable.roundedbutton_forleaderboard));
 
-        view.setBackground( getResources().getDrawable(R.drawable.selected_chip_background));
-        selectedView = view;
+       view.setBackground( getResources().getDrawable(R.drawable.selected_chip_background));
+       selectedView = view;
     }
 }

@@ -18,23 +18,19 @@ public class Tetris extends AppCompatActivity {
 
 
     private static MediaPlayer player; //Gestione della riproduzione audio
-    private TetrisCtrl mTetrisCtrl;
     private Point mScreenSize = new Point(0, 0); //dimensione dello schermo
     private Point mMousePos = new Point(-1, -1); //posizione del tocco
     private int mCellSize = 0; //dimensione di una singola cella
+    private TetrisCtrl mTetrisCtrl;
     private boolean mIsTouchMove = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);  POTREI TOGLIERLO
         setContentView(R.layout.activity_tetris);
 
         //Gestione musica
-        player = MediaPlayer.create(this, R.raw.tetris_song);
-        player.setVolume(100, 100);
-        player.setLooping(true);
-        player.start();
+        startMusic();
 
         //Gestione risoluzione dello schermo
         DisplayMetrics dm = this.getApplicationContext().getResources().getDisplayMetrics();
@@ -128,22 +124,41 @@ public class Tetris extends AppCompatActivity {
             case R.id.btnBottom :
                 mTetrisCtrl.block2Bottom();
                 break;
-            /*case R.id.btnRotate :
+            /*case R.id.btnRotate :     //TODO vedere qui per implementare il bottone per far ruotare i blocchi
                 mTetrisCtrl.block2Rotate();
                 break;*/
         }
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mTetrisCtrl.restartGame();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!player.isPlaying())
+            startMusic();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         mTetrisCtrl.pauseGame();
+        player.stop();
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        mTetrisCtrl.restartGame();
+    /**
+     *  Fa partire la classica musica di Tetris
+     */
+    void startMusic() {
+        player = MediaPlayer.create(this, R.raw.tetris_song);
+        player.setVolume(100, 100);
+        player.setLooping(true);
+        player.start();
     }
 
 }
