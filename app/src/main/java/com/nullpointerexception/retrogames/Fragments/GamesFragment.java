@@ -33,7 +33,7 @@ public class GamesFragment extends Fragment
         tetrisCard = view.findViewById(R.id.CardView_tetris);
         snakeCard = view.findViewById(R.id.CardView_pacman);
         pongCard = view.findViewById(R.id.CardView_pong);
-        spaceInvadersCard = view.findViewById(R.id.CardView_spaceinvaders);
+        spaceInvadersCard = view.findViewById(R.id.CardView_hole);
         breakoutCard = view.findViewById(R.id.CardView_brick_break);
 
         tetrisCard.setOnTouchListener(new OnTouchAnimatedListener()
