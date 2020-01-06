@@ -67,6 +67,7 @@
     <string name="name">Name</string>
     <string name="logout_img">logout image</string>
     <string name="profile_img">profile image</string>
+    <string name="hole">Hole</string>
 
     <!-- Registration activity -->
     <string name="registration_title">New account</string>
@@ -75,6 +76,10 @@
     <string name="total_score">Total score</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="title_activity_prova">prova</string>
+    <string name="game_name">Game_Name</string>
+    <string name="_0">0</string>
+    <string name="snake">Snake</string>
+
 
 
 </resources>

@@ -435,7 +435,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/CardView_spaceinvaders"
+        android:id="@+id/CardView_hole"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -455,7 +455,7 @@
 
 
             <ImageView
-                android:id="@+id/imageView_spaceinvaders"
+                android:id="@+id/imageView_hole"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/tetris"
@@ -467,13 +467,13 @@
                 app:srcCompat="@drawable/spaceinvaders" />
 
             <TextView
-                android:id="@+id/textView_spaceinvaders"
+                android:id="@+id/textView_hole"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alpha="0.90"
                 android:background="#FFFFFF"
                 android:padding="8dp"
-                android:text="@string/space_invaders"
+                android:text="@string/hole"
                 android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="18sp"
@@ -481,7 +481,7 @@
                 tools:layout_editor_absoluteX="170dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/Constraint_onclick_spaceinvaders"
+                android:id="@+id/Constraint_onclick_hole"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"
@@ -491,13 +491,13 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/textView_spaceinvaders_onclick"
+                    android:id="@+id/textView_hole_onclick"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:alpha="0.90"
                     android:background="#FFFFFF"
                     android:padding="22dp"
-                    android:text="@string/space_invaders"
+                    android:text="@string/hole"
                     android:textAlignment="textStart"
                     android:textColor="#000000"
                     android:textSize="18sp"
@@ -505,7 +505,7 @@
                     tools:layout_editor_absoluteX="170dp" />
 
                 <TextView
-                    android:id="@+id/textView_spaceinvaders_bottom"
+                    android:id="@+id/textView_hole_bottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
@@ -521,7 +521,7 @@
                     app:layout_constraintVertical_bias="0.948" />
 
                 <TextView
-                    android:id="@+id/textView_spaceinvaders_highscore"
+                    android:id="@+id/textView_hole_highscore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -531,12 +531,12 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_spaceinvaders_bottom"
+                    app:layout_constraintStart_toEndOf="@+id/textView_hole_bottom"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.955" />
 
                 <ImageView
-                    android:id="@+id/imageView_play_spaceinvaders"
+                    android:id="@+id/imageView_play_hole"
                     android:layout_width="95dp"
                     android:layout_height="48dp"
                     android:layout_marginTop="7dp"
@@ -545,11 +545,11 @@
                     android:src="@drawable/play_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView_spaceinvaders_onclick"
+                    app:layout_constraintTop_toTopOf="@+id/textView_hole_onclick"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/textView_play_spaceinvaders"
+                    android:id="@+id/textView_play_hole"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="137dp"
@@ -560,8 +560,8 @@
                     android:textColor="#00FF00"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_spaceinvaders_highscore"
-                    app:layout_constraintTop_toTopOf="@+id/textView_spaceinvaders_onclick" />
+                    app:layout_constraintStart_toEndOf="@+id/textView_hole_highscore"
+                    app:layout_constraintTop_toTopOf="@+id/textView_hole_onclick" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -580,7 +580,7 @@
         android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CardView_spaceinvaders">
+        app:layout_constraintTop_toBottomOf="@+id/CardView_hole">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
