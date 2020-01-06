@@ -220,8 +220,7 @@ public class BackEndInterface
      * Interfaccia usata per gestire le azioni da compiere
      * una volta ricevuto il risultato di una query assegnata a Firebase
      */
-    public interface OnQueryResultListener
-    {
+    public interface OnQueryResultListener {
         void onQueryResult(boolean success, Scoreboard scoreboard);
     }
 
