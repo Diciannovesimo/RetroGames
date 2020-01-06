@@ -44,4 +44,5 @@
     <string name="total_score_profile">Punteggio totale</string>
     <string name="zero">zero</string>
     <string name="leaderboard">Classifica</string>
+    <string name="loading_leaderboard">Caricamento classifica...</string>
 </resources>

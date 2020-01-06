@@ -1,13 +1,20 @@
 package com.nullpointerexception.retrogames.Fragments;
 
+import android.animation.Animator;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +45,8 @@ public class LeaderboardFragment extends Fragment
     private ViewGroup chipsContainer;
     private ImageView profileImage;
     private TextView profileName, positionTextview, userScoreTextview;
+    private CardView cardProfile;
+    private View progressView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -50,6 +59,8 @@ public class LeaderboardFragment extends Fragment
         recyclerView = view.findViewById(R.id.recyclerView);
         positionTextview = view.findViewById(R.id.positionTextview);
         userScoreTextview = view.findViewById(R.id.scoreTextView);
+        cardProfile = view.findViewById(R.id.cardProfileLeaderboard);
+        progressView = view.findViewById(R.id.progressView);
 
         /*
                 Inizializzazione utente
@@ -72,6 +83,9 @@ public class LeaderboardFragment extends Fragment
                             .fetchImageOf(user, drawable -> profileImage.setImageDrawable(drawable));
             }
         });*/
+
+        //  Se non è loggato
+        //cardProfile.setVisibility(View.GONE);
 
         profileName.setText(user.getNickname());
 
@@ -96,6 +110,7 @@ public class LeaderboardFragment extends Fragment
 
         layoutManager = new LinearLayoutManager(container.getContext());
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration( new ItemDivider(getContext()));
 
         loadScoreboard(App.TOTALSCORE);
 
@@ -147,27 +162,75 @@ public class LeaderboardFragment extends Fragment
 
     private void loadScoreboard(String game)
     {
-        List<Scoreboard> scoresList = new Vector<>();
-        BackEndInterface.get().readAllScoresFirebase(game, (success, scoreboard) ->
+        recyclerView.setAdapter(null);
+        progressView.setVisibility(View.VISIBLE);
+        positionTextview.setText("#");
+        userScoreTextview.setText("-");
+
+        /*
+                Lettura degli score dal database
+         */
+        BackEndInterface.get().readAllScoresFirebase(game, (success, scoreboardList) ->
         {
+            progressView.setVisibility(View.GONE);
+
             if(success && getActivity() != null)
                 getActivity().runOnUiThread(() ->
                 {
-                    scoresList.add(0, scoreboard);
-                    adapter.notifyItemInserted(0);
+                    //  Aggiornamento recyclerview
+                    adapter = new RecyclerViewAdapter(scoreboardList);
+                    recyclerView.setAdapter(adapter);
+
+                    for(int i = 0; i < scoreboardList.size(); i++)
+                        if(scoreboardList.get(i).getNickname().equals(user.getNickname()))
+                            positionTextview.setText(String.format("#%d", i + 1));
                 });
         });
-        adapter = new RecyclerViewAdapter(scoresList);
-        recyclerView.setAdapter(adapter);
 
+        //  Legge lo score dell'utente
         BackEndInterface.get().readScoreFirebase(game, user.getNickname(), (success, value) ->
         {
-            if(success && getActivity() != null)
-                getActivity().runOnUiThread(() ->
-                {
-                    //positionTextview.setText("#" + ); TODO
-                    userScoreTextview.setText( Scoreboard.formatScore(value));
-                });
+            if(success)
+            {
+                if(getActivity() != null)
+                    getActivity().runOnUiThread(() ->
+                    {
+                        userScoreTextview.setText(Scoreboard.formatScore(value));
+
+                        //  Mostra lo score dell'utente se è nascosto
+                        if(cardProfile.getVisibility() == View.GONE)
+                        {
+                            cardProfile.setVisibility(View.VISIBLE);
+                            cardProfile.animate()
+                                    .yBy(-cardProfile.getHeight())
+                                    .setDuration(200)
+                                    .setInterpolator(new DecelerateInterpolator())
+                                    .setListener(null);
+                        }
+                    });
+            }
+            else
+            {
+                //  Nasconde lo score dell'utente se non c'è in classifica
+                if(cardProfile.getVisibility() == View.VISIBLE)
+                    if(getActivity() != null)
+                        getActivity().runOnUiThread(() ->
+                                cardProfile.animate()
+                                        .yBy(cardProfile.getHeight())
+                                        .setDuration(200)
+                                        .setInterpolator(new DecelerateInterpolator())
+                                        .setListener(new Animator.AnimatorListener()
+                                        {
+                                            public void onAnimationStart(Animator animator) { }
+                                            @Override
+                                            public void onAnimationEnd(Animator animator)
+                                            {
+                                                cardProfile.setVisibility(View.GONE);
+                                            }
+                                            public void onAnimationCancel(Animator animator) { }
+                                            public void onAnimationRepeat(Animator animator) { }
+                                        }));
+            }
         });
     }
 
@@ -192,6 +255,8 @@ public class LeaderboardFragment extends Fragment
         {
             holder.userScoreView.setPosition(position+1);
             holder.userScoreView.setViewWithScore( dataSet.get(position));
+            if(dataSet.get(position).getNickname().equals(user.getNickname()))
+                holder.userScoreView.setBackgroundColor(Color.parseColor("#4c00aa00"));
         }
 
         @Override
@@ -209,6 +274,40 @@ public class LeaderboardFragment extends Fragment
         {
             super(itemView);
             userScoreView = (UserScoreView) itemView;
+        }
+    }
+
+    /**
+     *      Custom implementation of {@link androidx.recyclerview.widget.RecyclerView.ItemDecoration}
+     */
+    private class ItemDivider extends RecyclerView.ItemDecoration
+    {
+        private Drawable drawable;
+
+        ItemDivider(Context context)
+        {
+            drawable = context.getResources().getDrawable(R.drawable.recyclerview_divider);
+        }
+
+        @Override
+        public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state)
+        {
+            int left = parent.getPaddingLeft();
+            int right = parent.getWidth() - parent.getPaddingRight();
+
+            int childCount = parent.getChildCount();
+            for (int i = 0; i < childCount; i++)
+            {
+                View child = parent.getChildAt(i);
+
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+
+                int top = child.getBottom() + params.bottomMargin;
+                int bottom = top + drawable.getIntrinsicHeight();
+
+                drawable.setBounds(left, top, right, bottom);
+                drawable.draw(c);
+            }
         }
     }
 }

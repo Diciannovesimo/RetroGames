@@ -79,6 +79,7 @@
     <string name="game_name">Game_Name</string>
     <string name="_0">0</string>
     <string name="snake">Snake</string>
+    <string name="loading_leaderboard">Loading leaderboard…</string>
 
 
 

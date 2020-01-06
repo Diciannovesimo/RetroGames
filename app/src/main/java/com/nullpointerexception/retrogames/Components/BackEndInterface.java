@@ -13,6 +13,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+import java.util.Vector;
+
 public class BackEndInterface
 {
 
@@ -90,6 +93,9 @@ public class BackEndInterface
                     if(listener != null)
                         listener.onDataReceived(true, String.valueOf(value));
                 }
+                else if(listener != null)
+                    listener.onDataReceived(false, null);
+
             }
 
             @Override
@@ -111,6 +117,7 @@ public class BackEndInterface
     {
         Query query = database.getReference(child).orderByValue();
 
+        List<Scoreboard> scoresList = new Vector<>();
         query.addValueEventListener(new ValueEventListener()
         {
             @Override
@@ -125,8 +132,10 @@ public class BackEndInterface
                     long value = childSnapshot.getValue(Long.class);
                     scoreboard.setScore(value);
 
-                    if(listener != null)
-                        listener.onQueryResult(true, scoreboard);
+                    scoresList.add(0, scoreboard);
+
+                    if(scoresList.size() == dataSnapshot.getChildrenCount() && listener != null)
+                        listener.onQueryResult(true, scoresList);
                 }
             }
 
@@ -221,7 +230,7 @@ public class BackEndInterface
      * una volta ricevuto il risultato di una query assegnata a Firebase
      */
     public interface OnQueryResultListener {
-        void onQueryResult(boolean success, Scoreboard scoreboard);
+        void onQueryResult(boolean success, List<Scoreboard> scoreboardList);
     }
 
 }
