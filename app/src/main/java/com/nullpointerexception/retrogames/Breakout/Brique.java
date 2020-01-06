@@ -5,7 +5,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
-public class Brique {
+
+public class Brique{
 
     private int x,y,width,height,resistance;
     private RectF rect;
@@ -59,6 +60,16 @@ public class Brique {
         else if(this.resistance == 1) p.setColor(Color.YELLOW);
         else p.setColor(Color.RED);
         c.drawRect(rect,p);
+
+        /*
+        Bitmap bitmap = Bitmap.createScaledBitmap( BitmapFactory.decodeResource( getResources(), R.drawable.cell0), (int)rect.width(), (int)rect.height(), false);
+
+        Paint pi = new Paint();
+        c.drawBitmap(bitmap,rect.width(), rect.height(),pi);
+         */
+
+
+
     }
 }
 

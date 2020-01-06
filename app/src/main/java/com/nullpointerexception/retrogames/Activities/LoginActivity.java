@@ -122,12 +122,16 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.i("claudio", "Loggato con successo");
                                     currentUser = AuthenticationManager.get().getUserLogged();
                                     BackEndInterface.get().writeUser(currentUser.getEmail(), currentUser.getNickname());
-                                } else
+                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
                                     Log.i("claudio", "errore nel log in");
                                     new KAlertDialog(LoginActivity.this, KAlertDialog.ERROR_TYPE)
                                             .setTitleText("Errore")
                                             .setContentText("Accesso con Google non riuscito")
                                             .show();
+                                }
                             });
                 }
             }

@@ -2,27 +2,22 @@ package com.nullpointerexception.retrogames.Fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.nullpointerexception.retrogames.Activities.WelcomeActivity;
-import com.nullpointerexception.retrogames.Components.App;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.Components.ProfileImageFetcher;
 import com.nullpointerexception.retrogames.Components.User;
 import com.nullpointerexception.retrogames.MainActivity;
 import com.nullpointerexception.retrogames.R;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileFragment extends Fragment
 {
@@ -46,10 +41,7 @@ public class ProfileFragment extends Fragment
         /*
                 TODO Dopo il testing, prendere l'utente loggato
          */
-        SharedPreferences pref = getActivity().getSharedPreferences(App.APP_VARIABLES, MODE_PRIVATE);
         User user = AuthenticationManager.get().getUserLogged();
-        Toast.makeText(getContext(), pref.getString(App.USER, ""), Toast.LENGTH_LONG).show();
-        user.setNickname(pref.getString(App.USER, ""));
 
         /*BackEndInterface.get().readUser(user.getEmail(), new BackEndInterface.OnDataReceivedListener() {
             @Override
@@ -64,11 +56,26 @@ public class ProfileFragment extends Fragment
             }
         });*/
 
-        profileName.setText(user.getNickname());
+        //Verifico se l'utente è loggato oppure se è un ospite
+        if(user == null)
+        {
+            User userTemp = new User();
+            userTemp.setNickname("Ospite"); //Fare una stringa qui (william)
+            if(getContext() != null)
+                new ProfileImageFetcher(getContext())
+                        .fetchImageOf(userTemp, drawable -> profileImage.setImageDrawable(drawable));
+            profileName.setText("Ospite");
+        }
+        else
+        {
+            if(getContext() != null)
+                new ProfileImageFetcher(getContext())
+                        .fetchImageOf(user, drawable -> profileImage.setImageDrawable(drawable));
+            profileName.setText(user.getNickname());
+        }
 
-        if(getContext() != null)
-            new ProfileImageFetcher(getContext())
-                    .fetchImageOf(user, drawable -> profileImage.setImageDrawable(drawable));
+
+
 
 
 
@@ -82,6 +89,7 @@ public class ProfileFragment extends Fragment
             @Override
             public void onClick(View view)
             {
+                AuthenticationManager.get().logout();
                 startActivity(new Intent(getContext(), WelcomeActivity.class));
                 if(getActivity() != null)
                     getActivity().finish();
