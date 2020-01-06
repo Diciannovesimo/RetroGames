@@ -85,6 +85,9 @@ public class LoginActivity extends AppCompatActivity
                                             Log.i("claudio", "Loggato con successo");
                                             currentUser = AuthenticationManager.get().getUserLogged();
                                             Toast.makeText(getApplicationContext(), "Loggato con successo", Toast.LENGTH_LONG).show();
+                                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                            startActivity(intent);
+                                            finish();
                                         }else
                                             Log.i("claudio", "errore nel log in");
                                             Toast.makeText(getApplicationContext(), "Errore nel login", Toast.LENGTH_LONG).show();
@@ -124,6 +127,9 @@ public class LoginActivity extends AppCompatActivity
                                         Log.i("claudio", "Loggato con successo");
                                         currentUser = AuthenticationManager.get().getUserLogged();
                                         BackEndInterface.get().writeUser(currentUser.getEmail(), currentUser.getNickname());
+                                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                     }else
                                         Log.i("claudio", "errore nel log in");
                                 }

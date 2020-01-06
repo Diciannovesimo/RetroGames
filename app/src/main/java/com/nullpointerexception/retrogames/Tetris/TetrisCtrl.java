@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,8 +13,6 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class TetrisCtrl extends View {
 
@@ -48,7 +45,6 @@ public class TetrisCtrl extends View {
     private int mScore = 0; //Punteggio corrente
     private int mTopScore = 0; //Punteggio massimo
 
-    private SharedPreferences mPref = null; //TODO da togliere
 
     /**
      * Restituisce un oggetto di tipo rect contenente le coordinate intere per una figura
@@ -80,8 +76,7 @@ public class TetrisCtrl extends View {
     public TetrisCtrl(Context context) {
         super(context);
         this.context = context;
-        mPref = context.getSharedPreferences("info",MODE_PRIVATE);
-        mTopScore = mPref.getInt("TopScore", 0);
+
     }
 
     /**
@@ -316,9 +311,13 @@ public class TetrisCtrl extends View {
         mScore += filledCount * filledCount;
         if( mTopScore < mScore ) {
             mTopScore = mScore;
+            //-------- TODO vedere qui per la top score
+            /**
             SharedPreferences.Editor edit = mPref.edit();
             edit.putInt("TopScore", mTopScore);
             edit.commit();
+             */
+            //-------
         }
         return filledCount;
     }

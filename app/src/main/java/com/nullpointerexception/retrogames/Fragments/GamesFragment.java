@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment;
 
 import com.nullpointerexception.retrogames.Breakout.MainActivityBreakout;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
-import com.nullpointerexception.retrogames.Pacman.MainActivityPacman;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.R;
+import com.nullpointerexception.retrogames.Snake.MainActivitySnake;
 import com.nullpointerexception.retrogames.SpaceInvaders.MainActivitySpaceInvaders;
 import com.nullpointerexception.retrogames.Tetris.Tetris;
 
@@ -22,7 +22,7 @@ public class GamesFragment extends Fragment
     /*
            UI Components
      */
-    private ViewGroup tetrisCard, pacmanCard, pongCard, spaceInvadersCard, breakoutCard;
+    private ViewGroup tetrisCard, snakeCard, pongCard, spaceInvadersCard, breakoutCard;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -31,7 +31,7 @@ public class GamesFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         tetrisCard = view.findViewById(R.id.CardView_tetris);
-        pacmanCard = view.findViewById(R.id.CardView_pacman);
+        snakeCard = view.findViewById(R.id.CardView_pacman);
         pongCard = view.findViewById(R.id.CardView_pong);
         spaceInvadersCard = view.findViewById(R.id.CardView_spaceinvaders);
         breakoutCard = view.findViewById(R.id.CardView_brick_break);
@@ -46,12 +46,12 @@ public class GamesFragment extends Fragment
             }
         });
 
-        pacmanCard.setOnTouchListener(new OnTouchAnimatedListener()
+        snakeCard.setOnTouchListener(new OnTouchAnimatedListener()
         {
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(getContext(), MainActivityPacman.class);
+                Intent intent = new Intent(getContext(), MainActivitySnake.class);
                 startActivity(intent);
             }
         });
