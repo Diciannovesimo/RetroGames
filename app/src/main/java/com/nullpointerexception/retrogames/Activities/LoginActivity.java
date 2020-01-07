@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                 //TODO: Gestire salvataggio sharedPreferences
                                                                 currentUser.setNickname(value);
                                                                 SharedPreferences preferences = getSharedPreferences(App.USER, MODE_PRIVATE);
-                                                                preferences.edit().putString(currentUser.getNickname(),"lol").apply();
+                                                                preferences.edit().putString(App.NICKNAME,currentUser.getNickname()).apply();
                                                             }
                                                         });
                                                     }

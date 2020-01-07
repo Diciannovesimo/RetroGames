@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,6 +14,9 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+
+import com.nullpointerexception.retrogames.Components.App;
+import com.nullpointerexception.retrogames.Components.SaveScore;
 
 public class TetrisCtrl extends View {
 
@@ -43,7 +47,8 @@ public class TetrisCtrl extends View {
     private Bitmap[] mArBmpCell = new Bitmap[8]; //Immagini delle celle
     private AlertDialog mDlgMsg = null;
     private int mScore = 0; //Punteggio corrente
-    private int mTopScore = 0; //Punteggio massimo
+    private SharedPreferences totalscoreShared;
+    private long mTopScore;
 
 
     /**
@@ -76,6 +81,12 @@ public class TetrisCtrl extends View {
     public TetrisCtrl(Context context) {
         super(context);
         this.context = context;
+
+        //Prende il totalscore dalle sharedPreference
+        totalscoreShared = context.getSharedPreferences(App.TOTALSCORE, Context.MODE_PRIVATE);
+        mTopScore = totalscoreShared.getLong(App.TOTALSCORE, 0);  //Leggo il vecchio totalscore
+
+
 
     }
 
@@ -311,6 +322,10 @@ public class TetrisCtrl extends View {
         mScore += filledCount * filledCount;
         if( mTopScore < mScore ) {
             mTopScore = mScore;
+
+            SaveScore tetris = new SaveScore();
+            tetris.save(App.TETRIS, mScore,getContext());
+
             //-------- TODO vedere qui per la top score
             /**
             SharedPreferences.Editor edit = mPref.edit();

@@ -38,9 +38,8 @@ public class BackEndInterface
      * @param score intero contenente il punteggio ottenuto dal giocatore
      * @param totalscore intero conente il punteggio complessivo ottenuto dal giocatore
      */
-    public void writeScoreFirebase(String game, String nickname, int score, int totalscore) {
+    public void writeScoreFirebase(String game, String nickname, int score, long totalscore) {
 
-        //TODO Chiedere a Luca come fare per l'ordinamento su Firebase
         //Scrittura dello score di un singolo gioco
         myRef = database.getReference(game).child(nickname);
         myRef.setValue(score)
@@ -89,7 +88,7 @@ public class BackEndInterface
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue() != null)
                 {
-                    long value = dataSnapshot.getValue(Long.class);
+                    Long value = dataSnapshot.getValue(Long.class);
                     if(listener != null)
                         listener.onDataReceived(true, String.valueOf(value));
                 }

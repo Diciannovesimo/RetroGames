@@ -38,7 +38,7 @@ public class Tetris extends AppCompatActivity {
         mScreenSize.y = dm.heightPixels; //imposta altezza schermo
         mCellSize = (mScreenSize.x / 8); //imposta dimensione della cella
 
-        initTetrisCtrl();
+       initTetrisCtrl();
     }
 
 

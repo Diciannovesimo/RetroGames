@@ -89,6 +89,7 @@ public class ProfileFragment extends Fragment
             @Override
             public void onClick(View view)
             {
+                //TODO Fare un delete del database
                 AuthenticationManager.get().logout();
                 startActivity(new Intent(getContext(), WelcomeActivity.class));
                 if(getActivity() != null)
