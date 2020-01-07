@@ -133,7 +133,7 @@ public class LeaderboardFragment extends Fragment
                         if(text.equals( getResources().getString(R.string.total_score)))
                             loadScoreboard(App.TOTALSCORE);
                         else if(text.equals( getResources().getString(R.string.pac_man)))
-                            loadScoreboard(App.PACMAN);
+                            loadScoreboard(App.HOLE);
                         else if(text.equals( getResources().getString(R.string.tetris)))
                             loadScoreboard(App.TETRIS);
                         else if(text.equals( getResources().getString(R.string.breakout)))
@@ -141,7 +141,7 @@ public class LeaderboardFragment extends Fragment
                         else if(text.equals( getResources().getString(R.string.pong)))
                             loadScoreboard(App.PONG);
                         else if(text.equals( getResources().getString(R.string.space_invaders)))
-                            loadScoreboard(App.SPACEINVADERS);
+                            loadScoreboard(App.SNAKE);
                     }
                 }
             });

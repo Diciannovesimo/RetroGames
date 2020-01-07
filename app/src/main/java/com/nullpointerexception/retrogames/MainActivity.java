@@ -121,12 +121,12 @@ public class MainActivity extends AppCompatActivity
 
 
         //Inserimanto Pacman
-        Scoreboard pacman = new Scoreboard(App.PACMAN,20);
-        if(App.scoreboardDao.getGame(App.PACMAN) == null)
+        Scoreboard pacman = new Scoreboard(App.HOLE,20);
+        if(App.scoreboardDao.getGame(App.HOLE) == null)
             App.scoreboardDao.insertAll(pacman);
         else
             App.scoreboardDao.update(pacman);
-        //Toast.makeText(getApplicationContext(),App.scoreboardDao.getGame(App.PACMAN) + ": " + App.scoreboardDao.getScore(App.PACMAN), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),App.scoreboardDao.getGame(App.HOLE) + ": " + App.scoreboardDao.getScore(App.HOLE), Toast.LENGTH_SHORT).show();
 
 
         //Inserimanto Pong
@@ -138,12 +138,12 @@ public class MainActivity extends AppCompatActivity
         //Toast.makeText(getApplicationContext(),App.scoreboardDao.getGame(App.PONG) + ": " + App.scoreboardDao.getScore(App.PONG), Toast.LENGTH_SHORT).show();
 
         //Inserimanto SpaceInvaders
-        Scoreboard spaceInvaders = new Scoreboard(App.SPACEINVADERS,40);
-        if(App.scoreboardDao.getGame(App.SPACEINVADERS) == null)
+        Scoreboard spaceInvaders = new Scoreboard(App.SNAKE,40);
+        if(App.scoreboardDao.getGame(App.SNAKE) == null)
             App.scoreboardDao.insertAll(spaceInvaders);
         else
             App.scoreboardDao.update(spaceInvaders);
-        //Toast.makeText(getApplicationContext(),App.scoreboardDao.getGame(App.SPACEINVADERS) + ": " + App.scoreboardDao.getScore(App.SPACEINVADERS), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),App.scoreboardDao.getGame(App.SNAKE) + ": " + App.scoreboardDao.getScore(App.SNAKE), Toast.LENGTH_SHORT).show();
 
 
         //Inserimanto Breakout
@@ -163,10 +163,10 @@ public class MainActivity extends AppCompatActivity
 
     private void provaDatabaseFirebase() {
         //Scrittura sul database dello score
-        BackEndInterface.get().writeScoreFirebase(App.PACMAN,"ilmatty98", 10, 50);
-        BackEndInterface.get().writeScoreFirebase(App.PACMAN,"diciannovesimo", 20, 70);
-        BackEndInterface.get().writeScoreFirebase(App.PACMAN,"sgrulu", 30, 50);
-        BackEndInterface.get().writeScoreFirebase(App.PACMAN,"cioscos", 40, 50);
+        BackEndInterface.get().writeScoreFirebase(App.HOLE,"ilmatty98", 10, 50);
+        BackEndInterface.get().writeScoreFirebase(App.HOLE,"diciannovesimo", 20, 70);
+        BackEndInterface.get().writeScoreFirebase(App.HOLE,"sgrulu", 30, 50);
+        BackEndInterface.get().writeScoreFirebase(App.HOLE,"cioscos", 40, 50);
 
         BackEndInterface.get().writeScoreFirebase(App.TETRIS,"ilmatty98", 50, 50);
         BackEndInterface.get().writeScoreFirebase(App.TETRIS,"diciannovesimo", 60, 50);
@@ -178,10 +178,10 @@ public class MainActivity extends AppCompatActivity
         BackEndInterface.get().writeScoreFirebase(App.PONG,"sgrulu", 110, 50);
         BackEndInterface.get().writeScoreFirebase(App.PONG,"cioscos", 120, 50);
 
-        BackEndInterface.get().writeScoreFirebase(App.SPACEINVADERS,"ilmatty98", 130, 50);
-        BackEndInterface.get().writeScoreFirebase(App.SPACEINVADERS,"diciannovesimo", 140, 50);
-        BackEndInterface.get().writeScoreFirebase(App.SPACEINVADERS,"sgrulu", 150, 50);
-        BackEndInterface.get().writeScoreFirebase(App.SPACEINVADERS,"cioscos", 160, 50);
+        BackEndInterface.get().writeScoreFirebase(App.SNAKE,"ilmatty98", 130, 50);
+        BackEndInterface.get().writeScoreFirebase(App.SNAKE,"diciannovesimo", 140, 50);
+        BackEndInterface.get().writeScoreFirebase(App.SNAKE,"sgrulu", 150, 50);
+        BackEndInterface.get().writeScoreFirebase(App.SNAKE,"cioscos", 160, 50);
 
         BackEndInterface.get().writeScoreFirebase(App.BREAKOUT,"ilmatty98", 170, 500);
         BackEndInterface.get().writeScoreFirebase(App.BREAKOUT,"diciannovesimo", 180, 506);

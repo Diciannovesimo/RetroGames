@@ -9,10 +9,10 @@ public class App
     /*
             Firebase string keys
      */
-    public static final String PACMAN = "pacman";
+    public static final String HOLE = "hole";
     public static final String BREAKOUT = "breakout";
     public static final String PONG = "pong";
-    public static final String SPACEINVADERS = "spaceInvaders";
+    public static final String SNAKE = "snake";
     public static final String TETRIS = "tetris";
     public static final String TOTALSCORE = "totalscore";
     public static final String USER = "user";
