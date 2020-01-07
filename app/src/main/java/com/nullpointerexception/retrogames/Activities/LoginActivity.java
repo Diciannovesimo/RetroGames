@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                                                                 //TODO: Gestire salvataggio sharedPreferences
                                                                 currentUser.setNickname(value);
                                                                 SharedPreferences preferences = getSharedPreferences(App.USER, MODE_PRIVATE);
-                                                                preferences.edit().putString(App.NICKNAME,currentUser.getNickname()).apply();
+                                                                preferences.edit().putString(App.NICKNAME, currentUser.getNickname()).apply();
                                                             }
                                                         });
                                                     }
@@ -121,9 +121,10 @@ public class LoginActivity extends AppCompatActivity {
                                 if (result) {
                                     Log.i("claudio", "Loggato con successo");
                                     currentUser = AuthenticationManager.get().getUserLogged();
+                                    SharedPreferences preferences = getSharedPreferences(App.USER, MODE_PRIVATE);
+                                    preferences.edit().putString(App.NICKNAME, currentUser.getNickname()).apply();
                                     BackEndInterface.get().writeUser(currentUser.getEmail(), currentUser.getNickname());
-                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                    startActivity(intent);
+                                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                                     finish();
                                 } else {
                                     Log.i("claudio", "errore nel log in");
