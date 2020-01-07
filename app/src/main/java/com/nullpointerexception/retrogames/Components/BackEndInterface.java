@@ -91,17 +91,10 @@ public class BackEndInterface
             {
                 if(dataSnapshot.getValue() != null)
                 {
-                    try
-                    {
-                        long value = dataSnapshot.getValue(Long.class);
-                        if(listener != null)
-                            listener.onDataReceived(true, String.valueOf(value));
-                    }
-                    catch(Exception e)
-                    {
-                        if(listener != null)
-                            listener.onDataReceived(false, null);
-                    }
+                    long value = dataSnapshot.getValue(Long.class);
+                    if(listener != null)
+                        listener.onDataReceived(true, String.valueOf(value));
+
                 }
                 else if(listener != null)
                     listener.onDataReceived(false, null);
