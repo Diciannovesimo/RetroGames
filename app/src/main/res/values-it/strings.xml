@@ -34,7 +34,7 @@
     <string name="signInGoogle">ACCEDI CON GOOGLE</string>
     <string name="welcome">Benvenuto!</string>
     <string name="welcome_info">In RetroGames hai tutti i tuoi videogiochi arcade preferiti sul tuo smartphone.</string>
-    <string name="global_ranking"># in classifica globale</string>
+    <string name="global_ranking">in classifica globale</string>
     <string name="logout_img">immagine di logout</string>
     <string name="name">Nome</string>
     <string name="position"># posto</string>

@@ -82,20 +82,29 @@ public class BackEndInterface
      * @param nickname stringa contente il nome dell'utente da cui si vuole ricavare lo score
      * @param listener definizione delle operazioni da compiere una volta ricevuto il dato
      */
-    public void readScoreFirebase(String child, String nickname, final OnDataReceivedListener listener) {
+    public void readScoreFirebase(String child, String nickname, final OnDataReceivedListener listener)
+    {
         myRef = database.getReference(child).child(nickname);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 if(dataSnapshot.getValue() != null)
                 {
-                    Long value = dataSnapshot.getValue(Long.class);
-                    if(listener != null)
-                        listener.onDataReceived(true, String.valueOf(value));
+                    try
+                    {
+                        long value = dataSnapshot.getValue(Long.class);
+                        if(listener != null)
+                            listener.onDataReceived(true, String.valueOf(value));
+                    }
+                    catch(Exception e)
+                    {
+                        if(listener != null)
+                            listener.onDataReceived(false, null);
+                    }
                 }
                 else if(listener != null)
                     listener.onDataReceived(false, null);
-
             }
 
             @Override
