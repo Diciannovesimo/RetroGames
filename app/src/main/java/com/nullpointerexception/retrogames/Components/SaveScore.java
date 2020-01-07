@@ -35,11 +35,29 @@ public class SaveScore {
                 //Scrivo il nuovo punteggio sul database locale
                 App.scoreboardDao.update(new Scoreboard(nameGame, newScore));
 
+
+                if(App.scoreboardDao.getGame(App.TOTALSCORE) != null) //Controllo se già esiste un totalscore
+                {
+                    //Esiste già un totalscore
+                    newTotalscore = App.scoreboardDao.getScore(App.TOTALSCORE); //Leggo il vecchio totalscore
+                    newTotalscore = previousScore - newTotalscore + newScore;   //Determino il nuovo totalscore
+                    App.scoreboardDao.update(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
+                }
+                else
+                {
+                    //Non esiste un totalscore
+                    newTotalscore = 0;
+                    newTotalscore = previousScore - newTotalscore + newScore;   //Determino il nuovo totalscore
+                    App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
+                }
+
+                /**
                 //Scrivo il nuovo totalscore sulle SharedPreferences
                 SharedPreferences totalscoreShared = context.getSharedPreferences(App.TOTALSCORE, Context.MODE_PRIVATE);
                 newTotalscore = totalscoreShared.getLong(App.TOTALSCORE, 0);  //Leggo il vecchio totalscore
                 newTotalscore = previousScore - newTotalscore + newScore;    //Determino il nuovo totalscore
                 totalscoreShared.edit().putLong(App.TOTALSCORE, newTotalscore).apply();   //Scrivo il nuovo totalscore
+                 **/
 
                 //Controllo se l'utente è loggato con firebase
                 if(AuthenticationManager.get().isUserLogged())
@@ -61,11 +79,29 @@ public class SaveScore {
             //Scrivo il nuovo punteggio sul database locale
             App.scoreboardDao.insertAll(new Scoreboard(nameGame, newScore));
 
+
+            if(App.scoreboardDao.getGame(App.TOTALSCORE) != null) //Controllo se già esiste un totalscore
+            {
+                //Esiste già un totalscore
+                newTotalscore = App.scoreboardDao.getScore(App.TOTALSCORE); //Leggo il vecchio totalscore
+                newTotalscore = newTotalscore + newScore;   //Determino il nuovo totalscore
+                App.scoreboardDao.update(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
+            }
+            else
+            {
+                newTotalscore = 0;
+                newTotalscore = newTotalscore + newScore;   //Determino il nuovo totalscore
+                App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
+            }
+
+
+            /**
             //Scrivo il nuovo totalscore sulle SharedPreferences
             SharedPreferences totalscoreShared = context.getSharedPreferences(App.TOTALSCORE, Context.MODE_PRIVATE);
             newTotalscore = totalscoreShared.getLong(App.TOTALSCORE, 0);  //Leggo il vecchio totalscore
             newTotalscore = newTotalscore + newScore;    //Determino il nuovo totalscore
             totalscoreShared.edit().putLong(App.TOTALSCORE, newTotalscore).apply();   //Scrivo il nuovo totalscore
+             **/
 
             //Controllo se l'utente è loggato con firebase
             if(AuthenticationManager.get().isUserLogged())

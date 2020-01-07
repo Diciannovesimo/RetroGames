@@ -77,14 +77,28 @@ public class TetrisCtrl extends View {
         return rand;
     }
 
-    //TODO da togliere, sono le sharedPreferences
+    /**
+     * Viene istanziato il Tetris Controller e recupera il topscore dal database locale
+     * @param context contesto
+     */
     public TetrisCtrl(Context context) {
         super(context);
         this.context = context;
 
-        //Prende il totalscore dalle sharedPreference
+        /**
+        //Prende il totalscore dalle sharedPreferences
         totalscoreShared = context.getSharedPreferences(App.TOTALSCORE, Context.MODE_PRIVATE);
         mTopScore = totalscoreShared.getLong(App.TOTALSCORE, 0);  //Leggo il vecchio totalscore
+         **/
+
+        //Prendo il topscore dal database locale
+        if(App.scoreboardDao.getGame(App.TETRIS) != null) //Controllo se già esiste un topscore
+            //Esiste già un topscore
+            mTopScore = App.scoreboardDao.getScore(App.TETRIS); //Leggo il vecchio topscore
+        else
+            //Non esiste un topscore
+            mTopScore = 0;
+
 
 
 
@@ -286,9 +300,9 @@ public class TetrisCtrl extends View {
         }
     }
 
-    //TODO vedere qui per lo score e il topscore
     /**
-     * Controlla se le righe sono piene, se lo sono cancella la riga  e determina il punteggio
+     * Controlla se le righe sono piene, se lo sono cancella la riga
+     * e determina il nuovo score e l'eventuale topscore
      * @return numero intero di righe rimosse
      */
     int checkLineFilled() {
@@ -326,13 +340,6 @@ public class TetrisCtrl extends View {
             SaveScore tetris = new SaveScore();
             tetris.save(App.TETRIS, mScore,getContext());
 
-            //-------- TODO vedere qui per la top score
-            /**
-            SharedPreferences.Editor edit = mPref.edit();
-            edit.putInt("TopScore", mTopScore);
-            edit.commit();
-             */
-            //-------
         }
         return filledCount;
     }
