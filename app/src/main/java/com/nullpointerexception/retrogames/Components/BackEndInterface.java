@@ -38,7 +38,7 @@ public class BackEndInterface
      * @param score intero contenente il punteggio ottenuto dal giocatore
      * @param totalscore intero conente il punteggio complessivo ottenuto dal giocatore
      */
-    public void writeScoreFirebase(String game, String nickname, int score, long totalscore) {
+    public void writeScoreFirebase(String game, String nickname, long score, long totalscore) {
 
         //Scrittura dello score di un singolo gioco
         myRef = database.getReference(game).child(nickname);
