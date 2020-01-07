@@ -82,9 +82,20 @@ public class TetrisCtrl extends View {
         super(context);
         this.context = context;
 
-        //Prende il totalscore dalle sharedPreference
+        /**
+        //Prende il totalscore dalle sharedPreferences
         totalscoreShared = context.getSharedPreferences(App.TOTALSCORE, Context.MODE_PRIVATE);
         mTopScore = totalscoreShared.getLong(App.TOTALSCORE, 0);  //Leggo il vecchio totalscore
+         **/
+
+        //Prendo il totalscore dal database locale
+        if(App.scoreboardDao.getGame(App.TOTALSCORE) != null) //Controllo se già esiste un totalscore
+            //Esiste già un totalscore
+            mTopScore = App.scoreboardDao.getScore(App.TOTALSCORE); //Leggo il vecchio totalscore
+        else
+            //Non esiste un totalscore
+            mTopScore = 0;
+
 
 
 

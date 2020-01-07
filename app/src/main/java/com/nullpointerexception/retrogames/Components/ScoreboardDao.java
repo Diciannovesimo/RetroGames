@@ -35,7 +35,7 @@ public interface ScoreboardDao {
     int getScore(String game);
 
     /**
-     * Inserisce nel database il nome del gioco e il suo relativo punteggio
+     * Inserisce nel database il nome del gioco o il totalscore e il suo relativo punteggio
      * @param scoreboards oggetto contenente il nome del gioco e il suo relativo punteggio
      */
     @Insert

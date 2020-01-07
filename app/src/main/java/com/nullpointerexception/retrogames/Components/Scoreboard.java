@@ -15,11 +15,15 @@ public class Scoreboard {
     @ColumnInfo(name = "score")
     private long score;
 
+
+    @ColumnInfo(name = "totalscore")
+    private long totalscore;
+
     private String nickname;
 
     public Scoreboard() { }
 
-    public Scoreboard(String game, int score) {
+    public Scoreboard(String game, long score) {
         this.game = game;
         this.score = score;
     }
@@ -48,6 +52,14 @@ public class Scoreboard {
 
     public void setScore(long score) {
         this.score = score;
+    }
+
+    public long getTotalscore() {
+        return totalscore;
+    }
+
+    public void setTotalscore(long totalscore) {
+        this.totalscore = totalscore;
     }
 
     public String getFormattedScore()
