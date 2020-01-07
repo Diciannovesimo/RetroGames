@@ -50,4 +50,7 @@ public interface ScoreboardDao {
 
     @Delete
     void delete(Scoreboard user);
+
+    @Delete
+    void delete(List<Scoreboard> usersList);
 }

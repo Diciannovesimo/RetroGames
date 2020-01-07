@@ -19,12 +19,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.nullpointerexception.retrogames.Components.App;
+import com.nullpointerexception.retrogames.App;
+import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.Components.ProfileImageFetcher;
 import com.nullpointerexception.retrogames.Components.Scoreboard;
-import com.nullpointerexception.retrogames.Components.User;
 import com.nullpointerexception.retrogames.Components.UserScoreView;
 import com.nullpointerexception.retrogames.R;
 
@@ -34,7 +34,6 @@ import java.util.Vector;
 public class LeaderboardFragment extends Fragment
 {
     private View selectedView;
-    private User user;
 
     /*
           UI Components
@@ -65,49 +64,28 @@ public class LeaderboardFragment extends Fragment
         /*
                 Inizializzazione utente
          */
-        /*
-                TODO Dopo il testing, prendere l'utente loggato
-         */
-        user = new User();
-        user.setNickname("Sgrulu");
-
-        /*      Operazioni da fare se l'utente è loggato
-        BackEndInterface.get().readUser(user.getEmail(), (success, value) ->
-        {
-            if(success)
+        if(AuthenticationManager.get().isUserLogged())
+            BackEndInterface.get().readUser(AuthenticationManager.get().getUserLogged().getEmail(), (success, value) ->
             {
-                profileName.setText(user.getNickname());
+                if(success)
+                {
+                    profileName.setText( AuthenticationManager.get()
+                                            .getUserLogged().getNickname());
 
-                if(getContext() != null)
-                    new ProfileImageFetcher(getContext())
-                            .fetchImageOf(user, drawable -> profileImage.setImageDrawable(drawable));
-            }
-        });*/
-
-        //  Se non è loggato
-        //cardProfile.setVisibility(View.GONE);
-
-        profileName.setText(user.getNickname());
-
-        if(getContext() != null)
-            new ProfileImageFetcher(getContext())
-                    .fetchImageOf(user, drawable -> profileImage.setImageDrawable(drawable));
+                    if(getContext() != null)
+                        new ProfileImageFetcher(getContext())
+                                .fetchImageOf(AuthenticationManager.get().getUserLogged(),
+                                        drawable -> profileImage.setImageDrawable(drawable));
+                }
+                else
+                    cardProfile.setVisibility(View.GONE);
+            });
+        else
+            cardProfile.setVisibility(View.GONE);
 
         /*
                 Inizializzazione recyclerView
          */
-        //  TODO Remove after tests
-        /*
-        List<Scoreboard> fakeList = new Vector<>();
-        for(int i = 0; i < 20; i++)
-        {
-            Random random = new Random();
-            Scoreboard scoreboard = new Scoreboard();
-            scoreboard.setNickname("Player #" + random.nextInt(1000));
-            scoreboard.setScore(random.nextInt(3999999));
-            fakeList.add(scoreboard);
-        }*/
-
         layoutManager = new LinearLayoutManager(container.getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration( new ItemDivider(getContext()));
@@ -132,7 +110,7 @@ public class LeaderboardFragment extends Fragment
                         //  Switch content text
                         if(text.equals( getResources().getString(R.string.total_score)))
                             loadScoreboard(App.TOTALSCORE);
-                        else if(text.equals( getResources().getString(R.string.pac_man)))
+                        else if(text.equals( getResources().getString(R.string.hole)))
                             loadScoreboard(App.HOLE);
                         else if(text.equals( getResources().getString(R.string.tetris)))
                             loadScoreboard(App.TETRIS);
@@ -140,7 +118,7 @@ public class LeaderboardFragment extends Fragment
                             loadScoreboard(App.BREAKOUT);
                         else if(text.equals( getResources().getString(R.string.pong)))
                             loadScoreboard(App.PONG);
-                        else if(text.equals( getResources().getString(R.string.space_invaders)))
+                        else if(text.equals( getResources().getString(R.string.snake)))
                             loadScoreboard(App.SNAKE);
                     }
                 }
@@ -181,57 +159,72 @@ public class LeaderboardFragment extends Fragment
                     adapter = new RecyclerViewAdapter(scoreboardList);
                     recyclerView.setAdapter(adapter);
 
-                    for(int i = 0; i < scoreboardList.size(); i++)
-                        if(scoreboardList.get(i).getNickname().equals(user.getNickname()))
-                            positionTextview.setText(String.format("#%d", i + 1));
+                    if(AuthenticationManager.get().isUserLogged())
+                        for(int i = 0; i < scoreboardList.size(); i++)
+                            if(scoreboardList.get(i).getNickname().equals(
+                                    AuthenticationManager.get().getUserLogged().getNickname()))
+                                positionTextview.setText(String.format("#%d", i + 1));
                 });
         });
 
         //  Legge lo score dell'utente
-        BackEndInterface.get().readScoreFirebase(game, user.getNickname(), (success, value) ->
+        if(AuthenticationManager.get().isUserLogged())
         {
-            if(success)
-            {
-                if(getActivity() != null)
-                    getActivity().runOnUiThread(() ->
+            BackEndInterface.get().readScoreFirebase(game,
+                    AuthenticationManager.get().getUserLogged().getNickname(),
+                    (success, value) ->
                     {
-                        userScoreTextview.setText(Scoreboard.formatScore(value));
-
-                        //  Mostra lo score dell'utente se è nascosto
-                        if(cardProfile.getVisibility() == View.GONE)
+                        if(success)
                         {
-                            cardProfile.setVisibility(View.VISIBLE);
-                            cardProfile.animate()
-                                    .yBy(-cardProfile.getHeight())
-                                    .setDuration(200)
-                                    .setInterpolator(new DecelerateInterpolator())
-                                    .setListener(null);
+                            if(getActivity() != null)
+                                getActivity().runOnUiThread(() ->
+                                {
+                                    userScoreTextview.setText(Scoreboard.formatScore(value));
+
+                                    //  Mostra lo score dell'utente se è nascosto
+                                    if(cardProfile.getVisibility() == View.GONE)
+                                    {
+                                        cardProfile.setVisibility(View.VISIBLE);
+                                        cardProfile.animate()
+                                                .yBy(-cardProfile.getHeight())
+                                                .setDuration(200)
+                                                .setInterpolator(new DecelerateInterpolator())
+                                                .setListener(null);
+                                    }
+                                });
+                        }
+                        else
+                        {
+                            //  Nasconde lo score dell'utente se non c'è in classifica
+                            hideUserCard();
                         }
                     });
-            }
-            else
-            {
-                //  Nasconde lo score dell'utente se non c'è in classifica
-                if(cardProfile.getVisibility() == View.VISIBLE)
-                    if(getActivity() != null)
-                        getActivity().runOnUiThread(() ->
-                                cardProfile.animate()
-                                        .yBy(cardProfile.getHeight())
-                                        .setDuration(200)
-                                        .setInterpolator(new DecelerateInterpolator())
-                                        .setListener(new Animator.AnimatorListener()
-                                        {
-                                            public void onAnimationStart(Animator animator) { }
-                                            @Override
-                                            public void onAnimationEnd(Animator animator)
-                                            {
-                                                cardProfile.setVisibility(View.GONE);
-                                            }
-                                            public void onAnimationCancel(Animator animator) { }
-                                            public void onAnimationRepeat(Animator animator) { }
-                                        }));
-            }
-        });
+        }
+        else
+            hideUserCard();
+
+    }
+
+    private void hideUserCard()
+    {
+        if(cardProfile.getVisibility() == View.VISIBLE)
+            if(getActivity() != null)
+                getActivity().runOnUiThread(() ->
+                        cardProfile.animate()
+                                .yBy(cardProfile.getHeight())
+                                .setDuration(200)
+                                .setInterpolator(new DecelerateInterpolator())
+                                .setListener(new Animator.AnimatorListener()
+                                {
+                                    public void onAnimationStart(Animator animator) { }
+                                    @Override
+                                    public void onAnimationEnd(Animator animator)
+                                    {
+                                        cardProfile.setVisibility(View.GONE);
+                                    }
+                                    public void onAnimationCancel(Animator animator) { }
+                                    public void onAnimationRepeat(Animator animator) { }
+                                }));
     }
 
     public class RecyclerViewAdapter extends RecyclerView.Adapter<UserScoreViewItem>
@@ -255,8 +248,10 @@ public class LeaderboardFragment extends Fragment
         {
             holder.userScoreView.setPosition(position+1);
             holder.userScoreView.setViewWithScore( dataSet.get(position));
-            if(dataSet.get(position).getNickname().equals(user.getNickname()))
-                holder.userScoreView.setBackgroundColor(Color.parseColor("#4c00aa00"));
+            if(AuthenticationManager.get().isUserLogged())
+                if(dataSet.get(position).getNickname().equals(
+                        AuthenticationManager.get().getUserLogged().getNickname()))
+                    holder.userScoreView.setBackgroundColor(Color.parseColor("#4c00aa00"));
         }
 
         @Override

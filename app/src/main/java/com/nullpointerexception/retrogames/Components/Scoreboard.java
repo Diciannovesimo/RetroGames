@@ -15,7 +15,6 @@ public class Scoreboard {
     @ColumnInfo(name = "score")
     private long score;
 
-
     @ColumnInfo(name = "totalscore")
     private long totalscore;
 

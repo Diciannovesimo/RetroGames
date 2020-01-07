@@ -15,7 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 
-import com.nullpointerexception.retrogames.Components.App;
+import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.SaveScore;
 
 public class TetrisCtrl extends View {
