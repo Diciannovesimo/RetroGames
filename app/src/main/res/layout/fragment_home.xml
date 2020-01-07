@@ -198,7 +198,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/pacman_home" />
+                app:srcCompat="@drawable/snake_background" />
 
             <TextView
                 android:id="@+id/textView_snake"
@@ -453,7 +453,6 @@
             android:layout_height="156dp"
             android:visibility="visible">
 
-
             <ImageView
                 android:id="@+id/imageView_hole"
                 android:layout_width="wrap_content"
@@ -464,7 +463,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/spaceinvaders" />
+                app:srcCompat="@drawable/hole_background" />
 
             <TextView
                 android:id="@+id/textView_hole"
