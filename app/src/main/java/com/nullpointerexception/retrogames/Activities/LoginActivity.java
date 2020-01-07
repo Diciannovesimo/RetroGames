@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -91,8 +90,19 @@ public class LoginActivity extends AppCompatActivity {
                                                 .show();
                                     }
                                 });
-                    } else
-                        Toast.makeText(getApplicationContext(), "Campi errati", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //Crea un vettore con il risultato dei controlli sui campi e lo riempe
+                        //con il return di wrongFields
+                        int[] wrongFields = wrongFields();
+                        if(wrongFields[0] == 1 && wrongFields[1] == 1) { //se wrongFields[0]/[1] è 1 allora la mail e la password è errata
+                            mEmail.setError("La mail è sbagliata");
+                            mPassword.setError("La password è sbagliata");
+                        } else if(wrongFields[0] == 1) {                 //se wrongFields[0] è 1 allora la mail è errata
+                            mEmail.setError("La mail è sbagliata");
+                        } else if(wrongFields[1] == 1) {                 //se wrongFields[1] è 1 allora la password è errata
+                            mPassword.setError("La password è sbagliata");
+                        }
+                    }
                 }
             }
         });
@@ -140,27 +150,38 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean checkFields() {
-        boolean allRight = true;
+        boolean alright = true;
+
+        String email = mEmail.getText().toString();
+        if (!emailCheck(email.trim()) || email.isEmpty())
+            alright = false;
+
+        String psw = mPassword.getText().toString();
+        if (psw.isEmpty() || psw.length() < 8)
+            alright = false;
+
+        return alright;
+    }
+
+    private int[] wrongFields() {
+        int[] wrongField = new int[2];
 
         String email = mEmail.getText().toString();
         if (!emailCheck(email) || email.isEmpty())
-            allRight = false;
+            wrongField[0] = 1;
 
         String psw = mPassword.getText().toString();
-        if (psw.isEmpty() || psw.length() > 8)
-            allRight = false;
+        if (psw.isEmpty() || psw.length() < 8)
+            wrongField[1] = 1;
 
-        return allRight;
+        return wrongField;
     }
 
     private boolean emailCheck(String email) {
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
 
-        if (mat.matches())
-            return true;
-        else
-            return false;
+        return mat.matches();
     }
 
     private void initUI() {
