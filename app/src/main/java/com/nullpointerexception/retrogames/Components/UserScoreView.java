@@ -44,7 +44,7 @@ public class UserScoreView extends FrameLayout
         User user = new User();
         user.setNickname(score.getNickname());
 
-        new ProfileImageFetcher(getContext())
+        new ProfileImageGenerator(getContext())
                 .fetchImageOf(user, imageView::setImageDrawable);
     }
 

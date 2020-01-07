@@ -3,6 +3,7 @@ package com.nullpointerexception.retrogames.Components;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -17,6 +18,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.R;
 
 public class AuthenticationManager
@@ -60,7 +62,13 @@ public class AuthenticationManager
         auth = FirebaseAuth.getInstance();
 
         if(auth.getCurrentUser() != null)
+        {
             currentUser = new User(auth.getCurrentUser());
+
+            //  Get user info
+            SharedPreferences nicknameShared = context.getSharedPreferences(App.USER, Context.MODE_PRIVATE);
+            currentUser.setNickname( nicknameShared.getString(App.NICKNAME, "-"));
+        }
         else
             return null;
 

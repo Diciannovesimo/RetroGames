@@ -10,25 +10,15 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.Shape;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 
 /**
- *      ProfileImageFetcher
+ *      ProfileImageGenerator
  *
  *      Is used to retrieve or generate a drawable to use as profile image.
  */
-public class ProfileImageFetcher
+public class ProfileImageGenerator
 {
     /**   Context used to do functionality of this object  */
     private Context context;
@@ -36,10 +26,11 @@ public class ProfileImageFetcher
     private Drawable resource;
 
     /**   Interface used to provide an implementation of the callback method invoked when resource is ready.  */
-    public interface OnImageFetchedListener { void onImageFetched(Drawable drawable); }
+    public interface OnImageGeneratedListener
+    { void onImageGenerated(Drawable drawable); }
 
     @SuppressLint("CheckResult")
-    public ProfileImageFetcher(@NonNull Context context)
+    public ProfileImageGenerator(@NonNull Context context)
     {
         this.context = context;
     }
@@ -49,68 +40,15 @@ public class ProfileImageFetcher
      *      It generates one if it doesn't have an url or if can't be loaded.
      *
      *      @param user     User that provides image url.
-     *      @param onImageFetchedListener   Implementation of the callback method.
+     *      @param onImageGeneratedListener   Implementation of the callback method.
      */
     @SuppressLint("CheckResult")
-    public void fetchImageOf(@NonNull User user, OnImageFetchedListener onImageFetchedListener)
+    public void fetchImageOf(@NonNull User user, OnImageGeneratedListener onImageGeneratedListener)
     {
-        String url = user.getProfileImageUrl();
+        resource = new ProfileImageLetter(user.getNickname());
 
-        if(url != null && ! url.trim().isEmpty())
-        {
-            Glide.with(context)
-                    .load(url)
-                    .listener(new RequestListener<Drawable>()
-                    {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource)
-                        {
-                            if(e != null)
-                                Log.e(ProfileImageFetcher.class.getSimpleName(), e.toString());
-
-                            resource = new ProfileImageLetter(user.getNickname());
-
-                            if(onImageFetchedListener != null)
-                                onImageFetchedListener.onImageFetched(resource);
-
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource)
-                        {
-
-                            return false;
-                        }
-                    })
-                    .into(new CustomTarget<Drawable>()
-                    {
-                        @Override
-                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition)
-                        {
-                            ProfileImageFetcher.this.resource = resource;
-
-                            if(onImageFetchedListener != null)
-                                onImageFetchedListener.onImageFetched(resource);
-                        }
-
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder)
-                        {
-                            ProfileImageFetcher.this.resource = placeholder;
-
-                            if(onImageFetchedListener != null)
-                                onImageFetchedListener.onImageFetched(resource);
-                        }
-                    });
-        }
-        else
-        {
-            resource = new ProfileImageLetter(user.getNickname());
-
-            if(onImageFetchedListener != null)
-                onImageFetchedListener.onImageFetched(resource);
-        }
+        if(onImageGeneratedListener != null)
+            onImageGeneratedListener.onImageGenerated(resource);
     }
 
     public Context getContext()

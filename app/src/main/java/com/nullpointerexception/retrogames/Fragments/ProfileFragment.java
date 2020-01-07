@@ -18,7 +18,7 @@ import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
-import com.nullpointerexception.retrogames.Components.ProfileImageFetcher;
+import com.nullpointerexception.retrogames.Components.ProfileImageGenerator;
 import com.nullpointerexception.retrogames.Components.Scoreboard;
 import com.nullpointerexception.retrogames.Components.User;
 import com.nullpointerexception.retrogames.R;
@@ -70,26 +70,13 @@ public class ProfileFragment extends Fragment
         positionHole = view.findViewById(R.id.textView_position_hole);
 
         /*
-                Lettura utente da Firebase
+                Assegnazione contenuti grafici
          */
         User user = AuthenticationManager.get().getUserLogged();
 
-        BackEndInterface.get().readUser(user.getEmail(), (success, value) ->
-                getActivity().runOnUiThread(() ->
-                {
-                    user.setNickname(value);
-                    profileName.setText(user.getNickname());
-                    if(getContext() != null)
-                        new ProfileImageFetcher(getContext())
-                                .fetchImageOf(user, drawable -> profileImage.setImageDrawable(drawable));
-                }));
-
-        /*
-                Assegnazione contenuti grafici
-         */
         //  Generazione immagine profilo
         if(getContext() != null)
-            new ProfileImageFetcher(getContext())
+            new ProfileImageGenerator(getContext())
                     .fetchImageOf(user, drawable -> profileImage.setImageDrawable(drawable));
 
         //  Assegnazione testi
