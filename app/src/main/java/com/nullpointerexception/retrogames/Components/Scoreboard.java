@@ -18,6 +18,9 @@ public class Scoreboard {
     @ColumnInfo(name = "totalscore")
     private long totalscore;
 
+    @ColumnInfo(name = "position")
+    private int position;
+
     private String nickname;
 
     public Scoreboard() { }
@@ -64,6 +67,14 @@ public class Scoreboard {
     public String getFormattedScore()
     {
         return formatScore( String.valueOf(score));
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public static String formatScore(String s)

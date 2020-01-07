@@ -92,5 +92,11 @@
     <string name="loading_leaderboard">Loading leaderboard…</string>
     <string name="position"># place</string>
 
+    <!-- Tetris -->
+    <string name="gameOver">Game over</string>
+    <string name="your_score_is">Your score is</string>
+    <string name="again">Again</string>
+    <string name="exit">Exit</string>
+
 
 </resources>

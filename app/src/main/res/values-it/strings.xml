@@ -54,4 +54,8 @@
     <string name="error_edittext_username">Il nome utente esiste già</string>
     <string name="error">Errore</string>
     <string name="position_default">Non ancora classificato</string>
+    <string name="exit">Esci</string>
+    <string name="gameOver">Fine partita</string>
+    <string name="again">Riprova</string>
+    <string name="your_score_is">Il tuo punteggio è</string>
 </resources>

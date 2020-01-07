@@ -35,6 +35,14 @@ public interface ScoreboardDao {
     int getScore(String game);
 
     /**
+     *  Restituisce la posizione ottenuta in quel determinato gioco
+     * @param game stringa contenente il nome del gioco
+     * @return il punteggio del gioco
+     */
+    @Query("SELECT position FROM scoreboard WHERE game = :game")
+    int getPosition(String game);
+
+    /**
      * Inserisce nel database il nome del gioco o il totalscore e il suo relativo punteggio
      * @param scoreboards oggetto contenente il nome del gioco e il suo relativo punteggio
      */

@@ -17,6 +17,7 @@ import android.view.View;
 
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.SaveScore;
+import com.nullpointerexception.retrogames.R;
 
 public class TetrisCtrl extends View {
 
@@ -512,15 +513,22 @@ public class TetrisCtrl extends View {
      */
     void showDialog_GameOver() {
         mDlgMsg = new AlertDialog.Builder(context)
-                .setTitle("Notice")
-                .setMessage("Game over! Your score is " + mScore)
-                .setPositiveButton("Again",
-                        new DialogInterface.OnClickListener() {
+                .setTitle(getResources().getString(R.string.gameOver))
+                .setMessage(getResources().getString(R.string.your_score_is) + ": " + mScore)
+                .setPositiveButton(getResources().getString(R.string.again), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 mDlgMsg = null;
                                 startGame();
                             }
                         })
+                .setNegativeButton(getResources().getString(R.string.exit), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mDlgMsg = null;
+                        if(context instanceof Tetris)
+                            ((Tetris) context).finish();
+                    }
+                })
                 .show();
     }
 
@@ -605,7 +613,7 @@ public class TetrisCtrl extends View {
     }
 
     /**
-     * Mostra il prossimo blocco generato in maniera meno dettagliata
+     * Usato per mostrare il prossimo blocco
      * @param canvas foglio di disegno
      * @param blockX blocco sull'asse x
      * @param blockY blocco sull'asse y
@@ -613,14 +621,14 @@ public class TetrisCtrl extends View {
      */
     void showBlockColor(Canvas canvas, int blockX, int blockY, int blockType) {
         //vettore contenente tutti i tipi di blocchi generabili
-        int[] arColor = {Color.argb(32,255,255,255),
-                Color.argb(128,255,0,0),
-                Color.argb(128,255,255,0),
-                Color.argb(128,255,160,160),
-                Color.argb(128,100,255,100),
-                Color.argb(128,255,128,100),
-                Color.argb(128,0,0,255),
-                Color.argb(128,100,100,255)};
+        int[] arColor = {Color.argb(32,255,255,255),  //Bianco
+                Color.argb(128,147,4,0),    //Rosso
+                Color.argb(128,172,163,0),  //Giallo
+                Color.argb(128,146,1,80),//Rosa
+                Color.argb(128,0,139,32),//Verde
+                Color.argb(128,163,92,0),//Rosa scuro
+                Color.argb(128,19,35,229),    //Blu
+                Color.argb(128,0,97,153)};//Grigio
         int previewBlockSize = mScreenSize.x / 20;
 
         //Creazione di una figura tramite un oggetto di tipo Rect

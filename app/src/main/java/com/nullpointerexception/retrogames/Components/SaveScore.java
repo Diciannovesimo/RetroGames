@@ -55,14 +55,6 @@ public class SaveScore {
                     App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
                 }
 
-                /**
-                //Scrivo il nuovo totalscore sulle SharedPreferences
-                SharedPreferences totalscoreShared = context.getSharedPreferences(App.TOTALSCORE, Context.MODE_PRIVATE);
-                newTotalscore = totalscoreShared.getLong(App.TOTALSCORE, 0);  //Leggo il vecchio totalscore
-                newTotalscore = previousScore - newTotalscore + newScore;    //Determino il nuovo totalscore
-                totalscoreShared.edit().putLong(App.TOTALSCORE, newTotalscore).apply();   //Scrivo il nuovo totalscore
-                 **/
-
                 //Controllo se l'utente è loggato con firebase
                 if(AuthenticationManager.get().isUserLogged())
                 {
@@ -97,15 +89,6 @@ public class SaveScore {
                 newTotalscore = Math.abs(newTotalscore);
                 App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
             }
-
-
-            /**
-            //Scrivo il nuovo totalscore sulle SharedPreferences
-            SharedPreferences totalscoreShared = context.getSharedPreferences(App.TOTALSCORE, Context.MODE_PRIVATE);
-            newTotalscore = totalscoreShared.getLong(App.TOTALSCORE, 0);  //Leggo il vecchio totalscore
-            newTotalscore = newTotalscore + newScore;    //Determino il nuovo totalscore
-            totalscoreShared.edit().putLong(App.TOTALSCORE, newTotalscore).apply();   //Scrivo il nuovo totalscore
-             **/
 
             //Controllo se l'utente è loggato con firebase
             if(AuthenticationManager.get().isUserLogged())
