@@ -43,6 +43,7 @@ public class SaveScore {
                     //Esiste già un totalscore
                     newTotalscore = App.scoreboardDao.getScore(App.TOTALSCORE); //Leggo il vecchio totalscore
                     newTotalscore = previousScore - newTotalscore + newScore;   //Determino il nuovo totalscore
+                    newTotalscore = Math.abs(newTotalscore);
                     App.scoreboardDao.update(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
                 }
                 else
@@ -50,6 +51,7 @@ public class SaveScore {
                     //Non esiste un totalscore
                     newTotalscore = 0;
                     newTotalscore = previousScore - newTotalscore + newScore;   //Determino il nuovo totalscore
+                    newTotalscore = Math.abs(newTotalscore);
                     App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
                 }
 
@@ -85,12 +87,14 @@ public class SaveScore {
                 //Esiste già un totalscore
                 newTotalscore = App.scoreboardDao.getScore(App.TOTALSCORE); //Leggo il vecchio totalscore
                 newTotalscore = newTotalscore + newScore;   //Determino il nuovo totalscore
+                newTotalscore = Math.abs(newTotalscore);
                 App.scoreboardDao.update(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
             }
             else
             {
                 newTotalscore = 0;
                 newTotalscore = newTotalscore + newScore;   //Determino il nuovo totalscore
+                newTotalscore = Math.abs(newTotalscore);
                 App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
             }
 

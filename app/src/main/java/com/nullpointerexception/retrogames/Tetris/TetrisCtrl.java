@@ -33,7 +33,7 @@ public class TetrisCtrl extends View {
     //Tempo in ms per far muovere un blcco da una cella all'altra
     private final int TimerGapStart = 1000;
     private int TimerGapNormal = TimerGapStart;
-    private int TimerGapFast = 50;
+    private int TimerGapFast = 100;
     private int mTimerGap = TimerGapNormal;
 
 
