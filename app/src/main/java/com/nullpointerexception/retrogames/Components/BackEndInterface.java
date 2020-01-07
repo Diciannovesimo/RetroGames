@@ -199,6 +199,45 @@ public class BackEndInterface
     }
 
     /**
+     * Legge sul database tutti i nickname presenti
+     * @param listener definizione delle operazioni da compiere una volta ricevuto il dato
+     */
+    public void readAllNickname(final OnQueryResultListener2 listener){
+        List<String> nicknames = new Vector<>();
+
+        Query query = database.getReference(App.USER);
+
+        query.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                for(DataSnapshot childSnapshot : dataSnapshot.getChildren())
+                {
+
+
+                    String nickname = childSnapshot.getValue(String.class);
+
+
+                    nicknames.add(nickname);
+
+                    if(nicknames.size() == dataSnapshot.getChildrenCount() && listener != null)
+                        listener.onQueryResult(true, nicknames);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error)
+            {
+                // Failed to read value
+                if(listener != null)
+                    listener.onQueryResult(false, null);
+            }
+        });
+    }
+
+
+    /**
      * Sostituisce un carattere della stringa con uno nuovo
      * @param input stringa in input da modificare
      * @param toRemove carattere da togliere
@@ -230,6 +269,14 @@ public class BackEndInterface
      */
     public interface OnQueryResultListener {
         void onQueryResult(boolean success, List<Scoreboard> scoreboardList);
+    }
+
+    /**
+     * Interfaccia usata per gestire le azioni da compiere
+     * una volta ricevuto il risultato di una query assegnata a Firebase
+     */
+    public interface OnQueryResultListener2 {
+        void onQueryResult(boolean success, List<String> nicknames);
     }
 
 }
