@@ -31,7 +31,7 @@ public class GamesFragment extends Fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         tetrisCard = view.findViewById(R.id.CardView_tetris);
-        snakeCard = view.findViewById(R.id.CardView_pacman);
+        snakeCard = view.findViewById(R.id.CardView_snake);
         pongCard = view.findViewById(R.id.CardView_pong);
         spaceInvadersCard = view.findViewById(R.id.CardView_hole);
         breakoutCard = view.findViewById(R.id.CardView_brick_break);
