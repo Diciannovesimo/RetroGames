@@ -216,52 +216,76 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("nicknameAsynkTask", nicknameShared.getString(App.NICKNAME,"nulla"));
 
             //Recupero l'eventuale Totalscore
-            BackEndInterface.get().readScoreFirebase(App.TOTALSCORE, nickname, (success, value) -> {
-                if(success) {
-                    long score = Long.parseLong(value);
-                    App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, score));
+            BackEndInterface.get().readScoreFirebase(App.TOTALSCORE, nickname, new BackEndInterface.OnDataReceivedListener() {
+                @Override
+                public void onDataReceived(boolean success, String value) {
+                    if(success) {
+                        long score = Long.parseLong(value);
+                        if(App.scoreboardDao.getGame(App.TOTALSCORE) == null)
+                            App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, score));
+                    }
                 }
             });
 
 
             //Recupero l'eventuale score di Snake
-            BackEndInterface.get().readScoreFirebase(App.SNAKE, nickname, (success, value) -> {
-                if(success){
-                    long score = Long.parseLong(value);
-                    App.scoreboardDao.insertAll(new Scoreboard(App.SNAKE, score));
+            BackEndInterface.get().readScoreFirebase(App.SNAKE, nickname, new BackEndInterface.OnDataReceivedListener() {
+                @Override
+                public void onDataReceived(boolean success, String value) {
+                    if(success){
+                        long score = Long.parseLong(value);
+                        if(App.scoreboardDao.getGame(App.SNAKE) == null)
+                            App.scoreboardDao.insertAll(new Scoreboard(App.SNAKE, score));
+                    }
                 }
             });
 
 
             //Recupero l'eventuale score di Tetris
-            BackEndInterface.get().readScoreFirebase(App.TETRIS, nickname, (success, value) -> {
-                if(success) {
-                    long score = Long.parseLong(value);
-                    App.scoreboardDao.insertAll(new Scoreboard(App.TETRIS, score));
+            BackEndInterface.get().readScoreFirebase(App.TETRIS, nickname, new BackEndInterface.OnDataReceivedListener() {
+                @Override
+                public void onDataReceived(boolean success, String value) {
+                    if(success) {
+                        long score = Long.parseLong(value);
+                        if(App.scoreboardDao.getGame(App.TETRIS) == null)
+                            App.scoreboardDao.insertAll(new Scoreboard(App.TETRIS, score));
+                    }
                 }
             });
 
             //Recupero l'eventuale score di Breakout
-            BackEndInterface.get().readScoreFirebase(App.BREAKOUT, nickname, (success, value) -> {
-                if(success) {
-                    long score = Long.parseLong(value);
-                    App.scoreboardDao.insertAll(new Scoreboard(App.BREAKOUT, score));
+            BackEndInterface.get().readScoreFirebase(App.BREAKOUT, nickname, new BackEndInterface.OnDataReceivedListener() {
+                @Override
+                public void onDataReceived(boolean success, String value) {
+                    if(success) {
+                        long score = Long.parseLong(value);
+                        if(App.scoreboardDao.getGame(App.BREAKOUT) == null)
+                            App.scoreboardDao.insertAll(new Scoreboard(App.BREAKOUT, score));
+                    }
                 }
             });
 
             //Recupero l'eventuale score di Hole
-            BackEndInterface.get().readScoreFirebase(App.HOLE, nickname, (success, value) -> {
-                if(success){
-                    long score = Long.parseLong(value);
-                    App.scoreboardDao.insertAll(new Scoreboard(App.HOLE, score));
+            BackEndInterface.get().readScoreFirebase(App.HOLE, nickname, new BackEndInterface.OnDataReceivedListener() {
+                @Override
+                public void onDataReceived(boolean success, String value) {
+                    if(success){
+                        long score = Long.parseLong(value);
+                        if(App.scoreboardDao.getGame(App.HOLE) == null)
+                            App.scoreboardDao.insertAll(new Scoreboard(App.HOLE, score));
+                    }
                 }
             });
 
             //Recupero l'eventuale score di Pong
-            BackEndInterface.get().readScoreFirebase(App.PONG, nickname, (success, value) -> {
-                if(success){
-                    long score = Long.parseLong(value);
-                    App.scoreboardDao.insertAll(new Scoreboard(App.PONG, score));
+            BackEndInterface.get().readScoreFirebase(App.PONG, nickname, new BackEndInterface.OnDataReceivedListener() {
+                @Override
+                public void onDataReceived(boolean success, String value) {
+                    if(success){
+                        long score = Long.parseLong(value);
+                        if(App.scoreboardDao.getGame(App.PONG) == null)
+                            App.scoreboardDao.insertAll(new Scoreboard(App.PONG, score));
+                    }
                 }
             });
             return null;
