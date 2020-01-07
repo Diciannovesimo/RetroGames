@@ -60,13 +60,9 @@ public class AuthenticationManager
         auth = FirebaseAuth.getInstance();
 
         if(auth.getCurrentUser() != null)
-        {
             currentUser = new User(auth.getCurrentUser());
-        }
         else
-        {
             return null;
-        }
 
         currentLoginAttempt = new LoginAttempt();
         return currentLoginAttempt;

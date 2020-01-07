@@ -176,7 +176,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:alpha="0.54"
-                android:text="@string/position"
+                android:text="@string/position_default"
                 android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

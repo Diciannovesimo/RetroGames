@@ -10,9 +10,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.Fragments.GamesFragment;
 import com.nullpointerexception.retrogames.Fragments.LeaderboardFragment;
+import com.nullpointerexception.retrogames.Fragments.LoginFragment;
 import com.nullpointerexception.retrogames.Fragments.ProfileFragment;
 import com.nullpointerexception.retrogames.R;
 
@@ -60,9 +62,10 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                //  TODO Controllare se si è loggati, altrimenti piazzare quella di login
-                //placeFragment(new LoginFragment());
-                placeFragment(new ProfileFragment());
+                if(AuthenticationManager.get().isUserLogged())
+                    placeFragment(new ProfileFragment());
+                else
+                    placeFragment(new LoginFragment(false));
             }
         });
 
@@ -79,14 +82,16 @@ public class HomeActivity extends AppCompatActivity
             resetSectionViewColor(gamesButton);
         else if(currentFragment instanceof LeaderboardFragment)
             resetSectionViewColor(leaderboardButton);
-        else if(currentFragment instanceof ProfileFragment)
+        else if(currentFragment instanceof ProfileFragment ||
+                currentFragment instanceof LoginFragment)
             resetSectionViewColor(profileButton);
 
         if(newFragment instanceof GamesFragment)
             setCurrentSectionView(gamesButton);
         else if(newFragment instanceof LeaderboardFragment)
             setCurrentSectionView(leaderboardButton);
-        else if(newFragment instanceof ProfileFragment)
+        else if(newFragment instanceof ProfileFragment ||
+                newFragment instanceof LoginFragment)
             setCurrentSectionView(profileButton);
 
         currentFragment = newFragment;

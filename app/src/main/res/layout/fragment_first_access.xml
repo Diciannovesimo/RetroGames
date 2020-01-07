@@ -23,7 +23,7 @@
         android:layout_marginTop="48dp"
         android:background="@drawable/roundedbutton"
         android:elevation="4dp"
-        android:text="@string/login"
+        android:text="@string/login_2"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

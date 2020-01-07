@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.developer.kalert.KAlertDialog;
-import com.nullpointerexception.retrogames.Components.App;
+import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.Blocker;

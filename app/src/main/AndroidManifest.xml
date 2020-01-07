@@ -30,7 +30,6 @@
         <activity
             android:name=".Activities.LoginActivity"
             android:theme="@style/AppTheme.StatusBar" />
-        <activity android:name=".MainActivity" />
         <activity android:name=".Tetris.Tetris" />
 
         <activity android:name=".Breakout.GameActivity" />

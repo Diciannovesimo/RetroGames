@@ -1,8 +1,11 @@
-package com.nullpointerexception.retrogames.Components;
+package com.nullpointerexception.retrogames;
 
 import android.content.Context;
 
 import androidx.room.Room;
+
+import com.nullpointerexception.retrogames.Components.DatabaseManager;
+import com.nullpointerexception.retrogames.Components.ScoreboardDao;
 
 public class App
 {
