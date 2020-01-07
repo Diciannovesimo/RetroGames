@@ -86,23 +86,11 @@ public class LoginActivity extends AppCompatActivity {
                                     } else {   //Il login non ha avuto successo in quanto l'utente ha sbagliato le credenziali
                                         Log.i("claudio", "errore nel log in");
                                         new KAlertDialog(LoginActivity.this, KAlertDialog.ERROR_TYPE)
-                                                .setTitleText("Errore")
-                                                .setContentText("Nome utente o password errati")
+                                                .setTitleText(getResources().getString(R.string.error_dialog_title))
+                                                .setContentText(getResources().getString(R.string.error_dialog_content))
                                                 .show();
                                     }
                                 });
-                    } else {
-                        //Crea un vettore con il risultato dei controlli sui campi e lo riempe
-                        //con il return di wrongFields
-                        int[] wrongFields = wrongFields();
-                        if(wrongFields[0] == 1 && wrongFields[1] == 1) { //se wrongFields[0]/[1] è 1 allora la mail e la password è errata
-                            mEmail.setError("La mail è sbagliata");
-                            mPassword.setError("La password è sbagliata");
-                        } else if(wrongFields[0] == 1) {                 //se wrongFields[0] è 1 allora la mail è errata
-                            mEmail.setError("La mail è sbagliata");
-                        } else if(wrongFields[1] == 1) {                 //se wrongFields[1] è 1 allora la password è errata
-                            mPassword.setError("La password è sbagliata");
-                        }
                     }
                 }
             }
@@ -145,8 +133,8 @@ public class LoginActivity extends AppCompatActivity {
                                 } else { //Se l'accesso con Google non è andato a buon fine
                                     Log.i("claudio", "errore nel log in");
                                     new KAlertDialog(LoginActivity.this, KAlertDialog.ERROR_TYPE)
-                                            .setTitleText("Errore")
-                                            .setContentText("Accesso con Google non riuscito")
+                                            .setTitleText(getResources().getString(R.string.error_dialog_title))
+                                            .setContentText(getResources().getString(R.string.error_google_dialog_content))
                                             .show();
                                 }
                             });
@@ -164,33 +152,18 @@ public class LoginActivity extends AppCompatActivity {
         boolean alright = true;
 
         String email = mEmail.getText().toString();
-        if (!emailCheck(email.trim()) || email.isEmpty())
+        if (!emailCheck(email.trim()) || email.isEmpty()) {
             alright = false;
+            mEmail.setError(getResources().getString(R.string.error_edittext_mail));
+        }
 
         String psw = mPassword.getText().toString();
-        if (psw.isEmpty() || psw.length() < 8)
+        if (psw.isEmpty() || psw.length() < 8) {
             alright = false;
+            mPassword.setError(getResources().getString(R.string.error_edittext_password));
+        }
 
         return alright;
-    }
-
-    /**
-     * Controlla esattamente quele campo tra email e password è errato
-     *
-     * @return wrongField: Un array con due spazi dove lo spazio è settato ad 1 se il campo è errato
-     */
-    private int[] wrongFields() {
-        int[] wrongField = new int[2];
-
-        String email = mEmail.getText().toString();
-        if (!emailCheck(email) || email.isEmpty())
-            wrongField[0] = 1;
-
-        String psw = mPassword.getText().toString();
-        if (psw.isEmpty() || psw.length() < 8)
-            wrongField[1] = 1;
-
-        return wrongField;
     }
 
     /**

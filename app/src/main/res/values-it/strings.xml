@@ -31,12 +31,13 @@
     <string name="resumeLabel">Riprendi</string>
     <string name="settingsLabel">Impostazioni</string>
     <string name="signIn"><u>Registrati</u></string>
-    <string name="signInGoogle" translatable="false">ACCEDI CON GOOGLE</string>
+    <string name="signInGoogle">ACCEDI CON GOOGLE</string>
     <string name="welcome">Benvenuto!</string>
     <string name="welcome_info">In RetroGames hai tutti i tuoi videogiochi arcade preferiti sul tuo smartphone.</string>
-    <string name="global_ranking">in classifica globale</string>
+    <string name="global_ranking"># in classifica globale</string>
     <string name="logout_img">immagine di logout</string>
     <string name="name">Nome</string>
+    <string name="position"># posto</string>
     <string name="profile">Profilo</string>
     <string name="profile_img">Immagine di profilo</string>
     <string name="single_score">Punteggi Singoli</string>
@@ -44,5 +45,13 @@
     <string name="zero">zero</string>
     <string name="leaderboard">Classifica</string>
     <string name="loading_leaderboard">Caricamento classifica...</string>
-    <string name="login_2">Accedi</string>
+    <string name="error_dialog_content">Nome utente o password errata</string>
+    <string name="error_dialog_title">Errore</string>
+    <string name="error_edittext_mail">Email non corretto</string>
+    <string name="error_edittext_password">Password troppo corta</string>
+    <string name="error_google_dialog_content">Accesso con Google fallito</string>
+    <string name="total_score">Punteggio totale</string>
+    <string name="error_edittext_username">Il nome utente esiste già</string>
+    <string name="error">Errore</string>
+    <string name="position_default">Non ancora classificato</string>
 </resources>

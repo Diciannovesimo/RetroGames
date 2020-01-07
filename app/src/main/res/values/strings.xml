@@ -32,7 +32,6 @@
 
     <!--LoginFragment-->
     <string name="login">Login</string>
-    <string name="login_2">Login</string>
     <string name="first_access_info">By logging in you can share your scores and compete with the network in the ranking.</string>
     <string name="continue_without_logging_in"><u>Continue without logging in</u></string>
 
@@ -44,8 +43,8 @@
     <string name="play_game">Play!</string>
     <string name="pong" translatable="false">Pong</string>
     <string name="breakout" translatable="false">Breakout</string>
-    <string name="hole">Hole</string>
-    <string name="snake">Snake</string>
+    <string name="hole" translatable="false">Hole</string>
+    <string name="snake" translatable="false">Snake</string>
 
     <!-- Login activity -->
     <string name="emailTextFieldHint" translatable="false">Email</string>
@@ -58,34 +57,40 @@
     <string name="password" translatable="false">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="register">Register</string>
+    <string name="error_dialog_title">Error</string>
+    <string name="error_dialog_content">Username or password wrong</string>
+    <string name="error_google_dialog_content">Sign in with Google failed</string>
+    <string name="error_edittext_mail">Incorrect email</string>
+    <string name="error_edittext_password">Too short password</string>
 
     <!-- Fragment_Profile -->
     <string name="profile">Profile</string>
     <string name="total_score_profile">Total score:</string>
     <string name="global_ranking">in global ranking</string>
     <string name="single_score">Single score</string>
-    <string name="position_default" translatable="false">Not ranked yet</string>
+    <string name="position_default">Not ranked yet</string>
     <string name="zero">zero</string>
     <string name="name">Name</string>
     <string name="logout_img">logout image</string>
     <string name="profile_img">profile image</string>
     <string name="pong_profile" translatable="false">Pong:</string>
     <string name="breakout_profile" translatable="false">Breakout:</string>
-    <string name="hole_profile">Hole:</string>
-    <string name="snake_profile">Snake:</string>
+    <string name="hole_profile" translatable="false">Hole:</string>
+    <string name="snake_profile" translatable="false">Snake:</string>
     <string name="tetris_profile" translatable="false">Tetris:</string>
 
     <!-- Registration activity -->
     <string name="registration_title">New account</string>
+    <string name="error_edittext_username">The username already exists</string>
 
     <!-- Fragment Leaderboard -->
     <string name="total_score">Total score</string>
     <string name="leaderboard">Leaderboard</string>
-    <string name="title_activity_prova">prova</string>
-    <string name="game_name">Game_Name</string>
-    <string name="_0">0</string>
+    <string name="title_activity_prova" translatable="false">prova</string>
+    <string name="game_name" translatable="false">Game_Name</string>
+    <string name="_0" translatable="false">0</string>
     <string name="loading_leaderboard">Loading leaderboard…</string>
-
+    <string name="position"># place</string>
 
 
 </resources>
