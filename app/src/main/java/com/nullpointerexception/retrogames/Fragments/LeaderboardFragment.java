@@ -23,7 +23,7 @@ import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
-import com.nullpointerexception.retrogames.Components.ProfileImageFetcher;
+import com.nullpointerexception.retrogames.Components.ProfileImageGenerator;
 import com.nullpointerexception.retrogames.Components.Scoreboard;
 import com.nullpointerexception.retrogames.Components.UserScoreView;
 import com.nullpointerexception.retrogames.R;
@@ -73,7 +73,7 @@ public class LeaderboardFragment extends Fragment
                                             .getUserLogged().getNickname());
 
                     if(getContext() != null)
-                        new ProfileImageFetcher(getContext())
+                        new ProfileImageGenerator(getContext())
                                 .fetchImageOf(AuthenticationManager.get().getUserLogged(),
                                         drawable -> profileImage.setImageDrawable(drawable));
                 }
