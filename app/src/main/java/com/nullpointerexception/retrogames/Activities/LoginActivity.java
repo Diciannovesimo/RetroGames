@@ -79,15 +79,13 @@ public class LoginActivity extends AppCompatActivity {
                                                             //Salva il nickname nelle SharedPreferences
                                                             SharedPreferences preferences = getSharedPreferences(App.USER, MODE_PRIVATE);
                                                             preferences.edit().putString(App.NICKNAME, currentUser.getNickname()).apply();
+
+                                                            //Restore dei punteggi sul server firebase
+                                                            new restoreScoreboard().execute();
                                                         });
                                                     }
                                                 });
-                                        //Salva il nickname nelle SharedPreferences
-                                        SharedPreferences preferences = getSharedPreferences(App.USER, MODE_PRIVATE);
-                                        preferences.edit().putString(App.NICKNAME, currentUser.getNickname()).apply();
-                                        Log.d("nickname", preferences.getString(App.NICKNAME,"nulla"));
-                                        //Restore dei punteggi sul server firebase
-                                        new restoreScoreboard().execute();
+
                                         //Dopo il login parte l'Home activity e LoginActivity viene disallocata
                                         startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                         finish();
