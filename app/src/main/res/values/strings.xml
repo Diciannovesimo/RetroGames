@@ -82,6 +82,13 @@
     <!-- Registration activity -->
     <string name="registration_title">New account</string>
     <string name="error_edittext_username">The username already exists</string>
+    <string name="dialog_registration_succes">You have been successfully registered</string>
+    <string name="dialog_registrazion_error">Registration error</string>
+    <string name="error_wrong_email">Wrong email</string>
+    <string name="error_short_username">Too short username</string>
+    <string name="error_short_password">The password is too short</string>
+    <string name="error_match_password">Password doesn\'t match</string>
+
 
     <!-- Fragment Leaderboard -->
     <string name="total_score">Total score</string>

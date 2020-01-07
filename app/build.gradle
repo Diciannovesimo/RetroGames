@@ -42,11 +42,6 @@ dependencies {
      */
     implementation 'com.shaishavgandhi:login-buttons:1.0.0'
 
-    /*
-          KAlertDiaog
-          https://android-arsenal.com/details/1/7588
-     */
-    implementation 'com.github.TutorialsAndroid:KAlertDialog:v7.0.19'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.room:room-runtime:2.2.3'
     annotationProcessor 'androidx.room:room-compiler:2.2.3'

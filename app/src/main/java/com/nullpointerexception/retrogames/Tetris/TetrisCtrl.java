@@ -3,7 +3,6 @@ package com.nullpointerexception.retrogames.Tetris;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -515,19 +514,14 @@ public class TetrisCtrl extends View {
         mDlgMsg = new AlertDialog.Builder(context)
                 .setTitle(getResources().getString(R.string.gameOver))
                 .setMessage(getResources().getString(R.string.your_score_is) + ": " + mScore)
-                .setPositiveButton(getResources().getString(R.string.again), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                mDlgMsg = null;
-                                startGame();
-                            }
-                        })
-                .setNegativeButton(getResources().getString(R.string.exit), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mDlgMsg = null;
-                        if(context instanceof Tetris)
-                            ((Tetris) context).finish();
-                    }
+                .setPositiveButton(getResources().getString(R.string.again), (dialog, which) -> {
+                    mDlgMsg.dismiss();
+                    startGame();
+                })
+                .setNegativeButton(getResources().getString(R.string.exit), (dialog, which) -> {
+                    mDlgMsg.dismiss();
+                    if(context instanceof Tetris)
+                        ((Tetris) context).finish();
                 })
                 .show();
     }

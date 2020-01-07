@@ -1,7 +1,7 @@
 package com.nullpointerexception.retrogames.Activities;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +10,6 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.developer.kalert.KAlertDialog;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.Blocker;
@@ -28,6 +27,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private Button mRegister;
     private String email, password, confirmPassword, nickName;
     private List<String> mNicknames = new ArrayList<>();
+    private AlertDialog mDlgMsg;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -74,28 +74,29 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     *
+     * Controlla se i campi sono corretti
      */
     public boolean checkFields() {
         boolean alright = true;
         email = mEmail.getText().toString();
         if(!emailCheck(email)) {
             alright = false;
-            mEmail.setError("Email wrong");
+            mEmail.setError(getResources().getString(R.string.error_wrong_email));
         }
 
         nickName = mNickname.getText().toString();
         if(nickName.length() <= 3) {
             alright = false;
-            mNickname.setError("Nickname troppo corto");
+            mNickname.setError(getResources().getString(R.string.error_short_username));
         } else {
             for(int i = 0; i < mNicknames.size(); i++) {
                 if(nickName.equals(mNicknames.get(i))) {
                     alright = false;
-                    new KAlertDialog(RegistrationActivity.this, KAlertDialog.ERROR_TYPE)
-                            .setTitleText(getResources().getString(R.string.error_dialog_title))
-                            .setContentText(getResources().getString(R.string.error_edittext_username))
+
+                    mDlgMsg = new AlertDialog.Builder(RegistrationActivity.this)
+                            .setTitle(getResources().getString(R.string.error_dialog_title))
+                            .setMessage(getResources().getString(R.string.error_edittext_username))
+                            .setPositiveButton(getResources().getString(R.string.dialog_ok), (dialog, which) -> mDlgMsg.dismiss())
                             .show();
                 }
             }
@@ -105,48 +106,53 @@ public class RegistrationActivity extends AppCompatActivity {
         confirmPassword = mConfirmPassword.getText().toString();
         if(password.length() < 8) {
             alright = false;
-            mPassword.setError("La password non rispetta i criteri");
+            mPassword.setError(getResources().getString(R.string.error_short_username));
         }
 
         if(!confirmPassword.equals(password)) {
             alright = false;
-            mConfirmPassword.setError("La password non corrisponde");
+            mConfirmPassword.setError(getResources().getString(R.string.error_match_password));
         }
 
         return alright;
     }
 
+    /**
+     * Verifa se l'email è corretta
+     * @param email Riceve una String email come parametro
+     * @return Un boolean per capire se la mail è formattata correttamente
+     */
     private boolean emailCheck(String email) {
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
 
-        if(mat.matches())
-            return true;
-        else
-            return false;
+        return mat.matches();
     }
 
+    /**
+     * Gestisce i metodi per la registrazione
+     */
     private void startRegistration() {
-
+        //Chiama AuthenticationManager per iniziare la registrazione
         AuthenticationManager.get().createFirebaseUser(email, password, task -> {
+            //Se il task ha successo...
             if(task.isSuccessful()){
                 AuthenticationManager.get().sendVerificationEmail(task1 -> {
                     if(task1.isSuccessful()) {
+                        //effettua il login
                         AuthenticationManager.get().getUIdOf(email, password)
                                 .addOnUidListener(new AuthenticationManager.LoginAttempt.OnUIDListener() {
                                     @Override
-                                    public void onIdObtained(String uid) {
+                                    public void onIdObtained(String uid) {  //Quando ottiene l'id...
+                                        //Scrive l'username dell'utente sul database
                                         BackEndInterface.get().writeUser(email, mNickname.getText().toString());
                                         //Show dialog
                                         RegistrationActivity.this.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                new KAlertDialog(RegistrationActivity.this, KAlertDialog.SUCCESS_TYPE)
-                                                        .setContentText("Registrazione effettuata con successo")
-                                                        .setConfirmClickListener(kAlertDialog -> {
-                                                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                                                            finish();
-                                                        })
+                                                mDlgMsg = new AlertDialog.Builder(RegistrationActivity.this)
+                                                        .setMessage(getResources().getString(R.string.dialog_registration_succes))
+                                                        .setPositiveButton(getResources().getString(R.string.dialog_ok), (dialog, which) -> mDlgMsg.dismiss())
                                                         .show();
                                             }
                                         });
@@ -157,8 +163,11 @@ public class RegistrationActivity extends AppCompatActivity {
                                         RegistrationActivity.this.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                new KAlertDialog(RegistrationActivity.this, KAlertDialog.ERROR_TYPE)
-                                                        .setContentText("Errore durante la registrazione")
+
+                                                mDlgMsg = new AlertDialog.Builder(RegistrationActivity.this)
+                                                        .setTitle(getResources().getString(R.string.error_dialog_title))
+                                                        .setMessage(getResources().getString(R.string.dialog_registrazion_error))
+                                                        .setPositiveButton(getResources().getString(R.string.dialog_ok), (dialog, which) -> mDlgMsg.dismiss())
                                                         .show();
                                             }
                                         });
@@ -170,9 +179,10 @@ public class RegistrationActivity extends AppCompatActivity {
                 RegistrationActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new KAlertDialog(RegistrationActivity.this, KAlertDialog.ERROR_TYPE)
-                                .setContentText("Errore durante la registrazione")
-                                .setConfirmClickListener(kAlertDialog -> kAlertDialog.dismiss())
+                        mDlgMsg = new AlertDialog.Builder(RegistrationActivity.this)
+                                .setTitle(getResources().getString(R.string.error_dialog_title))
+                                .setMessage(getResources().getString(R.string.dialog_registrazion_error))
+                                .setPositiveButton(getResources().getString(R.string.dialog_ok), (dialog, which) -> mDlgMsg.dismiss())
                                 .show();
                     }
                 });

@@ -58,4 +58,10 @@
     <string name="gameOver">Fine partita</string>
     <string name="again">Riprova</string>
     <string name="your_score_is">Il tuo punteggio è</string>
+    <string name="dialog_registration_succes">Sei stato registrato correttamente</string>
+    <string name="dialog_registrazion_error">Errore di registrazione</string>
+    <string name="error_wrong_email">Email non corretta</string>
+    <string name="error_short_username">Username troppo corto</string>
+    <string name="error_short_password">La password è troppo corta</string>
+    <string name="error_match_password">La password non corrisponde</string>
 </resources>

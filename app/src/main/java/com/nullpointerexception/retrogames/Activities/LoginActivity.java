@@ -1,6 +1,7 @@
 package com.nullpointerexception.retrogames.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.developer.kalert.KAlertDialog;
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button mLogin;
     private TextView mSignin;
     private View googleSignInButton;
+    private AlertDialog mDlgMsg;
 
     private User currentUser;
 
@@ -91,9 +92,12 @@ public class LoginActivity extends AppCompatActivity {
                                         finish();
                                     } else {   //Il login non ha avuto successo in quanto l'utente ha sbagliato le credenziali
                                         Log.i("claudio", "errore nel log in");
-                                        new KAlertDialog(LoginActivity.this, KAlertDialog.ERROR_TYPE)
-                                                .setTitleText(getResources().getString(R.string.error_dialog_title))
-                                                .setContentText(getResources().getString(R.string.error_dialog_content))
+                                        mDlgMsg = new AlertDialog.Builder(LoginActivity.this)
+                                                .setTitle(getResources().getString(R.string.error_dialog_title))
+                                                .setMessage(getResources().getString(R.string.error_dialog_content))
+                                                .setPositiveButton(getResources().getString(R.string.again), (dialog, which) -> {
+                                                    mDlgMsg.dismiss();
+                                                })
                                                 .show();
                                     }
                                 });
@@ -140,9 +144,10 @@ public class LoginActivity extends AppCompatActivity {
                                     finish();
                                 } else { //Se l'accesso con Google non è andato a buon fine
                                     Log.i("claudio", "errore nel log in");
-                                    new KAlertDialog(LoginActivity.this, KAlertDialog.ERROR_TYPE)
-                                            .setTitleText(getResources().getString(R.string.error_dialog_title))
-                                            .setContentText(getResources().getString(R.string.error_google_dialog_content))
+                                    mDlgMsg = new AlertDialog.Builder(LoginActivity.this)
+                                            .setTitle(getResources().getString(R.string.error_dialog_title))
+                                            .setMessage(getResources().getString(R.string.error_google_dialog_content))
+                                            .setPositiveButton(getResources().getString(R.string.again), (dialog, which) -> mDlgMsg.dismiss())
                                             .show();
                                 }
                             });
@@ -211,70 +216,52 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("nicknameAsynkTask", nicknameShared.getString(App.NICKNAME,"nulla"));
 
             //Recupero l'eventuale Totalscore
-            BackEndInterface.get().readScoreFirebase(App.TOTALSCORE, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success) {
-                        long score = Long.parseLong(value);
-                        App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, score));
-                    }
+            BackEndInterface.get().readScoreFirebase(App.TOTALSCORE, nickname, (success, value) -> {
+                if(success) {
+                    long score = Long.parseLong(value);
+                    App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, score));
                 }
             });
 
 
             //Recupero l'eventuale score di Snake
-            BackEndInterface.get().readScoreFirebase(App.SNAKE, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success){
-                        long score = Long.parseLong(value);
-                        App.scoreboardDao.insertAll(new Scoreboard(App.SNAKE, score));
-                    }
+            BackEndInterface.get().readScoreFirebase(App.SNAKE, nickname, (success, value) -> {
+                if(success){
+                    long score = Long.parseLong(value);
+                    App.scoreboardDao.insertAll(new Scoreboard(App.SNAKE, score));
                 }
             });
 
 
             //Recupero l'eventuale score di Tetris
-            BackEndInterface.get().readScoreFirebase(App.TETRIS, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success) {
-                        long score = Long.parseLong(value);
-                        App.scoreboardDao.insertAll(new Scoreboard(App.TETRIS, score));
-                    }
+            BackEndInterface.get().readScoreFirebase(App.TETRIS, nickname, (success, value) -> {
+                if(success) {
+                    long score = Long.parseLong(value);
+                    App.scoreboardDao.insertAll(new Scoreboard(App.TETRIS, score));
                 }
             });
 
             //Recupero l'eventuale score di Breakout
-            BackEndInterface.get().readScoreFirebase(App.BREAKOUT, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success) {
-                        long score = Long.parseLong(value);
-                        App.scoreboardDao.insertAll(new Scoreboard(App.BREAKOUT, score));
-                    }
+            BackEndInterface.get().readScoreFirebase(App.BREAKOUT, nickname, (success, value) -> {
+                if(success) {
+                    long score = Long.parseLong(value);
+                    App.scoreboardDao.insertAll(new Scoreboard(App.BREAKOUT, score));
                 }
             });
 
             //Recupero l'eventuale score di Hole
-            BackEndInterface.get().readScoreFirebase(App.HOLE, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success){
-                        long score = Long.parseLong(value);
-                        App.scoreboardDao.insertAll(new Scoreboard(App.HOLE, score));
-                    }
+            BackEndInterface.get().readScoreFirebase(App.HOLE, nickname, (success, value) -> {
+                if(success){
+                    long score = Long.parseLong(value);
+                    App.scoreboardDao.insertAll(new Scoreboard(App.HOLE, score));
                 }
             });
 
             //Recupero l'eventuale score di Pong
-            BackEndInterface.get().readScoreFirebase(App.PONG, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success){
-                        long score = Long.parseLong(value);
-                        App.scoreboardDao.insertAll(new Scoreboard(App.PONG, score));
-                    }
+            BackEndInterface.get().readScoreFirebase(App.PONG, nickname, (success, value) -> {
+                if(success){
+                    long score = Long.parseLong(value);
+                    App.scoreboardDao.insertAll(new Scoreboard(App.PONG, score));
                 }
             });
             return null;
