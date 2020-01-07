@@ -88,6 +88,7 @@
     <string name="error_short_username">Too short username</string>
     <string name="error_short_password">The password is too short</string>
     <string name="error_match_password">Password doesn\'t match</string>
+    <string name="dialog_ok" translatable="false">Ok</string>
 
 
     <!-- Fragment Leaderboard -->
