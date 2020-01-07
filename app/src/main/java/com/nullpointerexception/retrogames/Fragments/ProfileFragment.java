@@ -25,6 +25,8 @@ import com.nullpointerexception.retrogames.R;
 
 public class ProfileFragment extends Fragment
 {
+    private User user;
+
     /*
             UI Components
      */
@@ -43,7 +45,17 @@ public class ProfileFragment extends Fragment
                     positionSnake,
                     positionHole;
 
-    @SuppressLint("ClickableViewAccessibility")
+    public ProfileFragment()
+    {
+        user = AuthenticationManager.get().getUserLogged();
+    }
+
+    public ProfileFragment(User user)
+    {
+        this.user = user;
+    }
+
+    @SuppressLint({"ClickableViewAccessibility", "DefaultLocale"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -72,7 +84,6 @@ public class ProfileFragment extends Fragment
         /*
                 Assegnazione contenuti grafici
          */
-        User user = AuthenticationManager.get().getUserLogged();
 
         //  Generazione immagine profilo
         if(getContext() != null)
@@ -82,12 +93,28 @@ public class ProfileFragment extends Fragment
         //  Assegnazione testi
         profileName.setText(user.getNickname());
 
+        //  Assegnazione score
         totalScore.setText( String.valueOf(App.scoreboardDao.getScore(App.TOTALSCORE)) );
         scoreSnake.setText( String.valueOf(App.scoreboardDao.getScore(App.SNAKE)) );
         scoreTetris.setText( String.valueOf(App.scoreboardDao.getScore(App.TETRIS)) );
         scorePong.setText( String.valueOf(App.scoreboardDao.getScore(App.PONG)) );
         scoreBreakout.setText( String.valueOf(App.scoreboardDao.getScore(App.BREAKOUT)) );
         scoreHole.setText( String.valueOf(App.scoreboardDao.getScore(App.HOLE)) );
+
+        //  Assegnazione posizioni
+        if(App.scoreboardDao.getPosition(App.TOTALSCORE) > 0)
+            totalscorePosition.setText(String.format("#%d %s", App.scoreboardDao.getPosition(App.TOTALSCORE),
+                getResources().getString(R.string.global_ranking)));
+        if(App.scoreboardDao.getPosition(App.SNAKE) > 0)
+            positionSnake.setText( String.format("#%d", App.scoreboardDao.getPosition(App.SNAKE)));
+        if(App.scoreboardDao.getPosition(App.TETRIS) > 0)
+            positionTetris.setText( String.format("#%d", App.scoreboardDao.getPosition(App.TETRIS)));
+        if(App.scoreboardDao.getPosition(App.PONG) > 0)
+            positionPong.setText( String.format("#%d", App.scoreboardDao.getPosition(App.PONG)));
+        if(App.scoreboardDao.getPosition(App.HOLE) > 0)
+            positionHole.setText( String.format("#%d", App.scoreboardDao.getPosition(App.HOLE)));
+        if(App.scoreboardDao.getPosition(App.BREAKOUT) > 0)
+            positionBreakout.setText( String.format("#%d", App.scoreboardDao.getPosition(App.BREAKOUT)));
 
         logoutButton.setOnTouchListener(new OnTouchAnimatedListener()
         {
@@ -114,8 +141,6 @@ public class ProfileFragment extends Fragment
     @SuppressLint("DefaultLocale")
     private void updatePositions()
     {
-        User user = AuthenticationManager.get().getUserLogged();
-
         //  Total score
         BackEndInterface.get().readAllScoresFirebase(App.TOTALSCORE,
         (success, scoreboardList) ->
@@ -131,6 +156,9 @@ public class ProfileFragment extends Fragment
                         getActivity().runOnUiThread(() ->
                                 totalscorePosition.setText(String.format("#%d %s", finalI +1,
                                     getResources().getString(R.string.global_ranking))));
+
+                        //  Update database
+                        updateDatabase(App.TOTALSCORE, finalI);
                     }
                     break;
                 }
@@ -151,6 +179,9 @@ public class ProfileFragment extends Fragment
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
                                         positionSnake.setText( String.format("#%d", finalI)));
+
+                                //  Update database
+                                updateDatabase(App.SNAKE, finalI);
                             }
                             break;
                         }
@@ -171,6 +202,9 @@ public class ProfileFragment extends Fragment
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
                                         positionTetris.setText( String.format("#%d", finalI)));
+
+                                //  Update database
+                                updateDatabase(App.TETRIS, finalI);
                             }
                             break;
                         }
@@ -191,6 +225,9 @@ public class ProfileFragment extends Fragment
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
                                         positionPong.setText( String.format("#%d", finalI)));
+
+                                //  Update database
+                                updateDatabase(App.PONG, finalI);
                             }
                             break;
                         }
@@ -211,6 +248,9 @@ public class ProfileFragment extends Fragment
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
                                         positionBreakout.setText( String.format("#%d", finalI)));
+
+                                //  Update database
+                                updateDatabase(App.BREAKOUT, finalI);
                             }
                             break;
                         }
@@ -231,11 +271,39 @@ public class ProfileFragment extends Fragment
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
                                         positionHole.setText( String.format("#%d", finalI)));
+
+                                //  Update database
+                                updateDatabase(App.HOLE, finalI);
                             }
                             break;
                         }
                     }
                 });
+    }
+
+    /*
+            Aggiorna il database locale con la nuova posizione per il gioco passato
+            come parametro.
+     */
+    private void updateDatabase(String game, int position)
+    {
+        //  Controlla se il profilo mostrato è quello dell'utente loggato
+        if( ! user.getNickname().equals(
+                AuthenticationManager.get().getUserLogged().getNickname()))
+            return;
+
+        Scoreboard localScore = App.scoreboardDao.getScoreboard(game);
+        if(localScore == null)
+        {
+            localScore = new Scoreboard(game, 0);
+            localScore.setPosition(position);
+            App.scoreboardDao.insertAll(localScore);
+        }
+        else
+        {
+            localScore.setPosition(position);
+            App.scoreboardDao.update(localScore);
+        }
     }
 
 }

@@ -163,7 +163,24 @@ public class LeaderboardFragment extends Fragment
                         for(int i = 0; i < scoreboardList.size(); i++)
                             if(scoreboardList.get(i).getNickname().equals(
                                     AuthenticationManager.get().getUserLogged().getNickname()))
-                                positionTextview.setText(String.format("#%d", i + 1));
+                            {
+                                int position = i+1;
+                                positionTextview.setText(String.format("#%d", position));
+
+                                //  Update database
+                                Scoreboard scoreboard = App.scoreboardDao.getScoreboard(game);
+                                if(scoreboard == null)
+                                {
+                                    scoreboard = new Scoreboard(game, 0);
+                                    scoreboard.setPosition(position);
+                                    App.scoreboardDao.insertAll(scoreboard);
+                                }
+                                else
+                                {
+                                    scoreboard.setPosition(position);
+                                    App.scoreboardDao.update(scoreboard);
+                                }
+                            }
                 });
         });
 
