@@ -50,7 +50,7 @@ public class RegistrationActivity extends AppCompatActivity {
         //Listener pulsante registrazione
         mRegister.setOnTouchListener(new OnTouchAnimatedListener()
         {
-            private Blocker mBlocker = new Blocker();
+            Blocker mBlocker = new Blocker();
 
             @Override
             public void onClick(View view) {

@@ -17,6 +17,7 @@ import com.nullpointerexception.retrogames.Activities.LoginActivity;
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
+import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.Components.ProfileImageGenerator;
 import com.nullpointerexception.retrogames.Components.Scoreboard;
@@ -118,18 +119,22 @@ public class ProfileFragment extends Fragment
 
         logoutButton.setOnTouchListener(new OnTouchAnimatedListener()
         {
+            Blocker mBlocker = new Blocker();
+
             @Override
             public void onClick(View view)
             {
-                App.scoreboardDao.delete( App.scoreboardDao.getAll() );
-                SharedPreferences prefs = getContext()
-                        .getSharedPreferences(App.USER, Context.MODE_PRIVATE);
-                prefs.edit().clear().apply();
+                if (!mBlocker.block()) {
+                    App.scoreboardDao.delete(App.scoreboardDao.getAll());
+                    SharedPreferences prefs = getContext()
+                            .getSharedPreferences(App.USER, Context.MODE_PRIVATE);
+                    prefs.edit().clear().apply();
 
-                AuthenticationManager.get().logout();
-                startActivity(new Intent(getContext(), LoginActivity.class));
-                if(getActivity() != null)
-                    getActivity().finish();
+                    AuthenticationManager.get().logout();
+                    startActivity(new Intent(getContext(), LoginActivity.class));
+                    if (getActivity() != null)
+                        getActivity().finish();
+                }
             }
         });
 
@@ -190,8 +195,7 @@ public class ProfileFragment extends Fragment
 
         //  Tetris
         BackEndInterface.get().readAllScoresFirebase(App.TETRIS,
-                (success, scoreboardList) ->
-                {
+                (success, scoreboardList) -> {
                     for(int i = 0; i < scoreboardList.size(); i++)
                     {
                         Scoreboard scoreboard = scoreboardList.get(i);
@@ -305,5 +309,4 @@ public class ProfileFragment extends Fragment
             App.scoreboardDao.update(localScore);
         }
     }
-
 }
