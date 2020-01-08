@@ -13,6 +13,7 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.TextView;
 
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.SaveScore;
@@ -49,6 +50,7 @@ public class TetrisCtrl extends View {
     private int mScore = 0; //Punteggio corrente
     private SharedPreferences totalscoreShared;
     private long mTopScore;
+    private TextView score, totalscore;
 
 
     /**
@@ -81,9 +83,11 @@ public class TetrisCtrl extends View {
      * Viene istanziato il Tetris Controller e recupera il topscore dal database locale
      * @param context contesto
      */
-    public TetrisCtrl(Context context) {
+    public TetrisCtrl(Context context, TextView score, TextView totalscore) {
         super(context);
         this.context = context;
+        this.score = score;
+        this.totalscore = totalscore;
 
         /**
         //Prende il totalscore dalle sharedPreferences
@@ -381,20 +385,29 @@ public class TetrisCtrl extends View {
     }
 
     /**
-     * Mostra lo score in real-time sullo schermo
+     * Mostra lo score in ullo schermo, non è usata
      * @param canvas foglio da disegno
      */
     void showScore(Canvas canvas) {
         int fontSize = mScreenSize.x / 20;
         Paint pnt = new Paint();
         pnt.setTextSize(fontSize);
-        pnt.setARGB(128, 255, 255,255);
+        pnt.setARGB(128, 0, 255,0);
         int posX = (int)(fontSize * 0.5);
         int poxY = (int)(fontSize * 1.5);
         canvas.drawText("Score : " + mScore, posX, poxY, pnt);
-
-        poxY += (int)(fontSize * 1.5);
+        poxY += (int)(fontSize * 1.2);
         canvas.drawText("Top Score : " + mTopScore, posX, poxY, pnt);
+    }
+
+    /**
+     * Scrive sulle textView lo score e il totalscore
+     */
+    void showScore(){
+        String score = "Score : " + mScore;
+        String totalscore = "Top Score : " + mTopScore;
+        this.score.setText(score);
+        this.totalscore.setText(totalscore);
     }
 
     /**
@@ -506,7 +519,6 @@ public class TetrisCtrl extends View {
         mTimerFrame.sendEmptyMessageDelayed(0, 10);
     }
 
-    //TODO vedere qui per eventualmente rimuovere il dialog e per cambiare le stringhe
     /**
      * Mostra il dialogn di GameOver
      */
@@ -537,7 +549,8 @@ public class TetrisCtrl extends View {
 
         showMatrix(canvas, mArMatrix);
         showNewBlock(canvas);
-        showScore(canvas);
+        //showScore(canvas);
+        showScore();
         showNextBlock(canvas, mArNextBlock);
     }
 
@@ -618,11 +631,11 @@ public class TetrisCtrl extends View {
         int[] arColor = {Color.argb(32,255,255,255),  //Bianco
                 Color.argb(128,147,4,0),    //Rosso
                 Color.argb(128,172,163,0),  //Giallo
-                Color.argb(128,146,1,80),//Rosa
-                Color.argb(128,0,139,32),//Verde
-                Color.argb(128,163,92,0),//Rosa scuro
-                Color.argb(128,19,35,229),    //Blu
-                Color.argb(128,0,97,153)};//Grigio
+                Color.argb(128,146,1,80),   //Rosa
+                Color.argb(128,0,139,32),   //Verde
+                Color.argb(128,163,92,0),   //Rosa scuro
+                Color.argb(128,19,35,229),  //Blu
+                Color.argb(128,0,97,153)};  //Grigio
         int previewBlockSize = mScreenSize.x / 20;
 
         //Creazione di una figura tramite un oggetto di tipo Rect

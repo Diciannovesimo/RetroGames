@@ -156,7 +156,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
     /**
      * Controlla se qualche campo non rispetta i criteri
      *

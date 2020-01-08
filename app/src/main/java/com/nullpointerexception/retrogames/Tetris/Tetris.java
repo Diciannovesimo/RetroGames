@@ -9,10 +9,13 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nullpointerexception.retrogames.R;
+
+import org.w3c.dom.Text;
 
 public class Tetris extends AppCompatActivity {
 
@@ -23,11 +26,16 @@ public class Tetris extends AppCompatActivity {
     private int mCellSize = 0; //dimensione di una singola cella
     private TetrisCtrl mTetrisCtrl;
     private boolean mIsTouchMove = false;
+    private TextView textViewScore, textViewTotalscore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tetris);
+
+        textViewScore = findViewById(R.id.textViewScore);
+        textViewTotalscore = findViewById(R.id.textViewTotalscore);
+
 
         //Gestione musica
         startMusic();
@@ -46,7 +54,7 @@ public class Tetris extends AppCompatActivity {
      * Crea le immagini delle celle e inizializza il layoutCanvas
      */
     void initTetrisCtrl() {
-        mTetrisCtrl = new TetrisCtrl(this);
+        mTetrisCtrl = new TetrisCtrl(this, textViewScore, textViewTotalscore);
         //Crea le bitmap delle 8 immagini relative agli 8 tipi di cell.png
         for(int i=0; i <= 7; i++) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cell0 + i);
@@ -58,10 +66,9 @@ public class Tetris extends AppCompatActivity {
 
 
     /**
-     * Gestisce gli eventi causati da un tocco sullo schermo
+     * Gestisce gli eventi causati da un tocco sullo schermo, non è usata
      * @param event gestisce i tocchi sullo schermo
      * @return
-     */
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
 
@@ -107,7 +114,7 @@ public class Tetris extends AppCompatActivity {
         }
         return true;
     }
-
+    */
 
     /**
      * Gestisce i bottoni per spostare i blocchi
@@ -124,9 +131,9 @@ public class Tetris extends AppCompatActivity {
             case R.id.btnBottom :
                 mTetrisCtrl.block2Bottom();
                 break;
-            /*case R.id.btnRotate :     //TODO vedere qui per implementare il bottone per far ruotare i blocchi
+            case R.id.btnRotate :
                 mTetrisCtrl.block2Rotate();
-                break;*/
+                break;
         }
     }
 
