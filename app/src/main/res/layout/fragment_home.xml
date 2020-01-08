@@ -83,11 +83,11 @@
                 android:id="@+id/Constraint_onclick_tetris"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="gone">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/textView_tetris_onclick"
@@ -107,62 +107,54 @@
                     android:id="@+id/textView_tetris_bottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:alpha="0.90"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/highscore"
-                    android:textColor="#000000"
+                    android:textColor="#8A000000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.052"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.948" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/textView_tetris_highscore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:alpha="0.90"
-                    android:text="@string/textview"
-                    android:textColor="#000000"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_tetris_bottom"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.955" />
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
 
-                <ImageView
-                    android:id="@+id/imageView_play_tetris"
-                    android:layout_width="95dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginEnd="5dp"
-                    android:contentDescription="@string/play_game"
-                    android:src="@drawable/play_icon"
-                    android:focusable="true"
-                    android:clickable="true"
+                    android:text="@string/_0"
+                    android:textColor="#8A000000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView_tetris_onclick"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintStart_toEndOf="@+id/textView_tetris_bottom" />
 
-                <TextView
-                    android:id="@+id/textView_play_tetris"
+                <LinearLayout
+                    android:id="@+id/Img_and_text_play_tetris"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="137dp"
-                    android:layout_marginTop="45dp"
-                    android:layout_marginEnd="40dp"
-                    android:alpha="0.90"
-                    android:text="@string/play_game"
-                    android:textColor="#00FF00"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_tetris_highscore"
-                    app:layout_constraintTop_toTopOf="@+id/textView_tetris_onclick" />
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/textView_tetris_onclick"
+                    app:layout_constraintTop_toTopOf="@+id/textView_tetris_onclick">
+
+                    <ImageView
+                        android:id="@+id/imageView_play_tetris"
+                        android:layout_width="95dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"
+                        android:clickable="true"
+                        android:contentDescription="@string/play_game"
+                        android:focusable="true"
+                        android:src="@drawable/play_icon" />
+
+                    <TextView
+                        android:id="@+id/textView_play_tetris"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:alpha="0.90"
+                        android:text="@string/play_game"
+                        android:textColor="#00FF00" />
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -244,62 +236,53 @@
                     android:id="@+id/textView_snake_bottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:alpha="0.90"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/highscore"
-                    android:textColor="#000000"
+                    android:textColor="#8A000000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.052"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.948" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/textView_snake_highscore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:alpha="0.90"
-                    android:text="@string/textview"
-                    android:textColor="#000000"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/_0"
+                    android:textColor="#8A000000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_snake_bottom"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.955" />
+                    app:layout_constraintStart_toEndOf="@+id/textView_snake_bottom" />
 
-                <ImageView
-                    android:id="@+id/imageView_play_snake"
-                    android:layout_width="95dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginEnd="5dp"
-                    android:contentDescription="@string/play_game"
-                    android:src="@drawable/play_icon"
-                    android:focusable="true"
-                    android:clickable="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView_snake_onclick"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/textView_play_snake"
+                <LinearLayout
+                    android:id="@+id/Img_and_text_play_snake"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="137dp"
-                    android:layout_marginTop="45dp"
-                    android:layout_marginEnd="40dp"
-                    android:alpha="0.90"
-                    android:text="@string/play_game"
-                    android:textColor="#00FF00"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_snake_highscore"
-                    app:layout_constraintTop_toTopOf="@+id/textView_snake_onclick" />
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/textView_snake_onclick"
+                    app:layout_constraintTop_toTopOf="@+id/textView_snake_onclick">
+
+                    <ImageView
+                        android:id="@+id/imageView_play_snake"
+                        android:layout_width="95dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"
+                        android:clickable="true"
+                        android:contentDescription="@string/play_game"
+                        android:focusable="true"
+                        android:src="@drawable/play_icon" />
+
+                    <TextView
+                        android:id="@+id/textView_play_snake"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:alpha="0.90"
+                        android:text="@string/play_game"
+                        android:textColor="#00FF00" />
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -379,62 +362,54 @@
                     android:id="@+id/textView_pong_bottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:alpha="0.90"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/highscore"
-                    android:textColor="#000000"
+                    android:textColor="#8A000000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.052"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.948" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/textView_pong_highscore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
                     android:alpha="0.90"
-                    android:text="@string/textview"
+                    android:text="@string/_0"
                     android:textColor="#000000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_pong_bottom"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.955" />
+                    app:layout_constraintStart_toEndOf="@+id/textView_pong_bottom" />
 
-                <ImageView
-                    android:id="@+id/imageView_play_pong"
-                    android:layout_width="95dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginEnd="5dp"
-                    android:contentDescription="@string/play_game"
-                    android:src="@drawable/play_icon"
-                    android:focusable="true"
-                    android:clickable="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView_pong_onclick"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/textView_play_pong"
+                <LinearLayout
+                    android:id="@+id/Img_and_text_play_pong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="137dp"
-                    android:layout_marginTop="45dp"
-                    android:layout_marginEnd="40dp"
-                    android:alpha="0.90"
-                    android:text="@string/play_game"
-                    android:textColor="#00FF00"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_pong_highscore"
-                    app:layout_constraintTop_toTopOf="@+id/textView_pong_onclick" />
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/textView_pong_onclick"
+                    app:layout_constraintTop_toTopOf="@+id/textView_pong_onclick">
+
+                    <ImageView
+                        android:id="@+id/imageView_play_pong"
+                        android:layout_width="95dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"
+                        android:clickable="true"
+                        android:contentDescription="@string/play_game"
+                        android:focusable="true"
+                        android:src="@drawable/play_icon" />
+
+                    <TextView
+                        android:id="@+id/textView_play_pong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:alpha="0.90"
+                        android:text="@string/play_game"
+                        android:textColor="#00FF00" />
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -513,62 +488,53 @@
                     android:id="@+id/textView_hole_bottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:alpha="0.90"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/highscore"
-                    android:textColor="#000000"
+                    android:textColor="#8A000000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.052"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.948" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/textView_hole_highscore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:alpha="0.90"
-                    android:text="@string/textview"
-                    android:textColor="#000000"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/_0"
+                    android:textColor="#8A000000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_hole_bottom"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.955" />
+                    app:layout_constraintStart_toEndOf="@+id/textView_hole_bottom" />
 
-                <ImageView
-                    android:id="@+id/imageView_play_hole"
-                    android:layout_width="95dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginEnd="5dp"
-                    android:contentDescription="@string/play_game"
-                    android:src="@drawable/play_icon"
-                    android:focusable="true"
-                    android:clickable="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView_hole_onclick"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/textView_play_hole"
+                <LinearLayout
+                    android:id="@+id/Img_and_text_play_hole"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="137dp"
-                    android:layout_marginTop="45dp"
-                    android:layout_marginEnd="40dp"
-                    android:alpha="0.90"
-                    android:text="@string/play_game"
-                    android:textColor="#00FF00"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_hole_highscore"
-                    app:layout_constraintTop_toTopOf="@+id/textView_hole_onclick" />
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/textView_hole_onclick"
+                    app:layout_constraintTop_toTopOf="@+id/textView_hole_onclick">
+
+                    <ImageView
+                        android:id="@+id/imageView_play_hole"
+                        android:layout_width="95dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"
+                        android:clickable="true"
+                        android:contentDescription="@string/play_game"
+                        android:focusable="true"
+                        android:src="@drawable/play_icon" />
+
+                    <TextView
+                        android:id="@+id/textView_play_hole"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:alpha="0.90"
+                        android:text="@string/play_game"
+                        android:textColor="#00FF00" />
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -649,62 +615,53 @@
                     android:id="@+id/textView_brick_break_bottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="10dp"
-                    android:alpha="0.90"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/highscore"
-                    android:textColor="#000000"
+                    android:textColor="#8A000000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.052"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.948" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/textView_brick_break_highscore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:alpha="0.90"
-                    android:text="@string/textview"
-                    android:textColor="#000000"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/_0"
+                    android:textColor="#8A000000"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_brick_break_bottom"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.955" />
+                    app:layout_constraintStart_toEndOf="@+id/textView_brick_break_bottom" />
 
-                <ImageView
-                    android:id="@+id/imageView_play_brick_break"
-                    android:layout_width="95dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginEnd="5dp"
-                    android:contentDescription="@string/play_game"
-                    android:src="@drawable/play_icon"
-                    android:focusable="true"
-                    android:clickable="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView_brick_break_onclick"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/textView_play_brick_break"
+                <LinearLayout
+                    android:id="@+id/Img_and_text_play"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="137dp"
-                    android:layout_marginTop="45dp"
-                    android:layout_marginEnd="40dp"
-                    android:alpha="0.90"
-                    android:text="@string/play_game"
-                    android:textColor="#00FF00"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView_brick_break_highscore"
-                    app:layout_constraintTop_toTopOf="@+id/textView_brick_break_onclick" />
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/textView_brick_break_onclick"
+                    app:layout_constraintTop_toTopOf="@+id/textView_brick_break_onclick">
+
+                    <ImageView
+                        android:id="@+id/imageView_play_brick_break"
+                        android:layout_width="95dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"
+                        android:clickable="true"
+                        android:contentDescription="@string/play_game"
+                        android:focusable="true"
+                        android:src="@drawable/play_icon" />
+
+                    <TextView
+                        android:id="@+id/textView_play_brick_break"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:alpha="0.90"
+                        android:text="@string/play_game"
+                        android:textColor="#00FF00" />
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
