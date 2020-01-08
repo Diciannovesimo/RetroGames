@@ -22,7 +22,6 @@
       android:layout_marginTop="24dp"
       android:background="@drawable/direction_arrove"
       android:rotation="90"
-      android:text="TOP"
       android:textColor="@android:color/white"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="@+id/guideline4"
@@ -76,11 +75,11 @@
       android:id="@+id/start_btn"
       android:layout_width="75dp"
       android:layout_height="45dp"
-      android:layout_marginStart="40dp"
-      android:layout_marginTop="60dp"
       android:background="@drawable/restart_btn_background"
       android:text="START"
       android:textColor="@android:color/white"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/guideline4"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@+id/guideline3" />
 

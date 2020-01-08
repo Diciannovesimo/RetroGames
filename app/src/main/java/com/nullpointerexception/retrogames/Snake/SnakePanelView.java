@@ -2,7 +2,6 @@ package com.nullpointerexception.retrogames.Snake;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.SaveScore;
+import com.nullpointerexception.retrogames.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -208,20 +208,17 @@ public class SnakePanelView extends View {
         post(new Runnable() {
             @Override
             public void run() {
-                new AlertDialog.Builder(getContext()).setMessage("Game " + "Over!")
+                new AlertDialog.Builder(getContext()).setMessage(getResources().getString(R.string.gameOver))
                         .setCancelable(false)
-                        .setPositiveButton("重新开始", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                reStartGame(mSpeed);
-                            }
+                        .setMessage(getResources().getString(R.string.your_score_is) + mPoint)
+                        .setPositiveButton(getResources().getString(R.string.again), (dialog, which) -> {
+                            dialog.dismiss();
+                            reStartGame(mSpeed);
                         })
-                        .setNegativeButton("退出", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
+                        .setNegativeButton(getResources().getString(R.string.exit), (dialog, which) -> {
+                            dialog.dismiss();
+                            if(getContext() instanceof MainActivitySnake)
+                                ((MainActivitySnake) getContext()).finish();
                         })
                         .create()
                         .show();
@@ -230,7 +227,7 @@ public class SnakePanelView extends View {
     }
 
     public void reStartGame(int difficult) {
-
+        //In base alla difficoltà, cambia la velocità del serpente
         switch (difficult) {
             case GameType.EASY:
                 setDifficulty(GameType.EASY);
@@ -246,8 +243,9 @@ public class SnakePanelView extends View {
                 break;
         }
 
+        //Legge dal database se esistono salvataggi del gioco
         if(App.scoreboardDao.getGame(App.SNAKE) != null)
-            mHighScore = App.scoreboardDao.getScore(App.SNAKE);
+            mHighScore = App.scoreboardDao.getScore(App.SNAKE);  //se si, l'highscore viene aggiornato
         else
             mHighScore = 0;
 
@@ -268,13 +266,9 @@ public class SnakePanelView extends View {
         mSnakeLength    = 3;                          //Lunghezza serpente
         mSnakeDirection = GameType.RIGHT;
 
-        if (mFoodPosition != null) {
-            mFoodPosition.setX(0);
-            mFoodPosition.setY(0);
-        } else {
-            mFoodPosition = new GridPosition(0, 0);
-        }
-        refreshFood(mFoodPosition);
+        if (mFoodPosition != null)
+            generateFood();
+
         mIsEndGame = false;
         GameMainThread thread = new GameMainThread();
         thread.start();

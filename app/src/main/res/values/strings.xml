@@ -102,8 +102,8 @@
     <string name="leaderboard_noConnection">Cannot load leaderboard without connection.\nTry later.</string>
 
     <!-- Tetris -->
-    <string name="gameOver">Game over</string>
-    <string name="your_score_is">Your score is</string>
+    <string name="gameOver">Game over!</string>
+    <string name="your_score_is">Your score is </string>
     <string name="again">Again</string>
     <string name="exit">Exit</string>
     <string name="high_score">High Score :</string>
