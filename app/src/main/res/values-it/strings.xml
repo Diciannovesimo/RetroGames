@@ -64,4 +64,6 @@
     <string name="error_short_username">Username troppo corto</string>
     <string name="error_short_password">La password è troppo corta</string>
     <string name="error_match_password">La password non corrisponde</string>
+    <string name="score">Punteggio:</string>
+    <string name="high_score">Punteggio più alto:</string>
 </resources>

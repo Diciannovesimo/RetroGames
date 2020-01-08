@@ -106,6 +106,8 @@
     <string name="your_score_is">Your score is</string>
     <string name="again">Again</string>
     <string name="exit">Exit</string>
+    <string name="high_score">High Score :</string>
+    <string name="score">Score :</string>
 
 
 </resources>

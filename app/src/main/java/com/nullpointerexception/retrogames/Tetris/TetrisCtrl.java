@@ -404,8 +404,8 @@ public class TetrisCtrl extends View {
      * Scrive sulle textView lo score e il totalscore
      */
     void showScore(){
-        String score = "Score : " + mScore;
-        String totalscore = "Top Score : " + mTopScore;
+        String score = context.getString(R.string.score) + mScore;
+        String totalscore = context.getString(R.string.high_score) + mTopScore;
         this.score.setText(score);
         this.totalscore.setText(totalscore);
     }
