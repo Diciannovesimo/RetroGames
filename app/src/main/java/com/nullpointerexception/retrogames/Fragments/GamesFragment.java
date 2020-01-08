@@ -43,7 +43,7 @@ public class GamesFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                if(blocker.block()) {
+                if(!blocker.block()) {
                     Intent intent = new Intent(getContext(), Tetris.class);
                     startActivity(intent);
                 }
@@ -56,7 +56,7 @@ public class GamesFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                if(blocker.block()) {
+                if(!blocker.block()) {
                     Intent intent = new Intent(getContext(), MainActivitySnake.class);
                     startActivity(intent);
                 }
@@ -69,7 +69,7 @@ public class GamesFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                if(blocker.block()) {
+                if(!blocker.block()) {
                     Intent intent = new Intent(getContext(), MainActivityPong.class);
                     startActivity(intent);
                 }
@@ -82,7 +82,7 @@ public class GamesFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                if(blocker.block()) {
+                if(!blocker.block()) {
                     Intent intent = new Intent(getContext(), FullscreenActivity.class);
                     startActivity(intent);
                 }
@@ -95,7 +95,7 @@ public class GamesFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                if(blocker.block()) {
+                if(!blocker.block()) {
                     Intent intent = new Intent(getContext(), MainActivityBreakout.class);
                     startActivity(intent);
                 }

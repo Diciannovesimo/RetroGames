@@ -8,8 +8,6 @@ import com.google.firebase.auth.FirebaseUser;
  *      User
  *
  *      Stores informations of an account.
- *
- *      @author Luca
  */
 public class User
 {
@@ -24,7 +22,7 @@ public class User
 
     public User() {}
 
-    /** Construct object from a FireBase user and set fields from it */
+    /** Costruttore user */
     public User(@NonNull FirebaseUser user) {
         id = user.getUid();
         email = user.getEmail();
@@ -38,6 +36,7 @@ public class User
         return email;
     }
 
+    //Getters e Setters
     public void setEmail(String email) {
         this.email = email;
     }
@@ -71,9 +70,6 @@ public class User
         this.id = id;
     }
 
-    /**
-     *      @return Return name and surname concatenated
-     */
     public String getNickname() {
         return nickname;
     }

@@ -21,7 +21,9 @@ public class SnakePanelView extends View {
     private final static String TAG = SnakePanelView.class.getSimpleName();
     public static boolean DEBUG = true;
 
+    //È una lista di GridSquare usata per creare la mappa
     private List<List<GridSquare>> mGridSquare = new ArrayList<>();
+    //Lista contenente le posizioni del serpente
     private List<GridPosition> mSnakePositions = new ArrayList<>();
 
     private GridPosition mSnakeHeader;                         //posizione della testa del serpente
@@ -52,14 +54,18 @@ public class SnakePanelView extends View {
     private void init() {
         List<GridSquare> squares;
         for (int i = 0; i < mGridSize; i++) {
+            //Inserisce una lista di quadrati in ogni posizione di squares
             squares = new ArrayList<>();
             for (int j = 0; j < mGridSize; j++) {
                 squares.add(new GridSquare(GameType.GRID));
             }
             mGridSquare.add(squares);
         }
+        //Posiziona la testa
         mSnakeHeader = new GridPosition(10, 10);
+        //Aggiunge nelle posizioni del serpente le coordinate della testa
         mSnakePositions.add(new GridPosition(mSnakeHeader.getX(), mSnakeHeader.getY()));
+        //Imposta coordinate cibo iniziali
         mFoodPosition = new GridPosition(0, 0);
         mIsEndGame    = true;
     }
@@ -81,9 +87,8 @@ public class SnakePanelView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(Color.WHITE);
-        //格子画笔
+        //Pennello griglia
         mGridPaint.reset();
-        mGridPaint.setAntiAlias(true);
         mGridPaint.setStyle(Paint.Style.FILL);
         mGridPaint.setAntiAlias(true);
 
@@ -134,11 +139,12 @@ public class SnakePanelView extends View {
                 checkCollision();
                 refreshGridSquare();
                 handleSnakeTail();
-                postInvalidate();//重绘界面
+                postInvalidate();     //Ridisegna l'interfaccia
                 handleSpeed();
             }
         }
 
+        //Gestisce la velocità di aggiornamento
         private void handleSpeed() {
             try {
                 sleep(1000 / mSpeed);
@@ -148,26 +154,27 @@ public class SnakePanelView extends View {
         }
     }
 
-    //检测碰撞
+    //Rileva collisione
     private void checkCollision() {
-        //检测是否咬到自己
+        //Ottiene la posizione della testa
         GridPosition headerPosition = mSnakePositions.get(mSnakePositions.size() - 1);
+
         for (int i = 0; i < mSnakePositions.size() - 2; i++) {
             GridPosition position = mSnakePositions.get(i);
             if (headerPosition.getX() == position.getX() && headerPosition.getY() == position.getY()) {
-                //咬到自己 停止游戏
+                //Il serpente si è morso
                 mIsEndGame = true;
                 showMessageDialog();
                 return;
             }
         }
 
-        //判断是否吃到食物
+        //Rileva collisioni cibo
         if (headerPosition.getX() == mFoodPosition.getX()
-                && headerPosition.getY() == mFoodPosition.getY()) {
-            mSnakeLength++;
-            generateFood();
-        }
+                && headerPosition.getY() == mFoodPosition.getY()) {   //Se la posizione della testa
+            mSnakeLength++;                                           //è uguale a quella del cibo
+            generateFood();                                           //aumenta la lunghezza e
+        }                                                             //genera il nuovo cibo
     }
 
     private void showMessageDialog() {
@@ -225,17 +232,18 @@ public class SnakePanelView extends View {
         thread.start();
     }
 
-    //生成food
+    //Genera il nuovo cibo
     private void generateFood() {
         Random random = new Random();
         int foodX = random.nextInt(mGridSize - 1);
         int foodY = random.nextInt(mGridSize - 1);
         for (int i = 0; i < mSnakePositions.size() - 1; i++) {
+            //Se il cibo si genera sulla posizione del corpo, lo rigenera
             if (foodX == mSnakePositions.get(i).getX() && foodY == mSnakePositions.get(i).getY()) {
-                //不能生成在蛇身上
+
                 foodX = random.nextInt(mGridSize - 1);
                 foodY = random.nextInt(mGridSize - 1);
-                //重新循环
+                //Resetta il contatore
                 i = 0;
             }
         }
@@ -247,7 +255,8 @@ public class SnakePanelView extends View {
     private void moveSnake(int snakeDirection) {
         switch (snakeDirection) {
             case GameType.LEFT:
-                if (mSnakeHeader.getX() - 1 < 0) {//边界判断：如果到了最左边 让他穿过屏幕到最右边
+                //se raggiunge l'estrema sinistra, attraversa lo schermo all'estrema destra
+                if (mSnakeHeader.getX() - 1 < 0) {
                     mSnakeHeader.setX(mGridSize - 1);
                 } else {
                     mSnakeHeader.setX(mSnakeHeader.getX() - 1);
@@ -255,6 +264,7 @@ public class SnakePanelView extends View {
                 mSnakePositions.add(new GridPosition(mSnakeHeader.getX(), mSnakeHeader.getY()));
                 break;
             case GameType.TOP:
+                //se raggiunge l'estremo superiore, attraversa lo schermo dal basso
                 if (mSnakeHeader.getY() - 1 < 0) {
                     mSnakeHeader.setY(mGridSize - 1);
                 } else {
@@ -262,6 +272,7 @@ public class SnakePanelView extends View {
                 }
                 mSnakePositions.add(new GridPosition(mSnakeHeader.getX(), mSnakeHeader.getY()));
                 break;
+            //se raggiunge l'estrema destra, attraversa lo schermo all'estrema sinistra
             case GameType.RIGHT:
                 if (mSnakeHeader.getX() + 1 >= mGridSize) {
                     mSnakeHeader.setX(0);
@@ -270,6 +281,7 @@ public class SnakePanelView extends View {
                 }
                 mSnakePositions.add(new GridPosition(mSnakeHeader.getX(), mSnakeHeader.getY()));
                 break;
+            //se raggiunge l'estrema sinistra, attraversa lo schermo all'estrema destra
             case GameType.BOTTOM:
                 if (mSnakeHeader.getY() + 1 >= mGridSize) {
                     mSnakeHeader.setY(0);
@@ -287,12 +299,13 @@ public class SnakePanelView extends View {
         }
     }
 
+    //Gestisce la coda del serpente
     private void handleSnakeTail() {
         int snakeLength = mSnakeLength;
         for (int i = mSnakePositions.size() - 1; i >= 0; i--) {
             if (snakeLength > 0) {
                 snakeLength--;
-            } else {//将超过长度的格子 置为 GameType.GRID
+            } else {
                 GridPosition position = mSnakePositions.get(i);
                 mGridSquare.get(position.getX()).get(position.getY()).setType(GameType.GRID);
             }
