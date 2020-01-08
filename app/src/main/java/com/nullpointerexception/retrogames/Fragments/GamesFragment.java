@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 import com.nullpointerexception.retrogames.Breakout.MainActivityBreakout;
+import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.Hole.FullscreenActivity;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
@@ -38,51 +39,66 @@ public class GamesFragment extends Fragment
 
         tetrisCard.setOnTouchListener(new OnTouchAnimatedListener()
         {
+            Blocker blocker = new Blocker();
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(getContext(), Tetris.class);
-                startActivity(intent);
+                if(blocker.block()) {
+                    Intent intent = new Intent(getContext(), Tetris.class);
+                    startActivity(intent);
+                }
             }
         });
 
         snakeCard.setOnTouchListener(new OnTouchAnimatedListener()
         {
+            Blocker blocker = new Blocker();
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(getContext(), MainActivitySnake.class);
-                startActivity(intent);
+                if(blocker.block()) {
+                    Intent intent = new Intent(getContext(), MainActivitySnake.class);
+                    startActivity(intent);
+                }
             }
         });
 
         pongCard.setOnTouchListener(new OnTouchAnimatedListener()
         {
+            Blocker blocker = new Blocker();
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(getContext(), MainActivityPong.class);
-                startActivity(intent);
+                if(blocker.block()) {
+                    Intent intent = new Intent(getContext(), MainActivityPong.class);
+                    startActivity(intent);
+                }
             }
         });
 
         spaceInvadersCard.setOnTouchListener(new OnTouchAnimatedListener()
         {
+            Blocker blocker = new Blocker();
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(getContext(), FullscreenActivity.class);
-                startActivity(intent);
+                if(blocker.block()) {
+                    Intent intent = new Intent(getContext(), FullscreenActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
         breakoutCard.setOnTouchListener(new OnTouchAnimatedListener()
         {
+            Blocker blocker = new Blocker();
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(getContext(), MainActivityBreakout.class);
-                startActivity(intent);
+                if(blocker.block()) {
+                    Intent intent = new Intent(getContext(), MainActivityBreakout.class);
+                    startActivity(intent);
+                }
             }
         });
 
