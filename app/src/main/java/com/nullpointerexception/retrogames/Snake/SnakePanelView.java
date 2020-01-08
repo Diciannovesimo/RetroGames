@@ -12,6 +12,9 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.nullpointerexception.retrogames.App;
+import com.nullpointerexception.retrogames.Components.SaveScore;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,17 +22,20 @@ import java.util.Random;
 
 public class SnakePanelView extends View {
     private final static String TAG = SnakePanelView.class.getSimpleName();
-    public static boolean DEBUG = true;
 
     //È una lista di GridSquare usata per creare la mappa
     private List<List<GridSquare>> mGridSquare = new ArrayList<>();
     //Lista contenente le posizioni del serpente
     private List<GridPosition> mSnakePositions = new ArrayList<>();
 
+    SaveScore game;
+
+    private OnEatListener onEatListener;
     private GridPosition mSnakeHeader;                         //posizione della testa del serpente
     private GridPosition mFoodPosition;                        //posizione del cibo
     private int mSnakeLength = 3;                              //lunghezza del serpente
-    private long mSpeed = 8;                                   //velocità del serpente
+    private int mDifficulty;
+    private int mSpeed = 8;                                    //velocità del serpente
     private int mSnakeDirection = GameType.RIGHT;              //direzione iniziale serpente
     private boolean mIsEndGame = false;                        //Il gioco finisce
     private int mGridSize = 20;                                //Taglia della griglia
@@ -37,6 +43,9 @@ public class SnakePanelView extends View {
     private Paint mStrokePaint = new Paint();                  //spessore paint
     private int mRectSize = dp2px(getContext(), 15);    //Dimensione del quadrato
     private int mStartX, mStartY;                              //cordinate posizione iniziale serpente
+    private int mPoint;
+    private int mHighScore;
+
 
     public SnakePanelView(Context context) {
         this(context, null);
@@ -44,6 +53,7 @@ public class SnakePanelView extends View {
 
     public SnakePanelView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
+        game= new SaveScore();
     }
 
     public SnakePanelView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -114,8 +124,12 @@ public class SnakePanelView extends View {
         mGridSquare.get(foodPosition.getX()).get(foodPosition.getY()).setType(GameType.FOOD);
     }
 
-    public void setSpeed(long speed) {
+    public void setSpeed(int speed) {
         mSpeed = speed;
+    }
+
+    public void setDifficulty(int difficulty) {
+        mDifficulty = difficulty;
     }
 
     public void setGridSize(int gridSize) {
@@ -173,8 +187,21 @@ public class SnakePanelView extends View {
         if (headerPosition.getX() == mFoodPosition.getX()
                 && headerPosition.getY() == mFoodPosition.getY()) {   //Se la posizione della testa
             mSnakeLength++;                                           //è uguale a quella del cibo
-            generateFood();                                           //aumenta la lunghezza e
+            generateFood();
+            addPoint();                                               //aumenta la lunghezza e
         }                                                             //genera il nuovo cibo
+    }
+
+    //Aggiungere lo score
+    private void addPoint() {
+        mPoint++;
+        if(mPoint > mHighScore) {
+            mHighScore = mPoint;
+            game.save(App.SNAKE, mPoint, getContext());
+        }
+        if(onEatListener != null) {
+            onEatListener.onEat(mPoint, mHighScore);
+        }
     }
 
     private void showMessageDialog() {
@@ -187,7 +214,7 @@ public class SnakePanelView extends View {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                reStartGame();
+                                reStartGame(mSpeed);
                             }
                         })
                         .setNegativeButton("退出", new DialogInterface.OnClickListener() {
@@ -202,7 +229,28 @@ public class SnakePanelView extends View {
         });
     }
 
-    public void reStartGame() {
+    public void reStartGame(int difficult) {
+
+        switch (difficult) {
+            case GameType.EASY:
+                setDifficulty(GameType.EASY);
+                setSpeed(4);
+                break;
+            case GameType.MEDIUM:
+                setDifficulty(GameType.MEDIUM);
+                setSpeed(8);
+                break;
+            case GameType.HARD:
+                setDifficulty(GameType.HARD);
+                setSpeed(12);
+                break;
+        }
+
+        if(App.scoreboardDao.getGame(App.SNAKE) != null)
+            mHighScore = App.scoreboardDao.getScore(App.SNAKE);
+        else
+            mHighScore = 0;
+
         if (!mIsEndGame) return;
         for (List<GridSquare> squares : mGridSquare) {
             for (GridSquare square : squares) {
@@ -213,13 +261,13 @@ public class SnakePanelView extends View {
             mSnakeHeader.setX(10);
             mSnakeHeader.setY(10);
         } else {
-            mSnakeHeader = new GridPosition(10, 10);//蛇的初始位置
+            mSnakeHeader = new GridPosition(10, 10);    //The initial position of the snake
         }
         mSnakePositions.clear();
         mSnakePositions.add(new GridPosition(mSnakeHeader.getX(), mSnakeHeader.getY()));
-        mSnakeLength    = 3;//蛇的长度
+        mSnakeLength    = 3;                          //Lunghezza serpente
         mSnakeDirection = GameType.RIGHT;
-        mSpeed          = 8;//速度
+
         if (mFoodPosition != null) {
             mFoodPosition.setX(0);
             mFoodPosition.setY(0);
@@ -326,5 +374,13 @@ public class SnakePanelView extends View {
     public static int dp2px(Context context, float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpVal,
                 context.getResources().getDisplayMetrics());
+    }
+
+    public void setOnEatListener(OnEatListener onEatListener) {
+        this.onEatListener = onEatListener;
+    }
+
+    public interface OnEatListener {
+        void onEat(int point, int highScore);
     }
 }

@@ -109,5 +109,9 @@
     <string name="high_score">High Score :</string>
     <string name="score">Score :</string>
 
+    <!-- Snake -->
+    <string name="default_highscore_snake">Highscore: 0</string>
+    <string name="default_score_snake">Score: 0</string>
+
 
 </resources>

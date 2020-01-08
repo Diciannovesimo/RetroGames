@@ -9,4 +9,8 @@ public interface GameType {
   int TOP = 2;
   int RIGHT = 3;
   int BOTTOM = 4;
+
+  int EASY = 1;
+  int MEDIUM = 2;
+  int HARD = 3;
 }

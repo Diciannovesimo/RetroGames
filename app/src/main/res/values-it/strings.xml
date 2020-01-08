@@ -10,7 +10,7 @@
     <string name="first_access_info">Effettuando il login puoi condividere i tuoi punteggi e competere con la rete in classifica.</string>
     <string name="games">Giochi</string>
     <string name="help">Come giocare</string>
-    <string name="highscore">Miglior punteggio:</string>
+    <string name="highscore">Miglior punteggio: </string>
     <string name="howToPlay">Pacman, il nostro eroe, sgranocchia tutto andando in giro per la mappa, mangiando tutti i thedots. Tuttavia, la vita non è facile per il nostro giovane piccolo eroe. Durante il suo viaggio, affronta fantasmi spettrali che cercheranno di fargli del male. Evitali! In ogni angolo della mappa c\'è un pallino di potenza. Se Pacman mangia una pallina di potere, ottiene temporaneamente il potere di mangiare i nemici.</string>
     <string name="howToPlayLabel">COME GIOCARE</string>
     <string name="login">Accesso</string>
@@ -64,6 +64,8 @@
     <string name="error_short_username">Username troppo corto</string>
     <string name="error_short_password">La password è troppo corta</string>
     <string name="error_match_password">La password non corrisponde</string>
+    <string name="default_score_snake">Punteggio: 0</string>
+    <string name="default_highscore_snake">Punteggio più alto: 0</string>
     <string name="score">Punteggio:</string>
     <string name="high_score">Punteggio più alto:</string>
 </resources>
