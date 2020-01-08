@@ -240,7 +240,7 @@ public class LoginActivity extends AppCompatActivity {
             });
 
 
-            //Recupero l'eventuale score di Tetris
+            //Recupero l'eventuale score di MainActivityTetris
             BackEndInterface.get().readScoreFirebase(App.TETRIS, nickname, new BackEndInterface.OnDataReceivedListener() {
                 @Override
                 public void onDataReceived(boolean success, String value) {

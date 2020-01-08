@@ -70,7 +70,7 @@
         android:layout_height="60dp"
         android:background="@drawable/direction_arrove"
         android:onClick="buttonDirection"
-        android:rotation="90"
+        android:rotation="270"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnRight"
         app:layout_constraintHorizontal_bias="0.5"

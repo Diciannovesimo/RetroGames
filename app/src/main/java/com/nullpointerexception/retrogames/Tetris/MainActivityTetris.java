@@ -17,7 +17,7 @@ import com.nullpointerexception.retrogames.R;
 
 import org.w3c.dom.Text;
 
-public class Tetris extends AppCompatActivity {
+public class MainActivityTetris extends AppCompatActivity {
 
 
     private static MediaPlayer player; //Gestione della riproduzione audio
@@ -159,9 +159,9 @@ public class Tetris extends AppCompatActivity {
     }
 
     /**
-     *  Fa partire la classica musica di Tetris
+     *  Fa partire la classica musica di MainActivityTetris
      */
-    void startMusic() {
+    private void startMusic() {
         player = MediaPlayer.create(this, R.raw.tetris_song);
         player.setVolume(100, 100);
         player.setLooping(true);

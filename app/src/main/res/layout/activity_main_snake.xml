@@ -8,78 +8,71 @@
 
   <com.nullpointerexception.retrogames.Snake.SnakePanelView
       android:id="@+id/snake_view"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      app:layout_constraintBottom_toTopOf="@+id/guideline3"
+      android:layout_width="408dp"
+      android:layout_height="336dp"
+      android:layout_marginTop="16dp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/score_tv" />
+      app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
   <Button
       android:id="@+id/top_btn"
       android:layout_width="60dp"
       android:layout_height="60dp"
-      android:layout_marginTop="24dp"
+      android:layout_marginTop="16dp"
       android:background="@drawable/direction_arrove"
       android:rotation="90"
       android:textColor="@android:color/white"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="@+id/guideline4"
+      app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
   <Button
       android:id="@+id/left_btn"
       android:layout_width="60dp"
       android:layout_height="60dp"
-      android:layout_marginTop="24dp"
-      android:layout_marginEnd="24dp"
-      android:layout_marginBottom="116dp"
       android:background="@drawable/direction_arrove"
       android:textColor="@android:color/white"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/top_btn"
-      app:layout_constraintStart_toStartOf="@+id/guideline4"
-      app:layout_constraintTop_toBottomOf="@+id/top_btn"
-      app:layout_constraintVertical_bias="0.0" />
+      app:layout_constraintBottom_toTopOf="@+id/bottom_btn"
+      app:layout_constraintEnd_toStartOf="@+id/right_btn"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/top_btn" />
 
   <Button
       android:id="@+id/right_btn"
       android:layout_width="60dp"
       android:layout_height="60dp"
-      android:layout_marginStart="24dp"
       android:background="@drawable/direction_arrove"
       android:rotation="180"
       android:textColor="@android:color/white"
-      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintBottom_toTopOf="@+id/bottom_btn"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@+id/top_btn"
-      app:layout_constraintTop_toTopOf="@+id/left_btn"
-      app:layout_constraintVertical_bias="0.0" />
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/left_btn"
+      app:layout_constraintTop_toBottomOf="@+id/top_btn" />
 
   <Button
       android:id="@+id/bottom_btn"
       android:layout_width="60dp"
       android:layout_height="60dp"
-      android:layout_marginTop="24dp"
       android:layout_marginBottom="16dp"
       android:background="@drawable/direction_arrove"
       android:rotation="-90"
       android:textColor="@android:color/white"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="@+id/guideline4"
-      app:layout_constraintTop_toBottomOf="@+id/left_btn"
-      app:layout_constraintVertical_bias="0.0" />
+      app:layout_constraintStart_toStartOf="parent" />
 
   <Button
       android:id="@+id/start_btn"
       android:layout_width="75dp"
       android:layout_height="45dp"
+      android:layout_marginStart="4dp"
+      android:layout_marginTop="4dp"
       android:background="@drawable/restart_btn_background"
       android:text="START"
       android:textColor="@android:color/white"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toStartOf="@+id/guideline4"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
@@ -88,14 +81,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      app:layout_constraintGuide_percent="0.6" />
-
-  <androidx.constraintlayout.widget.Guideline
-      android:id="@+id/guideline4"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:orientation="vertical"
-      app:layout_constraintGuide_percent="0.4" />
+      app:layout_constraintGuide_percent="0.65" />
 
   <TextView
       android:id="@+id/score_tv"
@@ -103,9 +89,11 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="4dp"
       android:layout_marginTop="2dp"
+      android:layout_marginBottom="2dp"
       android:textColor="@color/black"
       android:textSize="20sp"
       android:textStyle="bold"
+      app:layout_constraintBottom_toTopOf="@+id/guideline6"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
@@ -115,10 +103,19 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="2dp"
       android:layout_marginEnd="4dp"
+      android:layout_marginBottom="2dp"
       android:textColor="@color/black"
       android:textSize="20sp"
       android:textStyle="bold"
+      app:layout_constraintBottom_toTopOf="@+id/guideline6"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline6"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.05" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,7 @@ import com.nullpointerexception.retrogames.Hole.FullscreenActivity;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.R;
 import com.nullpointerexception.retrogames.Snake.MainActivitySnake;
-import com.nullpointerexception.retrogames.Tetris.Tetris;
+import com.nullpointerexception.retrogames.Tetris.MainActivityTetris;
 
 public class GamesFragment extends Fragment
 {
@@ -80,7 +80,7 @@ public class GamesFragment extends Fragment
             {
                 if( ! blocker.block())
                 {
-                    Intent intent = new Intent(getContext(), Tetris.class);
+                    Intent intent = new Intent(getContext(), MainActivityTetris.class);
                     startActivity(intent);
                 }
             }

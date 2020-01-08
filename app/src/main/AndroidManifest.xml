@@ -34,7 +34,7 @@
             android:name=".Activities.LoginActivity"
             android:theme="@style/AppTheme.StatusBar" />
         <activity
-            android:name=".Tetris.Tetris"
+            android:name=".Tetris.MainActivityTetris"
             android:screenOrientation="portrait" />
         <activity android:name=".Breakout.GameActivity" />
         <activity android:name=".Breakout.MainActivityBreakout" />

@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.SaveScore;
@@ -38,10 +39,10 @@ public class SnakePanelView extends View {
     private int mSpeed = 8;                                    //velocità del serpente
     private int mSnakeDirection = GameType.RIGHT;              //direzione iniziale serpente
     private boolean mIsEndGame = false;                        //Il gioco finisce
-    private int mGridSize = 20;                                //Taglia della griglia
+    private int mGridSize = 15;                                //Taglia della griglia
     private Paint mGridPaint = new Paint();                    //colore paint
     private Paint mStrokePaint = new Paint();                  //spessore paint
-    private int mRectSize = dp2px(getContext(), 15);    //Dimensione del quadrato
+    private int mRectSize = dp2px(getContext(), 20);    //Dimensione del quadrato
     private int mStartX, mStartY;                              //cordinate posizione iniziale serpente
     private int mPoint;
     private int mHighScore;
@@ -84,7 +85,7 @@ public class SnakePanelView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         mStartX = w / 2 - mGridSize * mRectSize / 2;
-        mStartY = dp2px(getContext(), 40);
+        mStartY = dp2px(getContext(), 1);
     }
 
     @Override
@@ -96,7 +97,6 @@ public class SnakePanelView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawColor(Color.WHITE);
         //Pennello griglia
         mGridPaint.reset();
         mGridPaint.setStyle(Paint.Style.FILL);
@@ -112,7 +112,12 @@ public class SnakePanelView extends View {
                 int left = mStartX + i * mRectSize;
                 int top = mStartY + j * mRectSize;
                 int right = left + mRectSize;
-                int bottom = top + mRectSize;
+                int bottom;
+                if(j != (mGridSize-1))
+                    bottom = top + mRectSize;
+                else
+                    bottom = top + mRectSize - 5;
+
                 canvas.drawRect(left, top, right, bottom, mStrokePaint);
                 mGridPaint.setColor(mGridSquare.get(i).get(j).getColor());
                 canvas.drawRect(left, top, right, bottom, mGridPaint);
@@ -194,7 +199,7 @@ public class SnakePanelView extends View {
 
     //Aggiungere lo score
     private void addPoint() {
-        mPoint++;
+        mPoint ++;     //TODO: modifica l'assegnazione del punteggio in base alla difficoltà
         if(mPoint > mHighScore) {
             mHighScore = mPoint;
             game.save(App.SNAKE, mPoint, getContext());
@@ -208,9 +213,9 @@ public class SnakePanelView extends View {
         post(new Runnable() {
             @Override
             public void run() {
-                new AlertDialog.Builder(getContext()).setMessage(getResources().getString(R.string.gameOver))
+                new AlertDialog.Builder(getContext()).setTitle(getResources().getString(R.string.gameOver))
                         .setCancelable(false)
-                        .setMessage(getResources().getString(R.string.your_score_is) + mPoint)
+                        .setMessage(getResources().getString(R.string.your_score_is) + " " + mPoint)
                         .setPositiveButton(getResources().getString(R.string.again), (dialog, which) -> {
                             dialog.dismiss();
                             reStartGame(mSpeed);

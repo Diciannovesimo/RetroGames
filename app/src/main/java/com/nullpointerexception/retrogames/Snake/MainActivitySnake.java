@@ -24,8 +24,11 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
         //Inizializza l'interfaccia grafica
         initUI();
 
+        //Acquisisto lo score più alto dal database locale
         if(App.scoreboardDao.getGame(App.SNAKE) != null)
             mhighScoreLoaded = String.valueOf(App.scoreboardDao.getScore(App.SNAKE));
+        else
+            mhighScoreLoaded = String.valueOf(0);
 
        runOnUiThread(new Runnable() {
            @Override

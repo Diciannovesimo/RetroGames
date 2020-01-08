@@ -207,7 +207,7 @@ public class ProfileFragment extends Fragment
                     }
                 });
 
-        //  Tetris
+        //  MainActivityTetris
         BackEndInterface.get().readAllScoresFirebase(App.TETRIS,
                 (success, scoreboardList) -> {
                     for(int i = 0; i < scoreboardList.size(); i++)
