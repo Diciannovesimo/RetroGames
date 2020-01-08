@@ -26,11 +26,12 @@ public class SaveScore {
         this.nameGame = nameGame;
         this.newScore = newScore;
         long newTotalscore;
+        long previousScore;
 
 
-        if(App.scoreboardDao.getGame(nameGame) != null) //Controllo se il gioco è presente nel database
+        if(App.scoreboardDao.getGame(nameGame) != null) //è presente uno score con questo gioco nel database locale
         {
-            int previousScore = App.scoreboardDao.getScore(nameGame); //Prendo il valore dal database locale
+            previousScore = App.scoreboardDao.getScore(nameGame); //Prendo il valore dal database locale
 
             if( newScore > previousScore ) //Controllo se il nuovo punteggio è maggiore rispetto a quello memorizzato
             {
@@ -42,16 +43,13 @@ public class SaveScore {
                 {
                     //Esiste già un totalscore
                     newTotalscore = App.scoreboardDao.getScore(App.TOTALSCORE); //Leggo il vecchio totalscore
-                    newTotalscore = previousScore - newTotalscore + newScore;   //Determino il nuovo totalscore
-                    newTotalscore = Math.abs(newTotalscore);
+                    newTotalscore = newTotalscore - previousScore + newScore;   //Determino il nuovo totalscore
                     App.scoreboardDao.update(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
                 }
                 else
                 {
                     //Non esiste un totalscore
-                    newTotalscore = 0;
-                    newTotalscore = previousScore - newTotalscore + newScore;   //Determino il nuovo totalscore
-                    newTotalscore = Math.abs(newTotalscore);
+                    newTotalscore = newScore;   //Determino il nuovo totalscore
                     App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
                 }
 
@@ -68,7 +66,7 @@ public class SaveScore {
             }
 
         }
-        else    //Non è presente uno score con questo gioco
+        else    //Non è presente uno score con questo gioco nel database locale
         {
             //Scrivo il nuovo punteggio sul database locale
             App.scoreboardDao.insertAll(new Scoreboard(nameGame, newScore));
@@ -79,14 +77,12 @@ public class SaveScore {
                 //Esiste già un totalscore
                 newTotalscore = App.scoreboardDao.getScore(App.TOTALSCORE); //Leggo il vecchio totalscore
                 newTotalscore = newTotalscore + newScore;   //Determino il nuovo totalscore
-                newTotalscore = Math.abs(newTotalscore);
                 App.scoreboardDao.update(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
             }
             else
             {
-                newTotalscore = 0;
-                newTotalscore = newTotalscore + newScore;   //Determino il nuovo totalscore
-                newTotalscore = Math.abs(newTotalscore);
+                //Non esiste un totalscore
+                newTotalscore = newScore;   //Determino il nuovo totalscore
                 App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, newTotalscore));   //Scrivo il nuovo totalscore
             }
 
