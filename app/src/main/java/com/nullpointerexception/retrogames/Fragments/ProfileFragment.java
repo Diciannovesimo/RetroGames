@@ -21,12 +21,11 @@ import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.Components.ProfileImageGenerator;
 import com.nullpointerexception.retrogames.Components.Scoreboard;
-import com.nullpointerexception.retrogames.Components.User;
 import com.nullpointerexception.retrogames.R;
 
 public class ProfileFragment extends Fragment
 {
-    private User user;
+    private String nickname;
 
     /*
             UI Components
@@ -48,12 +47,12 @@ public class ProfileFragment extends Fragment
 
     public ProfileFragment()
     {
-        user = AuthenticationManager.get().getUserLogged();
+        nickname = AuthenticationManager.get().getUserLogged().getNickname();
     }
 
-    public ProfileFragment(User user)
+    public ProfileFragment(String nickname)
     {
-        this.user = user;
+        this.nickname = nickname;
     }
 
     @SuppressLint({"ClickableViewAccessibility", "DefaultLocale"})
@@ -89,33 +88,41 @@ public class ProfileFragment extends Fragment
         //  Generazione immagine profilo
         if(getContext() != null)
             new ProfileImageGenerator(getContext())
-                    .fetchImageOf(user, drawable -> profileImage.setImageDrawable(drawable));
+                    .fetchImageOf(nickname, drawable -> profileImage.setImageDrawable(drawable));
 
         //  Assegnazione testi
-        profileName.setText(user.getNickname());
+        profileName.setText(nickname);
 
-        //  Assegnazione score
-        totalScore.setText( String.valueOf(App.scoreboardDao.getScore(App.TOTALSCORE)) );
-        scoreSnake.setText( String.valueOf(App.scoreboardDao.getScore(App.SNAKE)) );
-        scoreTetris.setText( String.valueOf(App.scoreboardDao.getScore(App.TETRIS)) );
-        scorePong.setText( String.valueOf(App.scoreboardDao.getScore(App.PONG)) );
-        scoreBreakout.setText( String.valueOf(App.scoreboardDao.getScore(App.BREAKOUT)) );
-        scoreHole.setText( String.valueOf(App.scoreboardDao.getScore(App.HOLE)) );
+        if( ! nickname.equals(AuthenticationManager.get().getUserLogged().getNickname()))
+        {
+            view.findViewById(R.id.textView3).setVisibility(View.GONE);
+            logoutButton.setVisibility(View.GONE);
+        }
+        else
+        {
+            //  Assegnazione score
+            totalScore.setText( String.valueOf(App.scoreboardDao.getScore(App.TOTALSCORE)) );
+            scoreSnake.setText( String.valueOf(App.scoreboardDao.getScore(App.SNAKE)) );
+            scoreTetris.setText( String.valueOf(App.scoreboardDao.getScore(App.TETRIS)) );
+            scorePong.setText( String.valueOf(App.scoreboardDao.getScore(App.PONG)) );
+            scoreBreakout.setText( String.valueOf(App.scoreboardDao.getScore(App.BREAKOUT)) );
+            scoreHole.setText( String.valueOf(App.scoreboardDao.getScore(App.HOLE)) );
 
-        //  Assegnazione posizioni
-        if(App.scoreboardDao.getPosition(App.TOTALSCORE) > 0)
-            totalscorePosition.setText(String.format("#%d %s", App.scoreboardDao.getPosition(App.TOTALSCORE),
-                getResources().getString(R.string.global_ranking)));
-        if(App.scoreboardDao.getPosition(App.SNAKE) > 0)
-            positionSnake.setText( String.format("#%d", App.scoreboardDao.getPosition(App.SNAKE)));
-        if(App.scoreboardDao.getPosition(App.TETRIS) > 0)
-            positionTetris.setText( String.format("#%d", App.scoreboardDao.getPosition(App.TETRIS)));
-        if(App.scoreboardDao.getPosition(App.PONG) > 0)
-            positionPong.setText( String.format("#%d", App.scoreboardDao.getPosition(App.PONG)));
-        if(App.scoreboardDao.getPosition(App.HOLE) > 0)
-            positionHole.setText( String.format("#%d", App.scoreboardDao.getPosition(App.HOLE)));
-        if(App.scoreboardDao.getPosition(App.BREAKOUT) > 0)
-            positionBreakout.setText( String.format("#%d", App.scoreboardDao.getPosition(App.BREAKOUT)));
+            //  Assegnazione posizioni
+            if(App.scoreboardDao.getPosition(App.TOTALSCORE) > 0)
+                totalscorePosition.setText(String.format("#%d %s", App.scoreboardDao.getPosition(App.TOTALSCORE),
+                        getResources().getString(R.string.global_ranking)));
+            if(App.scoreboardDao.getPosition(App.SNAKE) > 0)
+                positionSnake.setText( String.format("#%d", App.scoreboardDao.getPosition(App.SNAKE)));
+            if(App.scoreboardDao.getPosition(App.TETRIS) > 0)
+                positionTetris.setText( String.format("#%d", App.scoreboardDao.getPosition(App.TETRIS)));
+            if(App.scoreboardDao.getPosition(App.PONG) > 0)
+                positionPong.setText( String.format("#%d", App.scoreboardDao.getPosition(App.PONG)));
+            if(App.scoreboardDao.getPosition(App.HOLE) > 0)
+                positionHole.setText( String.format("#%d", App.scoreboardDao.getPosition(App.HOLE)));
+            if(App.scoreboardDao.getPosition(App.BREAKOUT) > 0)
+                positionBreakout.setText( String.format("#%d", App.scoreboardDao.getPosition(App.BREAKOUT)));
+        }
 
         logoutButton.setOnTouchListener(new OnTouchAnimatedListener()
         {
@@ -153,14 +160,17 @@ public class ProfileFragment extends Fragment
             for(int i = 0; i < scoreboardList.size(); i++)
             {
                 Scoreboard scoreboard = scoreboardList.get(i);
-                if(scoreboard.getNickname().equals( user.getNickname() ))
+                if(scoreboard.getNickname().equals( nickname ))
                 {
                     if(getActivity() != null)
                     {
-                        int finalI = i;
+                        int finalI = i+1;
                         getActivity().runOnUiThread(() ->
-                                totalscorePosition.setText(String.format("#%d %s", finalI +1,
-                                    getResources().getString(R.string.global_ranking))));
+                        {
+                            totalscorePosition.setText(String.format("#%d %s", finalI,
+                                    getResources().getString(R.string.global_ranking)));
+                            totalScore.setText( String.valueOf(scoreboard.getScore()));
+                        });
 
                         //  Update database
                         updateDatabase(App.TOTALSCORE, finalI);
@@ -177,13 +187,17 @@ public class ProfileFragment extends Fragment
                     for(int i = 0; i < scoreboardList.size(); i++)
                     {
                         Scoreboard scoreboard = scoreboardList.get(i);
-                        if(scoreboard.getNickname().equals( user.getNickname() ))
+                        if(scoreboard.getNickname().equals( nickname ))
                         {
                             if(getActivity() != null)
                             {
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
-                                        positionSnake.setText( String.format("#%d", finalI)));
+                                {
+                                    positionSnake.setText(String.format("#%d %s", finalI,
+                                            getResources().getString(R.string.global_ranking)));
+                                    scoreSnake.setText( String.valueOf(scoreboard.getScore()));
+                                });
 
                                 //  Update database
                                 updateDatabase(App.SNAKE, finalI);
@@ -199,13 +213,17 @@ public class ProfileFragment extends Fragment
                     for(int i = 0; i < scoreboardList.size(); i++)
                     {
                         Scoreboard scoreboard = scoreboardList.get(i);
-                        if(scoreboard.getNickname().equals( user.getNickname() ))
+                        if(scoreboard.getNickname().equals( nickname ))
                         {
                             if(getActivity() != null)
                             {
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
-                                        positionTetris.setText( String.format("#%d", finalI)));
+                                {
+                                    positionTetris.setText(String.format("#%d %s", finalI,
+                                            getResources().getString(R.string.global_ranking)));
+                                    scoreTetris.setText( String.valueOf(scoreboard.getScore()));
+                                });
 
                                 //  Update database
                                 updateDatabase(App.TETRIS, finalI);
@@ -222,13 +240,17 @@ public class ProfileFragment extends Fragment
                     for(int i = 0; i < scoreboardList.size(); i++)
                     {
                         Scoreboard scoreboard = scoreboardList.get(i);
-                        if(scoreboard.getNickname().equals( user.getNickname() ))
+                        if(scoreboard.getNickname().equals( nickname ))
                         {
                             if(getActivity() != null)
                             {
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
-                                        positionPong.setText( String.format("#%d", finalI)));
+                                {
+                                    positionPong.setText(String.format("#%d %s", finalI,
+                                            getResources().getString(R.string.global_ranking)));
+                                    scorePong.setText( String.valueOf(scoreboard.getScore()));
+                                });
 
                                 //  Update database
                                 updateDatabase(App.PONG, finalI);
@@ -245,13 +267,17 @@ public class ProfileFragment extends Fragment
                     for(int i = 0; i < scoreboardList.size(); i++)
                     {
                         Scoreboard scoreboard = scoreboardList.get(i);
-                        if(scoreboard.getNickname().equals( user.getNickname() ))
+                        if(scoreboard.getNickname().equals( nickname ))
                         {
                             if(getActivity() != null)
                             {
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
-                                        positionBreakout.setText( String.format("#%d", finalI)));
+                                {
+                                    positionBreakout.setText(String.format("#%d %s", finalI,
+                                            getResources().getString(R.string.global_ranking)));
+                                    scoreBreakout.setText( String.valueOf(scoreboard.getScore()));
+                                });
 
                                 //  Update database
                                 updateDatabase(App.BREAKOUT, finalI);
@@ -268,13 +294,17 @@ public class ProfileFragment extends Fragment
                     for(int i = 0; i < scoreboardList.size(); i++)
                     {
                         Scoreboard scoreboard = scoreboardList.get(i);
-                        if(scoreboard.getNickname().equals( user.getNickname() ))
+                        if(scoreboard.getNickname().equals( nickname ))
                         {
                             if(getActivity() != null)
                             {
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
-                                        positionHole.setText( String.format("#%d", finalI)));
+                                {
+                                    positionHole.setText(String.format("#%d %s", finalI,
+                                            getResources().getString(R.string.global_ranking)));
+                                    scoreHole.setText( String.valueOf(scoreboard.getScore()));
+                                });
 
                                 //  Update database
                                 updateDatabase(App.HOLE, finalI);
@@ -292,7 +322,7 @@ public class ProfileFragment extends Fragment
     private void updateDatabase(String game, int position)
     {
         //  Controlla se il profilo mostrato è quello dell'utente loggato
-        if( ! user.getNickname().equals(
+        if( ! nickname.equals(
                 AuthenticationManager.get().getUserLogged().getNickname()))
             return;
 

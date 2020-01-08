@@ -29,6 +29,7 @@
         android:contentDescription="@string/logout_img"
         android:focusable="true"
         android:src="@drawable/ic_exit_to_app_black_24dp"
+        android:tint="#DE000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -115,14 +116,12 @@
     <LinearLayout
         android:id="@+id/Layout_single_score"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view">
-
 
         <TextView
             android:id="@+id/textView_single_score"

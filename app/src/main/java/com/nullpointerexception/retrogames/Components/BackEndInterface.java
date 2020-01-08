@@ -94,20 +94,23 @@ public class BackEndInterface
                     long value = dataSnapshot.getValue(Long.class);
                     if(listener != null)
                         listener.onDataReceived(true, String.valueOf(value));
-
                 }
                 else if(listener != null)
                     listener.onDataReceived(false, null);
+
+                myRef.removeEventListener(this);
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(DatabaseError error)
+            {
                 // Failed to read value
                 if(listener != null)
                     listener.onDataReceived(false, String.valueOf(-1));
+
+                myRef.removeEventListener(this);
             }
         });
-
     }
 
     /**
@@ -139,6 +142,8 @@ public class BackEndInterface
                     if(scoresList.size() == dataSnapshot.getChildrenCount() && listener != null)
                         listener.onQueryResult(true, scoresList);
                 }
+
+                myRef.removeEventListener(this);
             }
 
             @Override
@@ -147,6 +152,8 @@ public class BackEndInterface
                 // Failed to read value
                 if(listener != null)
                     listener.onQueryResult(false, null);
+
+                myRef.removeEventListener(this);
             }
         });
 
@@ -190,6 +197,8 @@ public class BackEndInterface
                 String nickname = dataSnapshot.getValue(String.class);
                 if(listener != null)
                     listener.onDataReceived(true, nickname);
+
+                myRef.removeEventListener(this);
             }
 
             @Override
@@ -197,6 +206,8 @@ public class BackEndInterface
                 // Failed to read value
                 if(listener != null)
                     listener.onDataReceived(true, "");
+
+                myRef.removeEventListener(this);
             }
         });
     }
@@ -217,16 +228,15 @@ public class BackEndInterface
             {
                 for(DataSnapshot childSnapshot : dataSnapshot.getChildren())
                 {
-
-
                     String nickname = childSnapshot.getValue(String.class);
-
 
                     nicknames.add(nickname);
 
                     if(nicknames.size() == dataSnapshot.getChildrenCount() && listener != null)
                         listener.onQueryResult(true, nicknames);
                 }
+
+                myRef.removeEventListener(this);
             }
 
             @Override
@@ -235,6 +245,8 @@ public class BackEndInterface
                 // Failed to read value
                 if(listener != null)
                     listener.onQueryResult(false, null);
+
+                myRef.removeEventListener(this);
             }
         });
     }

@@ -1,7 +1,9 @@
 package com.nullpointerexception.retrogames.Fragments;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -19,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nullpointerexception.retrogames.Activities.ProfileDisplayActivity;
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
@@ -33,6 +36,7 @@ import java.util.Vector;
 
 public class LeaderboardFragment extends Fragment
 {
+    //  Ultimo chip selezionato
     private View selectedView;
 
     /*
@@ -52,6 +56,7 @@ public class LeaderboardFragment extends Fragment
     {
         View view = inflater.inflate(R.layout.fragment_leaderboard, container, false);
 
+        //  Assegnazione componenti UI
         profileImage = view.findViewById(R.id.profileImageView);
         profileName = view.findViewById(R.id.textView_profile_name);
         chipsContainer = view.findViewById(R.id.chipsContainer);
@@ -74,7 +79,7 @@ public class LeaderboardFragment extends Fragment
 
                     if(getContext() != null)
                         new ProfileImageGenerator(getContext())
-                                .fetchImageOf(AuthenticationManager.get().getUserLogged(),
+                                .fetchImageOf(AuthenticationManager.get().getUserLogged().getNickname(),
                                         drawable -> profileImage.setImageDrawable(drawable));
                 }
                 else
@@ -90,6 +95,7 @@ public class LeaderboardFragment extends Fragment
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration( new ItemDivider(getContext()));
 
+        //  Carica la recyclerView
         loadScoreboard(App.TOTALSCORE);
 
         /*
@@ -124,11 +130,16 @@ public class LeaderboardFragment extends Fragment
                 }
             });
 
-        selectChip(chipsContainer.getChildAt(0));
+        //  Seleziona la view Totalscore, situata alla prima posizione nel layout
+        selectChip( chipsContainer.getChildAt(0));
 
         return view;
     }
 
+    /**
+     *      Cambia lo sfondo della view in modo da sembrare selezionato.
+     *      @param view View da selezionare
+     */
     private void selectChip(View view)
     {
         if(selectedView != null)
@@ -138,6 +149,10 @@ public class LeaderboardFragment extends Fragment
        selectedView = view;
     }
 
+    /**
+     *      Carica la recyclerview con i punteggi relativi al gioco passato come parametro
+     *      @param game Gioco di cui visualizzare la classifica
+     */
     private void loadScoreboard(String game)
     {
         recyclerView.setAdapter(null);
@@ -184,7 +199,7 @@ public class LeaderboardFragment extends Fragment
                 });
         });
 
-        //  Legge lo score dell'utente
+        //  Legge lo score dell'utente dal database se è loggato
         if(AuthenticationManager.get().isUserLogged())
         {
             BackEndInterface.get().readScoreFirebase(game,
@@ -196,7 +211,8 @@ public class LeaderboardFragment extends Fragment
                             if(getActivity() != null)
                                 getActivity().runOnUiThread(() ->
                                 {
-                                    userScoreTextview.setText(Scoreboard.formatScore(value));
+                                    //  Setta il testo della textview
+                                    userScoreTextview.setText( Scoreboard.formatScore(value));
 
                                     //  Mostra lo score dell'utente se è nascosto
                                     if(cardProfile.getVisibility() == View.GONE)
@@ -218,10 +234,13 @@ public class LeaderboardFragment extends Fragment
                     });
         }
         else
-            hideUserCard();
-
+            hideUserCard(); //  Nasconde lo score dell'utente se non c'è in classifica
     }
 
+    /**
+     *      Nasconde la view con lo score dell'utente in basso nello schermo
+     *      compiendo un'animazione.
+     */
     private void hideUserCard()
     {
         if(cardProfile.getVisibility() == View.VISIBLE)
@@ -260,15 +279,36 @@ public class LeaderboardFragment extends Fragment
             return new UserScoreViewItem( new UserScoreView(parent.getContext()));
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         @Override
         public void onBindViewHolder(@NonNull UserScoreViewItem holder, int position)
         {
             holder.userScoreView.setPosition(position+1);
             holder.userScoreView.setViewWithScore( dataSet.get(position));
+
+            //  Imposta il colore di sfondo a verde se questa riga è quella dell'utente loggato
             if(AuthenticationManager.get().isUserLogged())
                 if(dataSet.get(position).getNickname().equals(
                         AuthenticationManager.get().getUserLogged().getNickname()))
                     holder.userScoreView.setBackgroundColor(Color.parseColor("#4c00aa00"));
+
+            holder.userScoreView
+                    .getProfileImageView()
+                    .setOnTouchListener(new OnTouchAnimatedListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            //  Se non è stato cliccato l'utente loggato, apre la schermata profilo del giocatore
+                            if( ! dataSet.get(position).getNickname().equals(
+                                    AuthenticationManager.get().getUserLogged().getNickname()))
+                            {
+                                Intent intent = new Intent(getContext(), ProfileDisplayActivity.class);
+                                intent.putExtra(ProfileDisplayActivity.USER_EXTRA, dataSet.get(position).getNickname());
+                                startActivity(intent);
+                            }
+                        }
+                    });
         }
 
         @Override
@@ -278,6 +318,9 @@ public class LeaderboardFragment extends Fragment
         }
     }
 
+    /**
+     *      Adattamento della UserScoreView per la recyclerView
+     */
     public class UserScoreViewItem extends RecyclerView.ViewHolder
     {
         UserScoreView userScoreView;
@@ -290,7 +333,8 @@ public class LeaderboardFragment extends Fragment
     }
 
     /**
-     *      Custom implementation of {@link androidx.recyclerview.widget.RecyclerView.ItemDecoration}
+     *      Implementazione custom di {@link androidx.recyclerview.widget.RecyclerView.ItemDecoration}
+     *      Disegna un drawable come divisore di items nella recyclerView
      */
     private class ItemDivider extends RecyclerView.ItemDecoration
     {

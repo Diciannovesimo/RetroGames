@@ -36,16 +36,15 @@ public class ProfileImageGenerator
     }
 
     /**
-     *      Tries to get an image from url provided by given user.
-     *      It generates one if it doesn't have an url or if can't be loaded.
+     *      Generate an image for the given name.
      *
-     *      @param user     User that provides image url.
+     *      @param name     name from by generate image.
      *      @param onImageGeneratedListener   Implementation of the callback method.
      */
     @SuppressLint("CheckResult")
-    public void fetchImageOf(@NonNull User user, OnImageGeneratedListener onImageGeneratedListener)
+    public void fetchImageOf(@NonNull String name, OnImageGeneratedListener onImageGeneratedListener)
     {
-        resource = new ProfileImageLetter(user.getNickname());
+        resource = new ProfileImageLetter(name);
 
         if(onImageGeneratedListener != null)
             onImageGeneratedListener.onImageGenerated(resource);
