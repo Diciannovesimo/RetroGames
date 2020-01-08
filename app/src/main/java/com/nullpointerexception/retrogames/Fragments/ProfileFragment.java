@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.nullpointerexception.retrogames.Activities.LoginActivity;
+import com.nullpointerexception.retrogames.Activities.HomeActivity;
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
@@ -131,14 +131,15 @@ public class ProfileFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                if (!mBlocker.block()) {
+                if ( ! mBlocker.block())
+                {
                     App.scoreboardDao.delete(App.scoreboardDao.getAll());
                     SharedPreferences prefs = getContext()
                             .getSharedPreferences(App.USER, Context.MODE_PRIVATE);
                     prefs.edit().clear().apply();
 
                     AuthenticationManager.get().logout();
-                    startActivity(new Intent(getContext(), LoginActivity.class));
+                    startActivity(new Intent(getContext(), HomeActivity.class));
                     if (getActivity() != null)
                         getActivity().finish();
                 }
@@ -194,8 +195,7 @@ public class ProfileFragment extends Fragment
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
                                 {
-                                    positionSnake.setText(String.format("#%d %s", finalI,
-                                            getResources().getString(R.string.global_ranking)));
+                                    positionSnake.setText(String.format("#%d", finalI));
                                     scoreSnake.setText( String.valueOf(scoreboard.getScore()));
                                 });
 
@@ -220,8 +220,7 @@ public class ProfileFragment extends Fragment
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
                                 {
-                                    positionTetris.setText(String.format("#%d %s", finalI,
-                                            getResources().getString(R.string.global_ranking)));
+                                    positionTetris.setText(String.format("#%d", finalI));
                                     scoreTetris.setText( String.valueOf(scoreboard.getScore()));
                                 });
 
@@ -247,8 +246,7 @@ public class ProfileFragment extends Fragment
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
                                 {
-                                    positionPong.setText(String.format("#%d %s", finalI,
-                                            getResources().getString(R.string.global_ranking)));
+                                    positionPong.setText(String.format("#%d", finalI));
                                     scorePong.setText( String.valueOf(scoreboard.getScore()));
                                 });
 
@@ -274,8 +272,7 @@ public class ProfileFragment extends Fragment
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
                                 {
-                                    positionBreakout.setText(String.format("#%d %s", finalI,
-                                            getResources().getString(R.string.global_ranking)));
+                                    positionBreakout.setText(String.format("#%d", finalI));
                                     scoreBreakout.setText( String.valueOf(scoreboard.getScore()));
                                 });
 
@@ -301,8 +298,7 @@ public class ProfileFragment extends Fragment
                                 int finalI = i+1;
                                 getActivity().runOnUiThread(() ->
                                 {
-                                    positionHole.setText(String.format("#%d %s", finalI,
-                                            getResources().getString(R.string.global_ranking)));
+                                    positionHole.setText(String.format("#%d", finalI));
                                     scoreHole.setText( String.valueOf(scoreboard.getScore()));
                                 });
 
@@ -322,6 +318,7 @@ public class ProfileFragment extends Fragment
     private void updateDatabase(String game, int position)
     {
         //  Controlla se il profilo mostrato è quello dell'utente loggato
+        if(AuthenticationManager.get().isUserLogged())
         if( ! nickname.equals(
                 AuthenticationManager.get().getUserLogged().getNickname()))
             return;

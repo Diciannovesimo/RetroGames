@@ -98,7 +98,8 @@ public class BackEndInterface
                 else if(listener != null)
                     listener.onDataReceived(false, null);
 
-                myRef.removeEventListener(this);
+                if(myRef != null)
+                    myRef.removeEventListener(this);
             }
 
             @Override
@@ -108,7 +109,8 @@ public class BackEndInterface
                 if(listener != null)
                     listener.onDataReceived(false, String.valueOf(-1));
 
-                myRef.removeEventListener(this);
+                if(myRef != null)
+                    myRef.removeEventListener(this);
             }
         });
     }
@@ -143,7 +145,8 @@ public class BackEndInterface
                         listener.onQueryResult(true, scoresList);
                 }
 
-                myRef.removeEventListener(this);
+                if(myRef != null)
+                    myRef.removeEventListener(this);
             }
 
             @Override
@@ -153,7 +156,8 @@ public class BackEndInterface
                 if(listener != null)
                     listener.onQueryResult(false, null);
 
-                myRef.removeEventListener(this);
+                if(myRef != null)
+                    myRef.removeEventListener(this);
             }
         });
 
@@ -198,7 +202,8 @@ public class BackEndInterface
                 if(listener != null)
                     listener.onDataReceived(true, nickname);
 
-                myRef.removeEventListener(this);
+                if(myRef != null)
+                    myRef.removeEventListener(this);
             }
 
             @Override
@@ -207,7 +212,8 @@ public class BackEndInterface
                 if(listener != null)
                     listener.onDataReceived(true, "");
 
-                myRef.removeEventListener(this);
+                if(myRef != null)
+                    myRef.removeEventListener(this);
             }
         });
     }
@@ -236,7 +242,8 @@ public class BackEndInterface
                         listener.onQueryResult(true, nicknames);
                 }
 
-                myRef.removeEventListener(this);
+                if(myRef != null)
+                    myRef.removeEventListener(this);
             }
 
             @Override
@@ -246,7 +253,8 @@ public class BackEndInterface
                 if(listener != null)
                     listener.onQueryResult(false, null);
 
-                myRef.removeEventListener(this);
+                if(myRef != null)
+                    myRef.removeEventListener(this);
             }
         });
     }

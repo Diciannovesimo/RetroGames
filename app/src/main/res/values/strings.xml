@@ -99,6 +99,7 @@
     <string name="_0" translatable="false">0</string>
     <string name="loading_leaderboard">Loading leaderboard…</string>
     <string name="position"># place</string>
+    <string name="leaderboard_noConnection">Cannot load leaderboard without connection.\nTry later.</string>
 
     <!-- Tetris -->
     <string name="gameOver">Game over</string>

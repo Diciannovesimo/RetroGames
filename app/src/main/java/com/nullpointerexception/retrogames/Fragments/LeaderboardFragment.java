@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +49,7 @@ public class LeaderboardFragment extends Fragment
     private RecyclerViewAdapter adapter;
     private ViewGroup chipsContainer;
     private ImageView profileImage;
-    private TextView profileName, positionTextview, userScoreTextview;
+    private TextView profileName, positionTextview, userScoreTextview, noConnectionTextview;
     private CardView cardProfile;
     private View progressView;
 
@@ -65,6 +67,7 @@ public class LeaderboardFragment extends Fragment
         userScoreTextview = view.findViewById(R.id.scoreTextView);
         cardProfile = view.findViewById(R.id.cardProfileLeaderboard);
         progressView = view.findViewById(R.id.progressView);
+        noConnectionTextview = view.findViewById(R.id.noConnection_textview);
 
         /*
                 Inizializzazione utente
@@ -156,6 +159,7 @@ public class LeaderboardFragment extends Fragment
     private void loadScoreboard(String game)
     {
         recyclerView.setAdapter(null);
+        noConnectionTextview.setVisibility(View.GONE);
         progressView.setVisibility(View.VISIBLE);
         positionTextview.setText("#");
         userScoreTextview.setText("-");
@@ -163,78 +167,89 @@ public class LeaderboardFragment extends Fragment
         /*
                 Lettura degli score dal database
          */
-        BackEndInterface.get().readAllScoresFirebase(game, (success, scoreboardList) ->
+        if( ! isNetworkAvailable())
         {
+            hideUserCard();
+
             progressView.setVisibility(View.GONE);
-
-            if(success && getActivity() != null)
-                getActivity().runOnUiThread(() ->
-                {
-                    //  Aggiornamento recyclerview
-                    adapter = new RecyclerViewAdapter(scoreboardList);
-                    recyclerView.setAdapter(adapter);
-
-                    if(AuthenticationManager.get().isUserLogged())
-                        for(int i = 0; i < scoreboardList.size(); i++)
-                            if(scoreboardList.get(i).getNickname().equals(
-                                    AuthenticationManager.get().getUserLogged().getNickname()))
-                            {
-                                int position = i+1;
-                                positionTextview.setText(String.format("#%d", position));
-
-                                //  Update database
-                                Scoreboard scoreboard = App.scoreboardDao.getScoreboard(game);
-                                if(scoreboard == null)
-                                {
-                                    scoreboard = new Scoreboard(game, 0);
-                                    scoreboard.setPosition(position);
-                                    App.scoreboardDao.insertAll(scoreboard);
-                                }
-                                else
-                                {
-                                    scoreboard.setPosition(position);
-                                    App.scoreboardDao.update(scoreboard);
-                                }
-                            }
-                });
-        });
-
-        //  Legge lo score dell'utente dal database se è loggato
-        if(AuthenticationManager.get().isUserLogged())
-        {
-            BackEndInterface.get().readScoreFirebase(game,
-                    AuthenticationManager.get().getUserLogged().getNickname(),
-                    (success, value) ->
-                    {
-                        if(success)
-                        {
-                            if(getActivity() != null)
-                                getActivity().runOnUiThread(() ->
-                                {
-                                    //  Setta il testo della textview
-                                    userScoreTextview.setText( Scoreboard.formatScore(value));
-
-                                    //  Mostra lo score dell'utente se è nascosto
-                                    if(cardProfile.getVisibility() == View.GONE)
-                                    {
-                                        cardProfile.setVisibility(View.VISIBLE);
-                                        cardProfile.animate()
-                                                .yBy(-cardProfile.getHeight())
-                                                .setDuration(200)
-                                                .setInterpolator(new DecelerateInterpolator())
-                                                .setListener(null);
-                                    }
-                                });
-                        }
-                        else
-                        {
-                            //  Nasconde lo score dell'utente se non c'è in classifica
-                            hideUserCard();
-                        }
-                    });
+            noConnectionTextview.setVisibility(View.VISIBLE);
         }
         else
-            hideUserCard(); //  Nasconde lo score dell'utente se non c'è in classifica
+        {
+            BackEndInterface.get().readAllScoresFirebase(game, (success, scoreboardList) ->
+            {
+                progressView.setVisibility(View.GONE);
+                noConnectionTextview.setVisibility(View.GONE);
+
+                if(success && getActivity() != null)
+                    getActivity().runOnUiThread(() ->
+                    {
+                        //  Aggiornamento recyclerview
+                        adapter = new RecyclerViewAdapter(scoreboardList);
+                        recyclerView.setAdapter(adapter);
+
+                        if(AuthenticationManager.get().isUserLogged())
+                            for(int i = 0; i < scoreboardList.size(); i++)
+                                if(scoreboardList.get(i).getNickname().equals(
+                                        AuthenticationManager.get().getUserLogged().getNickname()))
+                                {
+                                    int position = i+1;
+                                    positionTextview.setText(String.format("#%d", position));
+
+                                    //  Update database
+                                    Scoreboard scoreboard = App.scoreboardDao.getScoreboard(game);
+                                    if(scoreboard == null)
+                                    {
+                                        scoreboard = new Scoreboard(game, 0);
+                                        scoreboard.setPosition(position);
+                                        App.scoreboardDao.insertAll(scoreboard);
+                                    }
+                                    else
+                                    {
+                                        scoreboard.setPosition(position);
+                                        App.scoreboardDao.update(scoreboard);
+                                    }
+                                }
+                    });
+            });
+
+            //  Legge lo score dell'utente dal database se è loggato
+            if(AuthenticationManager.get().isUserLogged())
+            {
+                BackEndInterface.get().readScoreFirebase(game,
+                        AuthenticationManager.get().getUserLogged().getNickname(),
+                        (success, value) ->
+                        {
+                            if(success)
+                            {
+                                if(getActivity() != null)
+                                    getActivity().runOnUiThread(() ->
+                                    {
+                                        //  Setta il testo della textview
+                                        userScoreTextview.setText( Scoreboard.formatScore(value));
+
+                                        //  Mostra lo score dell'utente se è nascosto
+                                        if(cardProfile.getVisibility() == View.GONE)
+                                        {
+                                            cardProfile.setVisibility(View.VISIBLE);
+                                            cardProfile.animate()
+                                                    .yBy(-cardProfile.getHeight())
+                                                    .setDuration(200)
+                                                    .setInterpolator(new DecelerateInterpolator())
+                                                    .setListener(null);
+                                        }
+                                    });
+                            }
+                            else
+                            {
+                                //  Nasconde lo score dell'utente se non c'è in classifica
+                                hideUserCard();
+                            }
+                        });
+            }
+            else
+                hideUserCard(); //  Nasconde lo score dell'utente se non c'è in classifica
+        }
     }
 
     /**
@@ -261,6 +276,13 @@ public class LeaderboardFragment extends Fragment
                                     public void onAnimationCancel(Animator animator) { }
                                     public void onAnimationRepeat(Animator animator) { }
                                 }));
+    }
+
+    public boolean isNetworkAvailable()
+    {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public class RecyclerViewAdapter extends RecyclerView.Adapter<UserScoreViewItem>
@@ -300,6 +322,7 @@ public class LeaderboardFragment extends Fragment
                         public void onClick(View view)
                         {
                             //  Se non è stato cliccato l'utente loggato, apre la schermata profilo del giocatore
+                            if(AuthenticationManager.get().isUserLogged())
                             if( ! dataSet.get(position).getNickname().equals(
                                     AuthenticationManager.get().getUserLogged().getNickname()))
                             {
