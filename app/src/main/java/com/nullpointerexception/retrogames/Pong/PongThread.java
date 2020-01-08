@@ -254,9 +254,20 @@ public class PongThread extends Thread {
         }
     }
 
+    /*
+    il metodo pause in pongthread viene chiamato
+    solo se si è effettivamente
+    in game ovvero la palla è in movimento
+
+    bug (risolto): quando si vince o si perde
+    e si va in pausa il punteggio dell'utlimo giocatore
+    che ha fatto un punto viene incrementato di uno
+
+     */
     void pause() {
         synchronized (mSurfaceHolder) {
-            if (mState == STATE_RUNNING) {
+            if (mState != STATE_PAUSE) {
+                Log.i("INFO", "PAUSE");
                 setState(STATE_PAUSE);
             }
         }
@@ -264,6 +275,7 @@ public class PongThread extends Thread {
 
     void unPause() {
         synchronized (mSurfaceHolder) {
+            Log.i("INFO", "RUN");
             setState(STATE_RUNNING);
         }
     }
