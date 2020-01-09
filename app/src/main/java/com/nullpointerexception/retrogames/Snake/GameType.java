@@ -13,4 +13,5 @@ public interface GameType {
   int EASY = 1;
   int MEDIUM = 2;
   int HARD = 3;
+  int GENERIC_DIFFICULTY = 4;
 }

@@ -113,5 +113,11 @@
     <string name="default_highscore_snake">Highscore: 0</string>
     <string name="default_score_snake">Score: 0</string>
 
+    <!-- Snake dialog -->
+    <string name="snake_dialog_title">Select the difficulty of the game</string>
+    <string name="snake_dialog_easy">Easy</string>
+    <string name="snake_dialog_medium">Medium</string>
+    <string name="snake_dialog_hard">Hard</string>
+
 
 </resources>

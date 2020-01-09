@@ -4,7 +4,7 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B6B1B1">
+    android:background="@color/grey">
 
 
     <TextView

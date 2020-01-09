@@ -10,7 +10,6 @@ import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.SaveScore;
@@ -31,7 +30,13 @@ public class SnakePanelView extends View {
 
     SaveScore game;
 
+    //Listener per restituire score, highscore, e punteggio resettato
     private OnEatListener onEatListener;
+    private OnResetListener onResetListener;
+
+    //Istanza del thread principale
+
+
     private GridPosition mSnakeHeader;                         //posizione della testa del serpente
     private GridPosition mFoodPosition;                        //posizione del cibo
     private int mSnakeLength = 3;                              //lunghezza del serpente
@@ -44,9 +49,8 @@ public class SnakePanelView extends View {
     private Paint mStrokePaint = new Paint();                  //spessore paint
     private int mRectSize = dp2px(getContext(), 20);    //Dimensione del quadrato
     private int mStartX, mStartY;                              //cordinate posizione iniziale serpente
-    private int mPoint;
-    private int mHighScore;
-
+    private int mPoint;                                        //Segna il punteggio attuale
+    private int mHighScore;                                    //Segna l'highscore attuale
 
     public SnakePanelView(Context context) {
         this(context, null);
@@ -62,7 +66,10 @@ public class SnakePanelView extends View {
         init();
     }
 
-    private void init() {
+    /**
+     * Disegna la mappa per la prima volta
+     */
+    public void init() {
         List<GridSquare> squares;
         for (int i = 0; i < mGridSize; i++) {
             //Inserisce una lista di quadrati in ogni posizione di squares
@@ -94,6 +101,11 @@ public class SnakePanelView extends View {
         setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec), height);
     }
 
+    /**
+     * Disegna la grilia della mappa
+     *
+     * @param canvas Riceve in input un canvas inizializzato
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -125,22 +137,48 @@ public class SnakePanelView extends View {
         }
     }
 
+    /**
+     * Imposta la posizione del cibo
+     *
+     * @param foodPosition Riceve le coordinate del cibo
+     */
     private void refreshFood(GridPosition foodPosition) {
         mGridSquare.get(foodPosition.getX()).get(foodPosition.getY()).setType(GameType.FOOD);
     }
 
+    /**
+     * Imposta la velocità del serpente
+     *
+     * @param speed Un intero che indica la velocità del serpente
+     */
     public void setSpeed(int speed) {
         mSpeed = speed;
     }
 
+    /**
+     * Imposta la difficoltà
+     *
+     * @param difficulty Un intero che indica la difficoltà
+     */
     public void setDifficulty(int difficulty) {
         mDifficulty = difficulty;
     }
 
+    /**
+     * Imposta la dimensione della mappa
+     *
+     * @param gridSize Un intero che indica la grandezza della mappa
+     */
     public void setGridSize(int gridSize) {
         mGridSize = gridSize;
     }
 
+    /**
+     * Fuznione che gestisce la direzione del serpente.
+     * Se la posizione ricevuta è opposta a quella attuale allora non fa niente.
+     *
+     * @param snakeDirection Intero che indica la direzione del serpente
+     */
     public void setSnakeDirection(int snakeDirection) {
         if (mSnakeDirection == GameType.RIGHT && snakeDirection == GameType.LEFT) return;
         if (mSnakeDirection == GameType.LEFT && snakeDirection == GameType.RIGHT) return;
@@ -149,6 +187,9 @@ public class SnakePanelView extends View {
         mSnakeDirection = snakeDirection;
     }
 
+    /**
+     * Thread principale del gioco
+     */
     private class GameMainThread extends Thread {
 
         @Override
@@ -163,7 +204,9 @@ public class SnakePanelView extends View {
             }
         }
 
-        //Gestisce la velocità di aggiornamento
+        /**
+         * Gestisce la velocità di aggiornamento
+         */
         private void handleSpeed() {
             try {
                 sleep(1000 / mSpeed);
@@ -173,7 +216,13 @@ public class SnakePanelView extends View {
         }
     }
 
-    //Rileva collisione
+    /**
+     * Quando la testa si incontra con un altro elemento del corpo
+     * si ha una collisione e si perde la partita.
+     *
+     * Gestisce anche le collisioni con il cibo chiamando la funzione
+     * addPoint() e generateFood()
+     */
     private void checkCollision() {
         //Ottiene la posizione della testa
         GridPosition headerPosition = mSnakePositions.get(mSnakePositions.size() - 1);
@@ -197,18 +246,24 @@ public class SnakePanelView extends View {
         }                                                             //genera il nuovo cibo
     }
 
-    //Aggiungere lo score
+    /**
+     * Aggiunge un punto allo score e se si super l'Highscore
+     * lo si carica sul DB
+     */
     private void addPoint() {
-        mPoint ++;     //TODO: modifica l'assegnazione del punteggio in base alla difficoltà
+        mPoint ++;
         if(mPoint > mHighScore) {
             mHighScore = mPoint;
             game.save(App.SNAKE, mPoint, getContext());
         }
-        if(onEatListener != null) {
+        if(onEatListener != null)
             onEatListener.onEat(mPoint, mHighScore);
-        }
     }
 
+    /**
+     * Mostra il dialog quando si perde la partita per scegliere se ricominciarla
+     * o terminarla
+     */
     private void showMessageDialog() {
         post(new Runnable() {
             @Override
@@ -218,7 +273,10 @@ public class SnakePanelView extends View {
                         .setMessage(getResources().getString(R.string.your_score_is) + " " + mPoint)
                         .setPositiveButton(getResources().getString(R.string.again), (dialog, which) -> {
                             dialog.dismiss();
-                            reStartGame(mSpeed);
+                            mPoint = 0;
+                            if(onResetListener != null)
+                                onResetListener.onReset(mPoint);
+                            startGame(GameType.GENERIC_DIFFICULTY, false);
                         })
                         .setNegativeButton(getResources().getString(R.string.exit), (dialog, which) -> {
                             dialog.dismiss();
@@ -231,21 +289,29 @@ public class SnakePanelView extends View {
         });
     }
 
-    public void reStartGame(int difficult) {
+    /**
+     * Funzione che gestisce l'avvio della partita
+     *
+     * @param difficulty Un intero passato per comunicare la difficoltà
+     * @param isRestart Indica se la partita deve essere riavviata o è il primo avvio
+     */
+    public void startGame(int difficulty, boolean isRestart) {
         //In base alla difficoltà, cambia la velocità del serpente
-        switch (difficult) {
-            case GameType.EASY:
-                setDifficulty(GameType.EASY);
-                setSpeed(4);
-                break;
-            case GameType.MEDIUM:
-                setDifficulty(GameType.MEDIUM);
-                setSpeed(8);
-                break;
-            case GameType.HARD:
-                setDifficulty(GameType.HARD);
-                setSpeed(12);
-                break;
+        if(!isRestart) {
+            switch (difficulty) {
+                case GameType.EASY:
+                    setDifficulty(GameType.EASY);
+                    setSpeed(4);
+                    break;
+                case GameType.MEDIUM:
+                    setDifficulty(GameType.MEDIUM);
+                    setSpeed(8);
+                    break;
+                case GameType.HARD:
+                    setDifficulty(GameType.HARD);
+                    setSpeed(12);
+                    break;
+            }
         }
 
         //Legge dal database se esistono salvataggi del gioco
@@ -254,7 +320,7 @@ public class SnakePanelView extends View {
         else
             mHighScore = 0;
 
-        if (!mIsEndGame) return;
+        //if (!mIsEndGame) return;
         for (List<GridSquare> squares : mGridSquare) {
             for (GridSquare square : squares) {
                 square.setType(GameType.GRID);
@@ -263,9 +329,9 @@ public class SnakePanelView extends View {
         if (mSnakeHeader != null) {
             mSnakeHeader.setX(10);
             mSnakeHeader.setY(10);
-        } else {
+        } else
             mSnakeHeader = new GridPosition(10, 10);    //The initial position of the snake
-        }
+
         mSnakePositions.clear();
         mSnakePositions.add(new GridPosition(mSnakeHeader.getX(), mSnakeHeader.getY()));
         mSnakeLength    = 3;                          //Lunghezza serpente
@@ -275,11 +341,20 @@ public class SnakePanelView extends View {
             generateFood();
 
         mIsEndGame = false;
-        GameMainThread thread = new GameMainThread();
-        thread.start();
+        if(!isRestart) {
+            GameMainThread thread = new GameMainThread();
+            thread.start();
+        }
+        else {
+            mPoint = 0;
+            if(onResetListener != null)
+                onResetListener.onReset(mPoint);
+        }
     }
 
-    //Genera il nuovo cibo
+    /**
+     * Genera il cibo
+     */
     private void generateFood() {
         Random random = new Random();
         int foodX = random.nextInt(mGridSize - 1);
@@ -299,6 +374,14 @@ public class SnakePanelView extends View {
         refreshFood(mFoodPosition);
     }
 
+    /**
+     * Controlla la posizione della testa del serpente
+     * Se la testa del serpente raggiunge il bordo della mappa allora dovrà spostarsi
+     * dalla parte opposta della mappa.
+     * inoltre memorizza la posizione della tasta nelle posizioni del corpo
+     *
+     * @param snakeDirection Un intero che indica la direzione del serpente
+     */
     private void moveSnake(int snakeDirection) {
         switch (snakeDirection) {
             case GameType.LEFT:
@@ -340,13 +423,19 @@ public class SnakePanelView extends View {
         }
     }
 
+    /**
+     * controlla tutta la griglia della mappa e aggiorna le posizioni del serpente
+     */
     private void refreshGridSquare() {
-        for (GridPosition position : mSnakePositions) {
+        for (GridPosition position : mSnakePositions)
             mGridSquare.get(position.getX()).get(position.getY()).setType(GameType.SNAKE);
-        }
     }
 
-    //Gestisce la coda del serpente
+    /**
+     * Gestisce la coda del serpente.
+     *
+     * Imposta ogni quadrato della mappa in tipo mappa se il serpente non è su di essi.
+     */
     private void handleSnakeTail() {
         int snakeLength = mSnakeLength;
         for (int i = mSnakePositions.size() - 1; i >= 0; i--) {
@@ -379,7 +468,15 @@ public class SnakePanelView extends View {
         this.onEatListener = onEatListener;
     }
 
+    public void setOnResetListener(OnResetListener onResetListener) {
+        this.onResetListener = onResetListener;
+    }
+
     public interface OnEatListener {
         void onEat(int point, int highScore);
+    }
+
+    public interface OnResetListener {
+        void onReset(int point);
     }
 }

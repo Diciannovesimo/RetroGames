@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nullpointerexception.retrogames.App;
+import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.R;
 
 public class MainActivitySnake extends AppCompatActivity implements View.OnClickListener,
@@ -15,6 +16,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
     private SnakePanelView mSnakePanelView;
     private TextView mScore, mHighScore;
     private String mhighScoreLoaded;
+    Blocker mBlocker = new Blocker();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +39,33 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
            }
        });
 
-        mSnakePanelView.setOnEatListener((point, highScore) -> runOnUiThread(() -> {
-            String score = getResources().getString(R.string.score) + point;
-            String highscore_string = getResources().getString(R.string.highscore) + highScore;
-            mScore.setText(score);
-            mHighScore.setText(highscore_string);
-        }));
+        mSnakePanelView.setOnEatListener(new SnakePanelView.OnEatListener() {
+            @Override
+            public void onEat(int point, int highScore) {
+                MainActivitySnake.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String score = MainActivitySnake.this.getResources().getString(R.string.score) + point;
+                        String highscore_string = MainActivitySnake.this.getResources().getString(R.string.highscore) + highScore;
+                        mScore.setText(score);
+                        mHighScore.setText(highscore_string);
+                    }
+                });
+            }
+        });
+
+        mSnakePanelView.setOnResetListener(new SnakePanelView.OnResetListener() {
+            @Override
+            public void onReset(int point) {
+                MainActivitySnake.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String score = MainActivitySnake.this.getResources().getString(R.string.score) + point;
+                        mScore.setText(score);
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -58,6 +81,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
         findViewById(R.id.top_btn).setOnClickListener(this);
         findViewById(R.id.bottom_btn).setOnClickListener(this);
         findViewById(R.id.start_btn).setOnClickListener(this);
+        findViewById(R.id.restart_btn).setOnClickListener(this);
     }
 
     /**
@@ -66,22 +90,27 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
      */
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.left_btn:
-                mSnakePanelView.setSnakeDirection(GameType.LEFT);
-                break;
-            case R.id.right_btn:
-                mSnakePanelView.setSnakeDirection(GameType.RIGHT);
-                break;
-            case R.id.top_btn:
-                mSnakePanelView.setSnakeDirection(GameType.TOP);
-                break;
-            case R.id.bottom_btn:
-                mSnakePanelView.setSnakeDirection(GameType.BOTTOM);
-                break;
-            case R.id.start_btn:
-                openDialog();
-                break;
+        if (!mBlocker.block(55)) {
+            switch (v.getId()) {
+                case R.id.left_btn:
+                    mSnakePanelView.setSnakeDirection(GameType.LEFT);
+                    break;
+                case R.id.right_btn:
+                    mSnakePanelView.setSnakeDirection(GameType.RIGHT);
+                    break;
+                case R.id.top_btn:
+                    mSnakePanelView.setSnakeDirection(GameType.TOP);
+                    break;
+                case R.id.bottom_btn:
+                    mSnakePanelView.setSnakeDirection(GameType.BOTTOM);
+                    break;
+                case R.id.start_btn:
+                    openDialog();
+                    break;
+                case R.id.restart_btn:
+                    mSnakePanelView.startGame(GameType.GENERIC_DIFFICULTY, true);
+                    break;
+            }
         }
     }
 
@@ -92,7 +121,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
 
     @Override
     public void applyDifficult(int difficulty) {
-        mSnakePanelView.reStartGame(difficulty);
+        mSnakePanelView.startGame(difficulty, false);
         if(mhighScoreLoaded != null && !mhighScoreLoaded.isEmpty())
             mHighScore.setText(getResources().getString(R.string.highscore) + mhighScoreLoaded);
     }

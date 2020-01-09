@@ -68,4 +68,8 @@
     <string name="default_highscore_snake">Punteggio più alto: 0</string>
     <string name="score">Punteggio:</string>
     <string name="high_score">Punteggio più alto:</string>
+    <string name="snake_dialog_easy">Facile</string>
+    <string name="snake_dialog_hard">Difficile</string>
+    <string name="snake_dialog_medium">Media</string>
+    <string name="snake_dialog_title">Seleziona la difficoltà del gioco</string>
 </resources>

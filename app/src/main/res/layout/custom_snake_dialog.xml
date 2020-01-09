@@ -7,13 +7,13 @@
 
     <TextView
         android:id="@+id/txt_dia"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_gravity="center"
-        android:background="@drawable/background_green"
-        android:text="Select the difficulty of the game"
-        android:textAlignment="center"
+        android:background="@color/dialog_green"
         android:gravity="center"
+        android:text="@string/snake_dialog_title"
+        android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -22,33 +22,33 @@
         android:id="@+id/easy_diff"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:gravity="center"
-        android:text="Easy"
-        android:textColor="@color/black"
-        android:textSize="18sp"
         android:clickable="true"
-        android:focusable="true"/>
+        android:focusable="true"
+        android:gravity="center"
+        android:text="@string/snake_dialog_easy"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/medium_diff"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:gravity="center"
-        android:text="Medium"
-        android:textColor="@color/black"
-        android:textSize="18sp"
         android:clickable="true"
-        android:focusable="true"/>
+        android:focusable="true"
+        android:gravity="center"
+        android:text="@string/snake_dialog_medium"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/hard_diff"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:gravity="center"
-        android:text="Hard"
-        android:textColor="@color/black"
-        android:textSize="18sp"
         android:clickable="true"
-        android:focusable="true"/>
+        android:focusable="true"
+        android:gravity="center"
+        android:text="@string/snake_dialog_hard"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
 </LinearLayout>
