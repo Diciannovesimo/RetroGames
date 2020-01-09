@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
+import com.nullpointerexception.retrogames.Components.BackEndInterface;
 
 public class SplashScreen extends AppCompatActivity
 {
@@ -19,6 +20,7 @@ public class SplashScreen extends AppCompatActivity
 
         //Inizializza Room Database
         App.initializeRoomDatabase( getApplicationContext());
+        BackEndInterface.initialize( getApplicationContext());
 
         SharedPreferences prefs = getSharedPreferences(App.APP_VARIABLES, MODE_PRIVATE);
         boolean firstStart = prefs.getBoolean(App.APP_FIRST_OPENING, true);

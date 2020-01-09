@@ -1,11 +1,11 @@
 package com.nullpointerexception.retrogames.Components;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,10 +24,21 @@ public class BackEndInterface
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
 
-    public BackEndInterface() { }
+    private static Context context;
+
+    private BackEndInterface() { }
+
+    public static void initialize(Context ctx)
+    {
+        context = ctx;
+
+        SharedPreferences prefs = context.getSharedPreferences(App.APP_VARIABLES, Context.MODE_PRIVATE);
+        if(prefs.getBoolean(App.PREFS_INVALIDATE_FIREBASE_SCORES, false))
+            invalidateFirebaseScores();
+    }
 
     public static synchronized BackEndInterface get() {
-        if(instance==null)
+        if(instance == null)
             instance = new BackEndInterface();
         return instance;
     }
@@ -44,35 +55,35 @@ public class BackEndInterface
         //Scrittura dello score di un singolo gioco
         myRef = database.getReference(game).child(nickname);
         myRef.setValue(score)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // Write was successful!
+                .addOnSuccessListener(aVoid ->
+                {
+                    if( ! isNetworkAvailable())
+                    {
+                        SharedPreferences prefs = context.getSharedPreferences(App.APP_VARIABLES, Context.MODE_PRIVATE);
+                        prefs.edit().putBoolean(App.PREFS_INVALIDATE_FIREBASE_SCORES, true).apply();
                     }
-                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Write failed
-                        Log.d("writeScoreFirebase", "Elemento non scritto");
-                    }
+                })
+                .addOnFailureListener(e ->
+                {
+                    // Write failed
+                    Log.d("writeScoreFirebase", "Elemento non scritto");
                 });
 
         //Scrittura del nuovo totalscore
         myRef = database.getReference(App.TOTALSCORE).child(nickname);
         myRef.setValue(totalscore)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // Write was successful!
+                .addOnSuccessListener(aVoid ->
+                {
+                    if( ! isNetworkAvailable())
+                    {
+                        SharedPreferences prefs = context.getSharedPreferences(App.APP_VARIABLES, Context.MODE_PRIVATE);
+                        prefs.edit().putBoolean(App.PREFS_INVALIDATE_FIREBASE_SCORES, true).apply();
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Write failed
-                        Log.d("writeScoreFirebase", "Elemento non scritto");
-                    }
+                .addOnFailureListener(e ->
+                {
+                    // Write failed
+                    Log.d("writeScoreFirebase", "Elemento non scritto");
                 });
     }
 
@@ -172,18 +183,14 @@ public class BackEndInterface
         String newEmail = changeChars(email,'.', '%');
         myRef = database.getReference(App.USER).child(newEmail);
         myRef.setValue(nickname)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        // Write was successful!
-                    }
+                .addOnSuccessListener(aVoid ->
+                {
+
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Write failed
-                        Log.d("writeUserFirebase", "Elemento non scritto");
-                    }
+                .addOnFailureListener(e ->
+                {
+                    // Write failed
+                    Log.d("writeUserFirebase", "Elemento non scritto");
                 });
     }
 
@@ -300,6 +307,26 @@ public class BackEndInterface
      */
     public interface OnQueryResultListener2 {
         void onQueryResult(boolean success, List<String> nicknames);
+    }
+
+    public static boolean isNetworkAvailable()
+    {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private static void invalidateFirebaseScores()
+    {
+        long totalScore = App.scoreboardDao.getScore(App.TOTALSCORE);
+
+        List<Scoreboard> scoreboardList = App.scoreboardDao.getAll();
+        for(Scoreboard score : scoreboardList)
+            if( ! score.getGame().equals(App.TOTALSCORE))
+                instance.writeScoreFirebase(score.getGame(), score.getNickname(), score.getScore(), totalScore);
+
+        SharedPreferences prefs = context.getSharedPreferences(App.APP_VARIABLES, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean(App.PREFS_INVALIDATE_FIREBASE_SCORES, false).apply();
     }
 
 }
