@@ -34,8 +34,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/CardView_tetris"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/card_width"
+                android:layout_height="@dimen/card_height"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
@@ -48,7 +48,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="156dp"
+                    android:layout_height="match_parent"
                     android:visibility="visible">
 
                     <ImageView
@@ -166,8 +166,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/CardView_snake"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/card_width"
+                android:layout_height="@dimen/card_height"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
@@ -180,7 +180,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="156dp"
+                    android:layout_height="match_parent"
                     android:visibility="visible">
 
 
@@ -301,8 +301,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/CardView_pong"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/card_width"
+                android:layout_height="@dimen/card_height"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
@@ -315,7 +315,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="156dp"
+                    android:layout_height="match_parent"
                     android:visibility="visible">
 
 
@@ -434,8 +434,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/CardView_hole"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/card_width"
+                android:layout_height="@dimen/card_height"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
@@ -448,9 +448,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="156dp"
+                    android:layout_height="match_parent"
                     android:visibility="visible">
-
 
                     <ImageView
                         android:id="@+id/imageView_hole"
@@ -567,8 +566,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/CardView_brick_break"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/card_width"
+                android:layout_height="@dimen/card_height"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
@@ -582,7 +581,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="156dp"
+                    android:layout_height="match_parent"
                     android:visibility="visible">
 
 
@@ -707,7 +706,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginTop="32dp"
-
         app:cardElevation="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -721,10 +719,10 @@
 
             <TextView
                 android:id="@+id/textView_games_onclick"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="24dp"
                 android:alpha="0.87"
                 android:background="#FFFFFF"
                 android:text="@string/game_name"
@@ -740,7 +738,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:alpha="0.54"
                 android:text="@string/highscore"
                 android:textColor="#000000"
@@ -752,9 +750,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:alpha="0.54"
-                android:text="@string/textview"
+                android:text="@string/_0"
                 android:textColor="#000000"
                 app:layout_constraintStart_toEndOf="@+id/textView_games_bottom"
                 app:layout_constraintTop_toBottomOf="@+id/textView_games_onclick" />
@@ -775,8 +773,8 @@
 
                 <ImageView
                     android:id="@+id/imageView_play_games"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:contentDescription="@string/play_game"
                     android:src="@drawable/play_icon" />

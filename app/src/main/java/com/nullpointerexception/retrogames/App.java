@@ -39,6 +39,4 @@ public class App
                 DatabaseManager.class, "scoreboard").allowMainThreadQueries().build();
         scoreboardDao = databaseManager.scoreboardDao();
     }
-
-
 }
