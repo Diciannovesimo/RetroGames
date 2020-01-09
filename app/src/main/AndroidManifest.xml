@@ -44,15 +44,13 @@
         <activity
             android:name=".Pong.MainActivityPong"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:screenOrientation="landscape" />
         <activity android:name=".Snake.MainActivitySnake" />
         <activity
             android:name=".Hole.FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

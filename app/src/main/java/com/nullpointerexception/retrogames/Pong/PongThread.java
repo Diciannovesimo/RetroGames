@@ -1,5 +1,6 @@
 package com.nullpointerexception.retrogames.Pong;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -17,6 +18,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
 
+import com.nullpointerexception.retrogames.App;
+import com.nullpointerexception.retrogames.Components.SaveScore;
 import com.nullpointerexception.retrogames.R;
 
 import java.util.Random;
@@ -27,7 +30,6 @@ import java.util.Random;
 public class PongThread extends Thread {
 
     public Bundle universal_map;
-    private MainActivityPong MainActivity = new MainActivityPong();
 
     public static final int STATE_PAUSE   = 0;
     public static final int STATE_READY   = 1;
@@ -50,6 +52,8 @@ public class PongThread extends Thread {
     private static final String TAG = "PongThread";
 
     private final SurfaceHolder mSurfaceHolder;
+    private AlertDialog mDlgMsg = null;
+    private int highscore_point = 0;
 
     private final Handler mStatusHandler;
 
@@ -71,6 +75,8 @@ public class PongThread extends Thread {
     private Paint mCanvasBoundsPaint;
     private int   mCanvasHeight;
     private int   mCanvasWidth;
+
+    private onEndGameListener onEndGameListener;
 
     /**
      * usato per permettere al computer di "dimenticarsi" di muovere il canvas in modo tale da
@@ -96,6 +102,8 @@ public class PongThread extends Thread {
 
         mRun = false;
         mRunLock = new Object();
+
+        update_Highscore();
 
         TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.PongView);
 
@@ -275,9 +283,11 @@ public class PongThread extends Thread {
                 case STATE_LOSE:
                     setStatusText(res.getString(R.string.mode_lose));
                     mComputerPlayer.score++;
-                    if (mComputerPlayer.score == 5)
+                    if (mComputerPlayer.score == 1)
                     {
-                        MainActivity.game_over(mComputerPlayer.score,mHumanPlayer.score);
+                        game_over(mComputerPlayer.score,mHumanPlayer.score);
+                        startNewGame();
+
                     }
                     setupNewRound();
                     break;
@@ -286,6 +296,68 @@ public class PongThread extends Thread {
                     break;
             }
         }
+    }
+
+    /**
+     * aggiorna l'highscore
+     */
+    private void update_Highscore()
+    {
+        if (App.scoreboardDao.getScore(App.PONG) != highscore_point) {
+            highscore_point = App.scoreboardDao.getScore(App.PONG);
+        }
+    }
+
+    public void game_over(int cpuScore, int humanScore){
+
+        int score_pong = humanScore - cpuScore;
+
+        if (score_pong < 0)
+        {
+            score_pong = 0;
+            //fine 1
+            //showDialog_GameOver(score_pong);
+        }
+
+        if (highscore_point < score_pong)
+        {
+            highscore_point = score_pong;
+
+            SaveScore pong = new SaveScore();
+            pong.save(App.PONG, highscore_point,mContext);
+
+            //fine 2
+            //showDialog_GameOver(score_pong);
+        }
+        else {
+            //fine 3
+            //showDialog_GameOver(score_pong);
+        }
+
+
+
+        if(onEndGameListener != null)
+            onEndGameListener.onEnd(score_pong);
+
+
+    }
+
+    /**
+     * Mostra il dialog di GameOver
+     */
+    private void showDialog_GameOver(int score) {
+        mDlgMsg = new AlertDialog.Builder(mContext)
+                .setTitle(mContext.getResources().getString(R.string.gameOver))
+                .setMessage(mContext.getResources().getString(R.string.your_score_is) + ": " + score)
+                .setPositiveButton(mContext.getResources().getString(R.string.again), (dialog, which) -> {
+                    mDlgMsg.dismiss();
+                })
+                .setNegativeButton(mContext.getResources().getString(R.string.exit), (dialog, which) -> {
+                    mDlgMsg.dismiss();
+                    if(mContext instanceof MainActivityPong)
+                        ((MainActivityPong) mContext).finish();
+                })
+                .show();
     }
 
     /**
@@ -306,7 +378,7 @@ public class PongThread extends Thread {
         }
     }
 
-    /*
+
     void unPause() {
         synchronized (mSurfaceHolder) {
             setState(STATE_RUNNING);
@@ -318,10 +390,10 @@ public class PongThread extends Thread {
             mHumanPlayer.score = 0;
             mComputerPlayer.score = 0;
             setupNewRound();
-            setState(STATE_RUNNING);
+            setState(STATE_PAUSE);
         }
     }
-    */
+
 
     /**
      * @return vero se lo stato del gioco è diverso da Running.
@@ -564,6 +636,7 @@ public class PongThread extends Thread {
         b.putString("text", text);
         msg.setData(b);
         mScoreHandler.sendMessage(msg);
+
     }
 
     private void movePlayer(Player player, float left, float top) {
@@ -611,5 +684,14 @@ public class PongThread extends Thread {
             mBall.cx = mComputerPlayer.bounds.left - mBall.radius;
         }
     }
+
+    public void setOnEndGameListener(onEndGameListener onEndGameListener){
+        this.onEndGameListener = onEndGameListener;
+    }
+
+    public interface onEndGameListener{
+        void onEnd(int score);
+    }
+
 
 }

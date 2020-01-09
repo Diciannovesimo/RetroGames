@@ -1,20 +1,18 @@
 package com.nullpointerexception.retrogames.Pong;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.nullpointerexception.retrogames.App;
-import com.nullpointerexception.retrogames.Components.SaveScore;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.nullpointerexception.retrogames.R;
-import com.nullpointerexception.retrogames.Tetris.MainActivityTetris;
 
 /**
  * Main activity of MainActivityPong game.
  */
-public class MainActivityPong extends Activity {
+public class MainActivityPong extends AppCompatActivity {
 
     /*
     private static final int MENU_NEW_GAME = 1;
@@ -24,20 +22,23 @@ public class MainActivityPong extends Activity {
 
     private PongThread mGameThread;
     private Bundle save;
-    private int highscore_point = 0;
     private AlertDialog mDlgMsg = null;
     private Context context;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getApplicationContext();
-        update_Highscore();
+        setContentView(R.layout.pong_layout);
+
+        context = this;
+
+
+        //update_Highscore();
     }
 
+
     /**
-     * aggiorna l'highscore
-     */
+
     private void update_Highscore()
     {
         if (App.scoreboardDao.getScore(App.PONG) != highscore_point) {
@@ -72,9 +73,7 @@ public class MainActivityPong extends Activity {
         }
     }
 
-    /**
-     * Mostra il dialog di GameOver
-     */
+
     private void showDialog_GameOver(int score) {
         mDlgMsg = new AlertDialog.Builder(context)
                 .setTitle(getResources().getString(R.string.gameOver))
@@ -84,11 +83,13 @@ public class MainActivityPong extends Activity {
                 })
                 .setNegativeButton(getResources().getString(R.string.exit), (dialog, which) -> {
                     mDlgMsg.dismiss();
-                    if(context instanceof MainActivityTetris)
-                        ((MainActivityTetris) context).finish();
+                    if(context instanceof MainActivityPong)
+                        ((MainActivityPong) context).finish();
                 })
                 .show();
     }
+
+     **/
     /**
      * mette in pausa il gioco
      */
@@ -110,38 +111,6 @@ public class MainActivityPong extends Activity {
         save = outState;
     }
 
-    /*
-    Questi metodi non vengono mai
-    chiamati quindi li ho commentati
-     */
-
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_NEW_GAME, 0, R.string.menu_new_game);
-        menu.add(0, MENU_RESUME, 0, R.string.menu_resume);
-        menu.add(0, MENU_EXIT, 0, R.string.menu_exit);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case MENU_NEW_GAME:
-                mGameThread.startNewGame();
-                return true;
-            case MENU_EXIT:
-                finish();
-                return true;
-            case MENU_RESUME:
-                mGameThread.unPause();
-                return true;
-        }
-        return false;
-    }
-    */
 
     /**
      * quando il gioco viene ripreso
@@ -153,7 +122,39 @@ public class MainActivityPong extends Activity {
     protected void onResume() {
         super.onResume();
         game(save);
+
+        mGameThread.setOnEndGameListener(new PongThread.onEndGameListener() {
+            @Override
+            public void onEnd(int score) {
+
+                showDialog_GameOver(score);
+
+            }
+        });
     }
+
+
+    private void showDialog_GameOver(int score) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mDlgMsg = new AlertDialog.Builder(context)
+                        .setTitle(context.getString(R.string.gameOver))
+                        .setMessage(context.getString(R.string.your_score_is) + ": " + score)
+                        .setPositiveButton(context.getString(R.string.again), (dialog, which) -> {
+                            mDlgMsg.dismiss();
+                        })
+                        .setNegativeButton(context.getString(R.string.exit), (dialog, which) -> {
+                            mDlgMsg.dismiss();
+                            if(context instanceof MainActivityPong)
+                                ((MainActivityPong) context).finish();
+                        })
+                        .show();
+            }
+        });
+
+    }
+
 
     /**
      * setta i layout di pong per poi
