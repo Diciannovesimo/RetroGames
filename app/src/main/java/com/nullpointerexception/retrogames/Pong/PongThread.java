@@ -27,6 +27,7 @@ import java.util.Random;
 public class PongThread extends Thread {
 
     public Bundle universal_map;
+    private MainActivityPong MainActivity = new MainActivityPong();
 
     public static final int STATE_PAUSE   = 0;
     public static final int STATE_READY   = 1;
@@ -72,12 +73,13 @@ public class PongThread extends Thread {
     private int   mCanvasWidth;
 
     /**
-     * Used to make computer to "forget" to move the paddle in order to behave more like a human opponent.
+     * usato per permettere al computer di "dimenticarsi" di muovere il canvas in modo tale da
+     * avere la senzazione di star giocando contro un essere umano.
      */
     private Random mRandomGen;
 
     /**
-     * The probability to move computer paddle.
+     * la probabilità che il computer muovi il canvas
      */
     private float mComputerMoveProbability;
 
@@ -250,6 +252,7 @@ public class PongThread extends Thread {
      * Running: fa partire il gioco e nasconde il testo al centro
      * Win: assegna un punto al giocatore e stampa a video la scritta "good work"
      * Lose: assegna un punto alla cpu e stampa a video la scritta "sorry"
+     *       se lo score della cpu è uguale a 5 la partita finisce
      * Pause: salva tutto lo stato della partita e la mette in pausa stampando la scritta "paused"
      * @param mode
      */
@@ -272,6 +275,10 @@ public class PongThread extends Thread {
                 case STATE_LOSE:
                     setStatusText(res.getString(R.string.mode_lose));
                     mComputerPlayer.score++;
+                    if (mComputerPlayer.score == 5)
+                    {
+                        MainActivity.game_over(mComputerPlayer.score,mHumanPlayer.score);
+                    }
                     setupNewRound();
                     break;
                 case STATE_PAUSE:
