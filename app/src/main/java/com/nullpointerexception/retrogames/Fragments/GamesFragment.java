@@ -26,14 +26,19 @@ public class GamesFragment extends Fragment
 {
 
     /*
+           UI Components Portrait
+     */
+    private View lastViewSelected1, lastViewSelected2;
+    private View playButtonTetris, playButtonSnake, playButtonPong, playButtonHole, playButtonBreakout;
+    private TextView tetrisText, snakeText, pongText, holeText, breakoutText,
+            tetrisHighscoreText, snakeHighscoreText,
+            pongHighscoreText, holeHighscoreText, breakoutHighscoreText;
+    private ViewGroup clickViewTetris, clickViewSnake, clickViewPong, clickViewHole, clickViewBreakout;
+
+    /*
            UI Components Portrait / Landscape
      */
     private ViewGroup tetrisCard, snakeCard, pongCard, holeCard, breakoutCard;
-    private View playButtonTetris, playButtonSnake, playButtonPong, playButtonHole, playButtonBreakout;
-    private TextView tetrisText, snakeText, pongText, holeText, breakoutText,
-                     tetrisHighscoreText, snakeHighscoreText,
-                     pongHighscoreText, holeHighscoreText, breakoutHighscoreText;
-    private ViewGroup clickViewTetris, clickViewSnake, clickViewPong, clickViewHole, clickViewBreakout;
 
     /*
             UI Components Landscape
@@ -74,26 +79,6 @@ public class GamesFragment extends Fragment
         pongCard = view.findViewById(R.id.CardView_pong);
         holeCard = view.findViewById(R.id.CardView_hole);
         breakoutCard = view.findViewById(R.id.CardView_brick_break);
-        playButtonTetris = view.findViewById(R.id.imageView_play_tetris);
-        playButtonSnake = view.findViewById(R.id.imageView_play_snake);
-        playButtonPong = view.findViewById(R.id.imageView_play_pong);
-        playButtonHole = view.findViewById(R.id.imageView_play_hole);
-        playButtonBreakout = view.findViewById(R.id.imageView_play_brick_break);
-        tetrisText = view.findViewById(R.id.textView_tetris);
-        snakeText = view.findViewById(R.id.textView_snake);
-        pongText = view.findViewById(R.id.textView_pong);
-        holeText = view.findViewById(R.id.textView_hole);
-        breakoutText = view.findViewById(R.id.textView_brick_break);
-        clickViewTetris = view.findViewById(R.id.Constraint_onclick_tetris);
-        clickViewSnake = view.findViewById(R.id.Constraint_onclick_snake);
-        clickViewPong = view.findViewById(R.id.Constraint_onclick_pong);
-        clickViewHole = view.findViewById(R.id.Constraint_onclick_hole);
-        clickViewBreakout = view.findViewById(R.id.Constraint_onclick_brick_break);
-        tetrisHighscoreText = view.findViewById(R.id.textView_tetris_highscore);
-        snakeHighscoreText = view.findViewById(R.id.textView_snake_highscore);
-        pongHighscoreText = view.findViewById(R.id.textView_pong_highscore);
-        holeHighscoreText = view.findViewById(R.id.textView_hole_highscore);
-        breakoutHighscoreText = view.findViewById(R.id.textView_brick_break_highscore);
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
         {
@@ -101,6 +86,29 @@ public class GamesFragment extends Fragment
             gamesTitleTextview = view.findViewById(R.id.textView_games_onclick);
             gamesHighscoreTextview = view.findViewById(R.id.textView_games_highscore);
             playButton = view.findViewById(R.id.onclick_play);
+        }
+        else
+        {
+            playButtonTetris = view.findViewById(R.id.imageView_play_tetris);
+            playButtonSnake = view.findViewById(R.id.imageView_play_snake);
+            playButtonPong = view.findViewById(R.id.imageView_play_pong);
+            playButtonHole = view.findViewById(R.id.imageView_play_hole);
+            playButtonBreakout = view.findViewById(R.id.imageView_play_brick_break);
+            tetrisText = view.findViewById(R.id.textView_tetris);
+            snakeText = view.findViewById(R.id.textView_snake);
+            pongText = view.findViewById(R.id.textView_pong);
+            holeText = view.findViewById(R.id.textView_hole);
+            breakoutText = view.findViewById(R.id.textView_brick_break);
+            clickViewTetris = view.findViewById(R.id.Constraint_onclick_tetris);
+            clickViewSnake = view.findViewById(R.id.Constraint_onclick_snake);
+            clickViewPong = view.findViewById(R.id.Constraint_onclick_pong);
+            clickViewHole = view.findViewById(R.id.Constraint_onclick_hole);
+            clickViewBreakout = view.findViewById(R.id.Constraint_onclick_brick_break);
+            tetrisHighscoreText = view.findViewById(R.id.textView_tetris_highscore);
+            snakeHighscoreText = view.findViewById(R.id.textView_snake_highscore);
+            pongHighscoreText = view.findViewById(R.id.textView_pong_highscore);
+            holeHighscoreText = view.findViewById(R.id.textView_hole_highscore);
+            breakoutHighscoreText = view.findViewById(R.id.textView_brick_break_highscore);
         }
     }
 
@@ -187,106 +195,136 @@ public class GamesFragment extends Fragment
     {
         tetrisCard.setOnTouchListener(new OnTouchAnimatedListener()
         {
-            boolean clicked = false;
-
             @Override
             public void onClick(View view)
             {
-                if( ! clicked)
+                if(clickViewTetris.getVisibility() == View.GONE)
                 {
+                    if(lastViewSelected1 != null && lastViewSelected2 != null)
+                    {
+                        lastViewSelected1.setVisibility(View.GONE);
+                        lastViewSelected2.setVisibility(View.VISIBLE);
+                    }
+
                     clickViewTetris.setVisibility(View.VISIBLE);
                     tetrisText.setVisibility(View.GONE);
+
+                    lastViewSelected1 = clickViewTetris;
+                    lastViewSelected2 = tetrisText;
                 }
                 else
                 {
                     clickViewTetris.setVisibility(View.GONE);
                     tetrisText.setVisibility(View.VISIBLE);
                 }
-                clicked = ! clicked;
             }
         });
 
         snakeCard.setOnTouchListener(new OnTouchAnimatedListener()
         {
-            boolean clicked = false;
-
             @Override
             public void onClick(View view)
             {
-                if( ! clicked)
+                if(clickViewSnake.getVisibility() == View.GONE)
                 {
+                    if(lastViewSelected1 != null && lastViewSelected2 != null)
+                    {
+                        lastViewSelected1.setVisibility(View.GONE);
+                        lastViewSelected2.setVisibility(View.VISIBLE);
+                    }
+
                     clickViewSnake.setVisibility(View.VISIBLE);
                     snakeText.setVisibility(View.GONE);
+
+                    lastViewSelected1 = clickViewSnake;
+                    lastViewSelected2 = snakeText;
                 }
                 else
                 {
                     clickViewSnake.setVisibility(View.GONE);
                     snakeText.setVisibility(View.VISIBLE);
                 }
-                clicked = ! clicked;
             }
         });
 
         pongCard.setOnTouchListener(new OnTouchAnimatedListener()
         {
-            boolean clicked = false;
-
             @Override
             public void onClick(View view)
             {
-                if( ! clicked)
+                if(clickViewPong.getVisibility() == View.GONE)
                 {
+                    if(lastViewSelected1 != null && lastViewSelected2 != null)
+                    {
+                        lastViewSelected1.setVisibility(View.GONE);
+                        lastViewSelected2.setVisibility(View.VISIBLE);
+                    }
+
                     clickViewPong.setVisibility(View.VISIBLE);
                     pongText.setVisibility(View.GONE);
+
+                    lastViewSelected1 = clickViewPong;
+                    lastViewSelected2 = pongText;
                 }
                 else
                 {
                     clickViewPong.setVisibility(View.GONE);
                     pongText.setVisibility(View.VISIBLE);
                 }
-                clicked = ! clicked;
             }
         });
 
         holeCard.setOnTouchListener(new OnTouchAnimatedListener()
         {
-            boolean clicked = false;
-
             @Override
             public void onClick(View view)
             {
-                if( ! clicked)
+                if(clickViewHole.getVisibility() == View.GONE)
                 {
+                    if(lastViewSelected1 != null && lastViewSelected2 != null)
+                    {
+                        lastViewSelected1.setVisibility(View.GONE);
+                        lastViewSelected2.setVisibility(View.VISIBLE);
+                    }
+
                     clickViewHole.setVisibility(View.VISIBLE);
                     holeText.setVisibility(View.GONE);
+
+                    lastViewSelected1 = clickViewHole;
+                    lastViewSelected2 = holeText;
                 }
                 else
                 {
                     clickViewHole.setVisibility(View.GONE);
                     holeText.setVisibility(View.VISIBLE);
                 }
-                clicked = ! clicked;
             }
         });
 
         breakoutCard.setOnTouchListener(new OnTouchAnimatedListener()
         {
-            boolean clicked = false;
-
             @Override
             public void onClick(View view)
             {
-                if( ! clicked)
+                if(clickViewBreakout.getVisibility() == View.GONE)
                 {
+                    if(lastViewSelected1 != null && lastViewSelected2 != null)
+                    {
+                        lastViewSelected1.setVisibility(View.GONE);
+                        lastViewSelected2.setVisibility(View.VISIBLE);
+                    }
+
                     clickViewBreakout.setVisibility(View.VISIBLE);
                     breakoutText.setVisibility(View.GONE);
+
+                    lastViewSelected1 = clickViewBreakout;
+                    lastViewSelected2 = breakoutText;
                 }
                 else
                 {
                     clickViewBreakout.setVisibility(View.GONE);
                     breakoutText.setVisibility(View.VISIBLE);
                 }
-                clicked = ! clicked;
             }
         });
     }
