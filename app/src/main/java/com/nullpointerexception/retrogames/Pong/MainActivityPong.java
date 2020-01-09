@@ -2,9 +2,6 @@ package com.nullpointerexception.retrogames.Pong;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.nullpointerexception.retrogames.R;
@@ -14,9 +11,11 @@ import com.nullpointerexception.retrogames.R;
  */
 public class MainActivityPong extends Activity {
 
+    /*
     private static final int MENU_NEW_GAME = 1;
     private static final int MENU_RESUME = 2;
     private static final int MENU_EXIT = 3;
+    */
 
     private PongThread mGameThread;
     private Bundle save;
@@ -24,29 +23,27 @@ public class MainActivityPong extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        game(savedInstanceState);
-        save = savedInstanceState;
-
-        Log.i("INFO", "onCreate");
     }
 
+    /**
+     * mette in pausa il gioco
+     */
     @Override
     protected void onPause() {
         super.onPause();
         mGameThread.pause();
-        Log.i("INFO", "onPause");
     }
 
-    /*
-    salva lo stato del gioco
-    */
+    /**
+     * salva lo stato del gioco nella variabile
+     * save
+     * @param outState
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mGameThread.saveState(outState);
         save = outState;
-        Log.i("INFO", "SaveInstanceState");
     }
 
     /*
@@ -58,7 +55,6 @@ public class MainActivityPong extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        Log.i("INFO", "onCreateOptionsMenu");
         menu.add(0, MENU_NEW_GAME, 0, R.string.menu_new_game);
         menu.add(0, MENU_RESUME, 0, R.string.menu_resume);
         menu.add(0, MENU_EXIT, 0, R.string.menu_exit);
@@ -68,7 +64,6 @@ public class MainActivityPong extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i("INFO", "onOptionsItemSelected");
         switch (item.getItemId()) {
             case MENU_NEW_GAME:
                 mGameThread.startNewGame();
@@ -84,21 +79,23 @@ public class MainActivityPong extends Activity {
     }
     */
 
-    /*
-    quando il gioco viene ripreso
-    parte il metodo game con il save di
-    onSaveInstanceState
+    /**
+     * quando il gioco viene ripreso
+     * parte il metodo game con il
+     * salvataggio(save) di
+     * onSaveInstanceState
      */
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i("INFO", "onResume");
         game(save);
     }
 
-    /*
-    crea una nuova partita o riprende
-    quella avviata in precedenza se esiste
+    /**
+     * setta i layout di pong per poi
+     * creare una nuova partita o riprende
+     * quella avviata in precedenza se esiste
+     * @param savedInstanceState
      */
     private void game(Bundle savedInstanceState){
         setContentView(R.layout.pong_layout);
