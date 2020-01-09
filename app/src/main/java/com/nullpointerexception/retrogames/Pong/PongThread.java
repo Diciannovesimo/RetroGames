@@ -26,6 +26,8 @@ import java.util.Random;
  */
 public class PongThread extends Thread {
 
+    public Bundle universal_map;
+
     public static final int STATE_PAUSE   = 0;
     public static final int STATE_READY   = 1;
     public static final int STATE_RUNNING = 2;
@@ -97,7 +99,7 @@ public class PongThread extends Thread {
 
         int paddleHeight = a.getInt(R.styleable.PongView_paddleHeight, 200);
         int paddleWidth = a.getInt(R.styleable.PongView_paddleWidth, 35);
-        int ballRadius = a.getInt(R.styleable.PongView_ballRadius, 55);
+        int ballRadius = a.getInt(R.styleable.PongView_ballRadius, 32);
 
         a.recycle();
 
@@ -186,6 +188,12 @@ public class PongThread extends Thread {
         }
     }
 
+    /**
+     * salva lo stato del gioco mettendo in una
+     * mappa (map) le informazioni riguardanti la posizione
+     * di ogni oggetto sul layout (palla,giocatore,cpu)
+     * @param map
+     */
     void saveState(Bundle map) {
         synchronized (mSurfaceHolder) {
             map.putFloatArray(KEY_HUMAN_PLAYER_DATA,
@@ -201,10 +209,18 @@ public class PongThread extends Thread {
             map.putFloatArray(KEY_BALL_DATA,
                               new float[]{mBall.cx, mBall.cy, mBall.dx, mBall.dy});
 
+
             map.putInt(KEY_GAME_STATE, mState);
         }
     }
 
+    /**
+     * ripristina lo stato del gioco mettendo in una
+     * mappa (universal_map = map) le informazioni riguardanti la posizione
+     * di ogni oggetto sul layout (palla,giocatore,cpu)
+     * universal_map servirà al metodo SetupNewGame
+     * @param map
+     */
     void restoreState(Bundle map) {
         synchronized (mSurfaceHolder) {
             float[] humanPlayerData = map.getFloatArray(KEY_HUMAN_PLAYER_DATA);
@@ -221,11 +237,22 @@ public class PongThread extends Thread {
             mBall.dx = ballData[2];
             mBall.dy = ballData[3];
 
+
             int state = map.getInt(KEY_GAME_STATE);
+            universal_map = map;
             setState(state);
         }
     }
 
+    /**
+     *setta lo stato del gioco
+     * Ready: fa partire setupNewRound
+     * Running: fa partire il gioco e nasconde il testo al centro
+     * Win: assegna un punto al giocatore e stampa a video la scritta "good work"
+     * Lose: assegna un punto alla cpu e stampa a video la scritta "sorry"
+     * Pause: salva tutto lo stato della partita e la mette in pausa stampando la scritta "paused"
+     * @param mode
+     */
     void setState(int mode) {
         synchronized (mSurfaceHolder) {
             mState = mode;
@@ -254,35 +281,31 @@ public class PongThread extends Thread {
         }
     }
 
-    /*
-    il metodo pause in pongthread viene chiamato
-    solo se si è effettivamente
-    in game ovvero la palla è in movimento
-
-    bug (risolto): quando si vince o si perde
-    e si va in pausa il punteggio dell'utlimo giocatore
-    che ha fatto un punto viene incrementato di uno
-
+    /**
+    *il metodo pause in pongthread viene chiamato
+    *solo se si è effettivamente
+    *in game ovvero la palla è in movimento
+    *
+    *bug (risolto): quando si vince o si perde
+    *e si va in pausa il punteggio dell'utlimo giocatore
+    *che ha fatto un punto viene incrementato di uno
+    *
      */
     void pause() {
         synchronized (mSurfaceHolder) {
             if (mState != STATE_PAUSE) {
-                Log.i("INFO", "PAUSE");
                 setState(STATE_PAUSE);
             }
         }
     }
 
+    /*
     void unPause() {
         synchronized (mSurfaceHolder) {
-            Log.i("INFO", "RUN");
             setState(STATE_RUNNING);
         }
     }
 
-    /**
-     * Reset score and start new game.
-     */
     void startNewGame() {
         synchronized (mSurfaceHolder) {
             mHumanPlayer.score = 0;
@@ -291,18 +314,28 @@ public class PongThread extends Thread {
             setState(STATE_RUNNING);
         }
     }
+    */
 
     /**
-     * @return true if the game is in win, lose or pause state.
+     * @return vero se lo stato del gioco è diverso da Running.
      */
     boolean isBetweenRounds() {
         return mState != STATE_RUNNING;
     }
 
+    /**
+     * @param event percepisce l'evento di movimento
+     * @return la nuova posizione del player
+     */
     boolean isTouchOnHumanPaddle(MotionEvent event) {
         return mHumanPlayer.bounds.contains(event.getX(), event.getY());
     }
 
+    /**
+     * sincronizza la posizione del giocatore
+     * sul layout
+     * @param dy
+     */
     void moveHumanPaddle(float dy) {
         synchronized (mSurfaceHolder) {
             movePlayer(mHumanPlayer,
@@ -311,6 +344,11 @@ public class PongThread extends Thread {
         }
     }
 
+    /**
+     * setta la superficie del layout
+     * @param width
+     * @param height
+     */
     void setSurfaceSize(int width, int height) {
         synchronized (mSurfaceHolder) {
             mCanvasWidth = width;
@@ -320,7 +358,8 @@ public class PongThread extends Thread {
     }
 
     /**
-     * Update paddle and player positions, check for collisions, win or lose.
+     * aggiorna la posizione dei canvas, controlla le collisioni e le
+     * condizioni di vittoria o sconfitta
      */
     private void updatePhysics() {
 
@@ -354,6 +393,9 @@ public class PongThread extends Thread {
         moveBall();
     }
 
+    /**
+     * muove la palla
+     */
     private void moveBall() {
         mBall.cx += mBall.dx;
         mBall.cy += mBall.dy;
@@ -366,7 +408,7 @@ public class PongThread extends Thread {
     }
 
     /**
-     * Move the computer paddle to hit the ball.
+     * muove la cpu per colpire la palla
      */
     private void doAI() {
         if (mComputerPlayer.bounds.top > mBall.cy) {
@@ -382,21 +424,33 @@ public class PongThread extends Thread {
         }
     }
 
+    /**
+     *
+     * @return vero se la palla collide con il muro di sinistra
+     */
     private boolean ballCollidedWithLeftWall() {
         return mBall.cx <= mBall.radius;
     }
 
+    /**
+     *
+     * @return vero se la palla collide con il muro di destra
+     */
     private boolean ballCollidedWithRightWall() {
         return mBall.cx + mBall.radius >= mCanvasWidth - 1;
     }
 
+    /**
+     *
+     * @return vero se la palla collide con il muro di sopra o sotto
+     */
     private boolean ballCollidedWithTopOrBottomWall() {
         return mBall.cy <= mBall.radius
                || mBall.cy + mBall.radius >= mCanvasHeight - 1;
     }
 
     /**
-     * Draws the score, paddles and the ball.
+     * disegna i canvas dello score, della palla, del giocatore e della cpu
      */
     private void updateDisplay(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
@@ -415,6 +469,12 @@ public class PongThread extends Thread {
         canvas.drawCircle(mBall.cx, mBall.cy, mBall.radius, mBall.paint);
     }
 
+    /**
+     * disegna un'ombra quando i canvas
+     * del giocatore o della cpu colpiscono
+     * la palla
+     * @param player
+     */
     private void handleHit(Player player) {
         if (player.collision > 0) {
             player.paint.setShadowLayer(player.paddleWidth / 2, 0, 0, player.paint.getColor());
@@ -424,23 +484,49 @@ public class PongThread extends Thread {
     }
 
     /**
-     * Reset players and ball position for a new round.
+     * setta una nuova partita o ripristina l'ultima messa in pausa
      */
     private void setupNewRound() {
-        mBall.cx = mCanvasWidth / 2;
-        mBall.cy = mCanvasHeight / 2;
-        mBall.dx = -PHYS_BALL_SPEED;
-        mBall.dy = 0;
 
-        movePlayer(mHumanPlayer,
-                   2,
-                   (mCanvasHeight - mHumanPlayer.paddleHeight) / 2);
+        if(universal_map == null) {
+            mBall.cx = mCanvasWidth / 2;
+            mBall.cy = mCanvasHeight / 2;
+            mBall.dx = -PHYS_BALL_SPEED;
+            mBall.dy = 0;
 
-        movePlayer(mComputerPlayer,
-                   mCanvasWidth - mComputerPlayer.paddleWidth - 2,
-                   (mCanvasHeight - mComputerPlayer.paddleHeight) / 2);
+            movePlayer(mHumanPlayer,
+                    2,
+                    (mCanvasHeight - mHumanPlayer.paddleHeight) / 2);
+
+            movePlayer(mComputerPlayer,
+                    mCanvasWidth - mComputerPlayer.paddleWidth - 2,
+                    (mCanvasHeight - mComputerPlayer.paddleHeight) / 2);
+
+        }
+        else {
+            float[] humanPlayerData = universal_map.getFloatArray(KEY_HUMAN_PLAYER_DATA);
+            mHumanPlayer.score = (int) humanPlayerData[2];
+            movePlayer(mHumanPlayer, humanPlayerData[0], humanPlayerData[1]);
+
+            float[] computerPlayerData = universal_map.getFloatArray(KEY_COMPUTER_PLAYER_DATA);
+            mComputerPlayer.score = (int) computerPlayerData[2];
+            movePlayer(mComputerPlayer, computerPlayerData[0], computerPlayerData[1]);
+
+            float[] ballData = universal_map.getFloatArray(KEY_BALL_DATA);
+            mBall.cx = ballData[0];
+            mBall.cy = ballData[1];
+            mBall.dx = ballData[2];
+            mBall.dy = ballData[3];
+        }
+
+        universal_map = null;
     }
 
+    /**
+     * a seconda del parametro passato
+     * setta il testo
+     * @param text
+     */
     private void setStatusText(String text) {
         Message msg = mStatusHandler.obtainMessage();
         Bundle b = new Bundle();
@@ -450,6 +536,9 @@ public class PongThread extends Thread {
         mStatusHandler.sendMessage(msg);
     }
 
+    /**
+     * nasconde il testo
+     */
     private void hideStatusText() {
         Message msg = mStatusHandler.obtainMessage();
         Bundle b = new Bundle();
@@ -458,6 +547,10 @@ public class PongThread extends Thread {
         mStatusHandler.sendMessage(msg);
     }
 
+    /**
+     * scrive lo score
+     * @param text
+     */
     private void setScoreText(String text) {
         Message msg = mScoreHandler.obtainMessage();
         Bundle b = new Bundle();
@@ -480,6 +573,12 @@ public class PongThread extends Thread {
         player.bounds.offsetTo(left, top);
     }
 
+    /**
+     * controlla le collisioni
+     * @param player
+     * @param ball
+     * @return vero se c'è una collisione
+     */
     private boolean collision(Player player, Ball ball) {
         return player.bounds.intersects(
                 ball.cx - mBall.radius,
@@ -489,7 +588,7 @@ public class PongThread extends Thread {
     }
 
     /**
-     * Compute ball direction after collision with player paddle.
+     * computa la direzione della palla dopo una collisione con il giocatore
      */
     private void handleCollision(Player player, Ball ball) {
         float relativeIntersectY = player.bounds.top + player.paddleHeight / 2 - ball.cy;
