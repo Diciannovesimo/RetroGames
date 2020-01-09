@@ -533,10 +533,10 @@ public class PongThread extends Thread {
      */
     private void updateDisplay(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
-        canvas.drawRect(0, 0, mCanvasWidth, mCanvasHeight, mCanvasBoundsPaint);
+        canvas.drawRect(5, 5, mCanvasWidth, mCanvasHeight - 5 , mCanvasBoundsPaint);
 
         final int middle = mCanvasWidth / 2;
-        canvas.drawLine(middle, 1, middle, mCanvasHeight - 1, mMedianLinePaint);
+        canvas.drawLine(middle, 5, middle, mCanvasHeight - 5, mMedianLinePaint);
 
         setScoreText(mHumanPlayer.score + "    " + mComputerPlayer.score);
 
