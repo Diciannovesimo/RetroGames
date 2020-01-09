@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Fragments.ProfileFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.ProfileFragment">
+    android:orientation="vertical"
+    android:scrollbars="none">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/textView3"
@@ -35,7 +41,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="300dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,8 +50,8 @@
 
         <ImageView
             android:id="@+id/imageView_profile"
-            android:layout_width="128dp"
-            android:layout_height="128dp"
+            android:layout_width="@dimen/profile_image_size"
+            android:layout_height="@dimen/profile_image_size"
             android:layout_gravity="center"
             android:contentDescription="@string/profile_img" />
 
@@ -58,7 +64,7 @@
             android:alpha="0.87"
             android:text="@string/name"
             android:textColor="#000000"
-            android:textSize="24sp" />
+            android:textSize="@dimen/font_size_mark" />
 
         <LinearLayout
             android:id="@+id/total_score_layout"
@@ -77,7 +83,7 @@
                 android:alpha="0.87"
                 android:text="@string/total_score_profile"
                 android:textColor="#000000"
-                android:textSize="18sp" />
+                android:textSize="@dimen/font_size_text" />
 
             <TextView
                 android:id="@+id/textView_total_score"
@@ -87,7 +93,7 @@
                 android:alpha="0.87"
                 android:text="@string/_0"
                 android:textColor="#000000"
-                android:textSize="24sp" />
+                android:textSize="@dimen/font_size_mark" />
 
         </LinearLayout>
 
@@ -102,25 +108,25 @@
             android:text="@string/global_ranking"
             android:textAlignment="center"
             android:textColor="#DE000000"
-            android:textSize="14sp" />
+            android:textSize="@dimen/font_size_text" />
 
     </LinearLayout>
 
     <View
         android:id="@+id/View"
         android:layout_width="1dp"
-        android:layout_height="300dp"
-        android:layout_marginStart="64dp"
+        android:layout_height="@dimen/divider_height"
+        android:layout_marginTop="32dp"
         android:background="#3f000000"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/linearLayout"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <LinearLayout
         android:id="@+id/Layout_single_score"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -151,13 +157,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginBottom="2dp"
                 android:alpha="0.87"
-                android:text="@string/snake"
+                android:text="@string/snake_profile"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="@dimen/font_size_text"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textView_position_snake"
@@ -179,7 +185,7 @@
                 android:alpha="0.87"
                 android:text="@string/_0"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                android:textSize="@dimen/font_size_mark"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView_snake"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -197,13 +203,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginBottom="2dp"
                 android:alpha="0.87"
-                android:text="@string/tetris"
+                android:text="@string/tetris_profile"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="@dimen/font_size_text"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textView_position_tetris"
@@ -225,7 +231,7 @@
                 android:alpha="0.87"
                 android:text="@string/_0"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                android:textSize="@dimen/font_size_mark"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView_tetris"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -243,13 +249,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginBottom="2dp"
                 android:alpha="0.87"
-                android:text="@string/pong"
+                android:text="@string/pong_profile"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="@dimen/font_size_text"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textView_position_pong"
@@ -271,7 +277,7 @@
                 android:alpha="0.87"
                 android:text="@string/_0"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                android:textSize="@dimen/font_size_mark"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView_pong"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -289,13 +295,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginBottom="2dp"
                 android:alpha="0.87"
-                android:text="@string/breakout"
+                android:text="@string/breakout_profile"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="@dimen/font_size_text"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textView_position_brick_breaker"
@@ -317,7 +323,7 @@
                 android:alpha="0.87"
                 android:text="@string/_0"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                android:textSize="@dimen/font_size_mark"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView_brick_breaker"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -335,13 +341,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginBottom="2dp"
                 android:alpha="0.87"
-                android:text="@string/hole"
+                android:text="@string/hole_profile"
                 android:textColor="#000000"
-                android:textSize="18sp"
+                android:textSize="@dimen/font_size_text"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textView_position_hole"
@@ -363,7 +369,7 @@
                 android:alpha="0.87"
                 android:text="@string/_0"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                android:textSize="@dimen/font_size_mark"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView_hole"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -371,3 +377,4 @@
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

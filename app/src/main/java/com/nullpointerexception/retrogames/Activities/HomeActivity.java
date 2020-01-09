@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -23,8 +24,14 @@ import com.nullpointerexception.retrogames.R;
 
 public class HomeActivity extends AppCompatActivity
 {
-
+    /*
+            Constants
+     */
     private static final int DEFAULT_ICON_COLORS = Color.parseColor("#707070");
+    private static final int GAMES_FRAGMENT = 0;
+    private static final int LEADERBOARD_FRAGMENT = 1;
+    private static final int PROFILE_FRAGMENT = 2;
+    private static final int ACCESS_FRAGMENT = 3;
 
     /*
             UI Components
@@ -74,7 +81,28 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        placeFragment(new GamesFragment());
+        if(savedInstanceState != null)
+        {
+            int fragment = savedInstanceState.getInt("fragmentPlaced");
+            switch (fragment)
+            {
+                case GAMES_FRAGMENT:
+                default:
+                    placeFragment(new GamesFragment());
+                    break;
+                case LEADERBOARD_FRAGMENT:
+                    placeFragment(new LeaderboardFragment());
+                    break;
+                case PROFILE_FRAGMENT:
+                    placeFragment(new ProfileFragment());
+                    break;
+                case ACCESS_FRAGMENT:
+                    placeFragment(new LoginFragment());
+                    break;
+            }
+        }
+        else
+            placeFragment(new GamesFragment());
     }
 
     private void sendFirebase() {
@@ -151,7 +179,7 @@ public class HomeActivity extends AppCompatActivity
             if(currentView instanceof TextView)
                 ((TextView) currentView).setTextColor( getResources().getColor(R.color.colorPrimaryDark));
             else if(currentView instanceof ImageView)
-                ((ImageView) currentView).getDrawable().setTint( getResources().getColor(R.color.colorPrimaryDark));
+                ((ImageView) currentView).getDrawable().mutate().setTint( getResources().getColor(R.color.colorPrimaryDark));
         }
     }
 
@@ -166,5 +194,24 @@ public class HomeActivity extends AppCompatActivity
             else if(currentView instanceof ImageView)
                 ((ImageView) currentView).getDrawable().setTint(DEFAULT_ICON_COLORS);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState)
+    {
+        int value = GAMES_FRAGMENT;
+
+        if(currentFragment instanceof GamesFragment)
+            value = GAMES_FRAGMENT;
+        else if(currentFragment instanceof LeaderboardFragment)
+            value = LEADERBOARD_FRAGMENT;
+        else if(currentFragment instanceof ProfileFragment)
+            value = PROFILE_FRAGMENT;
+        else if(currentFragment instanceof LoginFragment)
+            value = ACCESS_FRAGMENT;
+
+        outState.putInt("fragmentPlaced", value);
+
+        super.onSaveInstanceState(outState);
     }
 }
