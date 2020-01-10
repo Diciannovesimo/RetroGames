@@ -18,10 +18,10 @@
     <string name="menu_exit">Esci</string>
     <string name="menu_new_game">Nuovo gioco</string>
     <string name="menu_resume">Riprendi</string>
-    <string name="mode_lose">Scusa :-(</string>
+    <string name="mode_lose">CPU segna</string>
     <string name="mode_pause">Gioco in pausa</string>
     <string name="mode_ready">Tocca per giocare</string>
-    <string name="mode_win">Buon lavoro :-)</string>
+    <string name="mode_win">Bel lavoro</string>
     <string name="next">Prossimo</string>
     <string name="or">O</string>
     <string name="play">Nuovo gioco</string>
@@ -72,4 +72,7 @@
     <string name="snake_dialog_hard">Difficile</string>
     <string name="snake_dialog_medium">Media</string>
     <string name="snake_dialog_title">Seleziona la difficoltà del gioco</string>
+    <string name="no_point">Non hai fatto nessun punto</string>
+    <string name="you_try">Ci hai provato</string>
+    <string name="good_job">Nuovo highscore congratulazioni!</string>
 </resources>

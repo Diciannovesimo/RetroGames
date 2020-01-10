@@ -125,31 +125,71 @@ public class MainActivityPong extends AppCompatActivity {
 
         mGameThread.setOnEndGameListener(new PongThread.onEndGameListener() {
             @Override
-            public void onEnd(int score) {
+            public void onEnd(int score, int exit_mode) {
 
-                showDialog_GameOver(score);
+                showDialog_GameOver(score,exit_mode);
 
             }
         });
     }
 
 
-    private void showDialog_GameOver(int score) {
+    private void showDialog_GameOver(int score, int exit_mode) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mDlgMsg = new AlertDialog.Builder(context)
+                if (exit_mode == 1)
+                {
+                    mDlgMsg = new AlertDialog.Builder(context)
                         .setTitle(context.getString(R.string.gameOver))
-                        .setMessage(context.getString(R.string.your_score_is) + ": " + score)
-                        .setPositiveButton(context.getString(R.string.again), (dialog, which) -> {
-                            mDlgMsg.dismiss();
-                        })
-                        .setNegativeButton(context.getString(R.string.exit), (dialog, which) -> {
-                            mDlgMsg.dismiss();
-                            if(context instanceof MainActivityPong)
-                                ((MainActivityPong) context).finish();
-                        })
-                        .show();
+                            .setMessage(context.getString(R.string.your_score_is) + ": " + score + "\n" + context.getString(R.string.no_point))
+
+
+                            .setPositiveButton(context.getString(R.string.again), (dialog, which) -> {
+                                mDlgMsg.dismiss();
+                            })
+                            .setNegativeButton(context.getString(R.string.exit), (dialog, which) -> {
+                                mDlgMsg.dismiss();
+                                if(context instanceof MainActivityPong)
+                                    ((MainActivityPong) context).finish();
+                            })
+                            .show();
+                }
+                if (exit_mode == 2)
+                {
+                    mDlgMsg = new AlertDialog.Builder(context)
+                            .setTitle(context.getString(R.string.gameOver))
+                            .setMessage(context.getString(R.string.your_score_is) + ": " + score + "\n" + context.getString(R.string.good_job))
+
+
+                            .setPositiveButton(context.getString(R.string.again), (dialog, which) -> {
+                                mDlgMsg.dismiss();
+                            })
+                            .setNegativeButton(context.getString(R.string.exit), (dialog, which) -> {
+                                mDlgMsg.dismiss();
+                                if(context instanceof MainActivityPong)
+                                    ((MainActivityPong) context).finish();
+                            })
+                            .show();
+                }
+                if (exit_mode == 3)
+                {
+                    mDlgMsg = new AlertDialog.Builder(context)
+                            .setTitle(context.getString(R.string.gameOver))
+                            .setMessage(context.getString(R.string.your_score_is) + ": " + score + "\n" + context.getString(R.string.you_try))
+
+
+                            .setPositiveButton(context.getString(R.string.again), (dialog, which) -> {
+                                mDlgMsg.dismiss();
+                            })
+                            .setNegativeButton(context.getString(R.string.exit), (dialog, which) -> {
+                                mDlgMsg.dismiss();
+                                if(context instanceof MainActivityPong)
+                                    ((MainActivityPong) context).finish();
+                            })
+                            .show();
+                }
+
             }
         });
 

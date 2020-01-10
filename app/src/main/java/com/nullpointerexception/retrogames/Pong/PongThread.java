@@ -37,6 +37,8 @@ public class PongThread extends Thread {
     public static final int STATE_LOSE    = 3;
     public static final int STATE_WIN     = 4;
 
+    public static final int LOSE_VALUE = 3;
+
     private static final int    PHYS_BALL_SPEED       = 15;
     private static final int    PHYS_PADDLE_SPEED     = 8;
     private static final int    PHYS_FPS              = 60;
@@ -283,7 +285,7 @@ public class PongThread extends Thread {
                 case STATE_LOSE:
                     setStatusText(res.getString(R.string.mode_lose));
                     mComputerPlayer.score++;
-                    if (mComputerPlayer.score == 1)
+                    if (mComputerPlayer.score == LOSE_VALUE)
                     {
                         game_over(mComputerPlayer.score,mHumanPlayer.score);
                         startNewGame();
@@ -311,12 +313,13 @@ public class PongThread extends Thread {
     public void game_over(int cpuScore, int humanScore){
 
         int score_pong = humanScore - cpuScore;
+        int exit_mode = 1;
 
         if (score_pong < 0)
         {
             score_pong = 0;
-            //fine 1
-            //showDialog_GameOver(score_pong);
+
+            exit_mode = 1;
         }
 
         if (highscore_point < score_pong)
@@ -326,39 +329,21 @@ public class PongThread extends Thread {
             SaveScore pong = new SaveScore();
             pong.save(App.PONG, highscore_point,mContext);
 
-            //fine 2
-            //showDialog_GameOver(score_pong);
+
+            exit_mode = 2;
         }
-        else {
-            //fine 3
-            //showDialog_GameOver(score_pong);
+        else if(score_pong != 0) {
+            exit_mode = 3;
         }
 
 
 
         if(onEndGameListener != null)
-            onEndGameListener.onEnd(score_pong);
+            onEndGameListener.onEnd(score_pong, exit_mode);
 
 
     }
 
-    /**
-     * Mostra il dialog di GameOver
-     */
-    private void showDialog_GameOver(int score) {
-        mDlgMsg = new AlertDialog.Builder(mContext)
-                .setTitle(mContext.getResources().getString(R.string.gameOver))
-                .setMessage(mContext.getResources().getString(R.string.your_score_is) + ": " + score)
-                .setPositiveButton(mContext.getResources().getString(R.string.again), (dialog, which) -> {
-                    mDlgMsg.dismiss();
-                })
-                .setNegativeButton(mContext.getResources().getString(R.string.exit), (dialog, which) -> {
-                    mDlgMsg.dismiss();
-                    if(mContext instanceof MainActivityPong)
-                        ((MainActivityPong) mContext).finish();
-                })
-                .show();
-    }
 
     /**
     *il metodo pause in pongthread viene chiamato
@@ -690,7 +675,7 @@ public class PongThread extends Thread {
     }
 
     public interface onEndGameListener{
-        void onEnd(int score);
+        void onEnd(int score, int exit_mode);
     }
 
 

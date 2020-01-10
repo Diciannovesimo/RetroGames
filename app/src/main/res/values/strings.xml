@@ -18,12 +18,16 @@
     <!--MainActivityPong -->
     <string name="mode_ready">Touch to play</string>
     <string name="mode_pause">Paused</string>
-    <string name="mode_win">Good work :-)</string>
-    <string name="mode_lose">Sorry :-(</string>
+    <string name="mode_win">Good work</string>
+    <string name="mode_lose">CPU score</string>
     <string name="menu_new_game">New game</string>
     <string name="menu_exit">Exit</string>
     <string name="menu_resume">Resume</string>
     <string name="default_score" translatable="false">0    0</string>
+
+    <string name="no_point">You have not made a single point</string>
+    <string name="you_try">You tried</string>
+    <string name="good_job">New highscore congratulations!</string>
 
     <!--WelcomeFragment-->
     <string name="next">Next</string>
@@ -118,6 +122,7 @@
     <string name="snake_dialog_easy">Easy</string>
     <string name="snake_dialog_medium">Medium</string>
     <string name="snake_dialog_hard">Hard</string>
+
 
 
 </resources>
