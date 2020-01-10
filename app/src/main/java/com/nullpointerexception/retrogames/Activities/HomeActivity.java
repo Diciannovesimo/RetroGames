@@ -1,5 +1,6 @@
 package com.nullpointerexception.retrogames.Activities;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -49,6 +50,9 @@ public class HomeActivity extends AppCompatActivity
         leaderboardButton = findViewById(R.id.buttonLeaderBoard);
         profileButton = findViewById(R.id.buttonProfile);
 
+        SharedPreferences prefs = getSharedPreferences(App.APP_VARIABLES, Context.MODE_PRIVATE);
+        boolean prefsInvalidate = prefs.getBoolean(App.PREFS_INVALIDATE_FIREBASE_SCORES, false);
+
         sendFirebase();
 
         gamesButton.setOnTouchListener(new OnTouchAnimatedListener()
@@ -84,6 +88,7 @@ public class HomeActivity extends AppCompatActivity
         if(savedInstanceState != null)
         {
             int fragment = savedInstanceState.getInt("fragmentPlaced");
+
             switch (fragment)
             {
                 case GAMES_FRAGMENT:
@@ -107,6 +112,7 @@ public class HomeActivity extends AppCompatActivity
 
 
     private void sendFirebase() {
+
         //Prendo il nickname dell'utente loggato
         SharedPreferences nicknameShared = getSharedPreferences(App.USER, 0);
         String nickname = nicknameShared.getString(App.NICKNAME, "error");

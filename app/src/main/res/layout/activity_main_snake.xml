@@ -7,12 +7,19 @@
     tools:context="com.nullpointerexception.retrogames.Snake.MainActivitySnake"
     android:background="@color/grey">
 
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline4"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.71" />
+
   <com.nullpointerexception.retrogames.Snake.SnakePanelView
       android:id="@+id/snake_view"
-      android:layout_width="408dp"
-      android:layout_height="336dp"
-      android:layout_marginTop="16dp"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="1.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
@@ -115,9 +122,9 @@
       android:layout_width="50sp"
       android:layout_height="50sp"
       android:layout_marginStart="16dp"
-      android:layout_marginBottom="8dp"
-      app:layout_constraintBottom_toTopOf="@+id/guideline3"
+      app:layout_constraintBottom_toTopOf="@+id/guideline4"
       app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/snake_view"
       app:srcCompat="@drawable/rotate_tetris" />
 
   <ImageView
@@ -125,10 +132,10 @@
       android:layout_width="52dp"
       android:layout_height="52dp"
       android:layout_marginEnd="16dp"
-      android:layout_marginBottom="8dp"
       android:clickable="true"
-      app:layout_constraintBottom_toTopOf="@+id/guideline3"
+      app:layout_constraintBottom_toTopOf="@+id/guideline4"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/snake_view"
       app:srcCompat="@drawable/ic_play"
       tools:ignore="KeyboardInaccessibleWidget" />
 

@@ -77,6 +77,9 @@ public class LoginActivity extends AppCompatActivity {
                                                     public void onDataReceived(boolean success, String value) {
                                                         runOnUiThread(() -> {
                                                             currentUser.setNickname(value);
+
+
+
                                                             //Salva il nickname nelle SharedPreferences
                                                             SharedPreferences preferences = getSharedPreferences(App.USER, MODE_PRIVATE);
                                                             preferences.edit().putString(App.NICKNAME, currentUser.getNickname()).apply();
@@ -311,4 +314,6 @@ public class LoginActivity extends AppCompatActivity {
         //Fa partire l/accesso con Google
         AuthenticationManager.get().loginWithGoogle(requestCode, data);
     }
+
+
 }
