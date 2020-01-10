@@ -14,4 +14,7 @@ public interface GameType {
   int MEDIUM = 2;
   int HARD = 3;
   int GENERIC_DIFFICULTY = 4;
+
+  int SNAKE_EAT = 0;
+  int SNAKE_LOOSE = 1;
 }

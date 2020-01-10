@@ -5,6 +5,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -34,9 +37,6 @@ public class SnakePanelView extends View {
     private OnEatListener onEatListener;
     private OnResetListener onResetListener;
 
-    //Istanza del thread principale
-
-
     private GridPosition mSnakeHeader;                         //posizione della testa del serpente
     private GridPosition mFoodPosition;                        //posizione del cibo
     private int mSnakeLength = 3;                              //lunghezza del serpente
@@ -52,18 +52,29 @@ public class SnakePanelView extends View {
     private int mPoint;                                        //Segna il punteggio attuale
     private int mHighScore;                                    //Segna l'highscore attuale
 
+    //SoundPool costants
+    private SoundPool soundPool;
+    private final int NUMBER_OF_SIMULTANEOUS_SOUNDS = 5;
+    private final float LEFT_VOLUME_VALUE = 1.0f;
+    private final float RIGHT_VOLUME_VALUE = 1.0f;
+    private final int MUSIC_LOOP = 0;
+    private final int SOUND_PLAY_PRIORITY = 1;
+    private final float PLAY_RATE= 1.0f;
+    static int[] sm;
+
     public SnakePanelView(Context context) {
         this(context, null);
     }
 
     public SnakePanelView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
-        game= new SaveScore();
+        game = new SaveScore();
     }
 
     public SnakePanelView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
+        initSound();
     }
 
     /**
@@ -86,6 +97,37 @@ public class SnakePanelView extends View {
         //Imposta coordinate cibo iniziali
         mFoodPosition = new GridPosition(0, 0);
         mIsEndGame    = true;
+    }
+
+    private void initSound() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            soundPool= new SoundPool.Builder()
+                    .setMaxStreams(NUMBER_OF_SIMULTANEOUS_SOUNDS)
+                    .build();
+        } else
+            // Deprecated way of creating a SoundPool before Android API 21.
+            soundPool= new SoundPool(NUMBER_OF_SIMULTANEOUS_SOUNDS, AudioManager.STREAM_MUSIC, 0);
+
+        sm = new int[3];
+
+        //inserisce i suoni
+        sm[0] = soundPool.load(getContext(), R.raw.snake_eat, SOUND_PLAY_PRIORITY);
+        sm[1] = soundPool.load(getContext(), R.raw.snake_loose3, SOUND_PLAY_PRIORITY);
+    }
+
+    private void playSound(int sound) {
+        soundPool.play(sm[sound],
+                LEFT_VOLUME_VALUE,
+                RIGHT_VOLUME_VALUE,
+                SOUND_PLAY_PRIORITY,
+                MUSIC_LOOP,
+                PLAY_RATE);
+    }
+
+    public final void cleanUpIfEnd() {
+        sm = null;
+        soundPool.release();
+        soundPool = null;
     }
 
     @Override
@@ -231,6 +273,7 @@ public class SnakePanelView extends View {
             GridPosition position = mSnakePositions.get(i);
             if (headerPosition.getX() == position.getX() && headerPosition.getY() == position.getY()) {
                 //Il serpente si è morso
+                playSound(GameType.SNAKE_LOOSE);
                 mIsEndGame = true;
                 showMessageDialog();
                 return;
@@ -241,6 +284,7 @@ public class SnakePanelView extends View {
         if (headerPosition.getX() == mFoodPosition.getX()
                 && headerPosition.getY() == mFoodPosition.getY()) {   //Se la posizione della testa
             mSnakeLength++;                                           //è uguale a quella del cibo
+            playSound(GameType.SNAKE_EAT);
             generateFood();
             addPoint();                                               //aumenta la lunghezza e
         }                                                             //genera il nuovo cibo
@@ -280,6 +324,7 @@ public class SnakePanelView extends View {
                         })
                         .setNegativeButton(getResources().getString(R.string.exit), (dialog, which) -> {
                             dialog.dismiss();
+                            cleanUpIfEnd();
                             if(getContext() instanceof MainActivitySnake)
                                 ((MainActivitySnake) getContext()).finish();
                         })
