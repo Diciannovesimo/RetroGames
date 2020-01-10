@@ -6,8 +6,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 
-public class Brique{
-
+public class Brick
+{
     private int x,y,width,height,resistance;
     private RectF rect;
     private boolean isVisible;
@@ -16,7 +16,8 @@ public class Brique{
     private int v = (int)(Math.random()*255);
     private int b = (int)(Math.random()*255);
 
-    public Brique(int x, int y, int width, int height){
+    public Brick(int x, int y, int width, int height)
+    {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -67,8 +68,6 @@ public class Brique{
         Paint pi = new Paint();
         c.drawBitmap(bitmap,rect.width(), rect.height(),pi);
          */
-
-
 
     }
 }

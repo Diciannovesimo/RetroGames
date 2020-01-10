@@ -6,18 +6,19 @@ import android.graphics.Paint;
 
 import java.util.Random;
 
-public class Cercle{
-    int rayon,x,y;
+public class Circle
+{
+    int radius,x,y;
     int speed = 0;
     int Xspeed = 0;
     int Yspeed = 0;
-    private Color couleur;
+    private Color color;
 
-    public Cercle(int x, int y, int r, int s) {
+    public Circle(int x, int y, int r, int s) {
         super();
         this.x = x/2;
         this.y = y-200;
-        this.rayon = r/2;
+        this.radius = r/2;
         this.Xspeed = s;
         this.Yspeed = s;
     }
@@ -33,16 +34,16 @@ public class Cercle{
     public void setX(int x) {this.x = x;}
     public void setY(int y) {this.y = y;}
 
-    public int getRayon() {return this.rayon;}
-    public Color getColor() {return this.couleur;}
+    public int getRadius() {return this.radius;}
+    public Color getColor() {return this.color;}
 
-    public void setRayon(int r) {this.rayon = r;}
-    public void setColor(Color c) {this.couleur = c;}
+    public void setRadius(int r) {this.radius = r;}
+    public void setColor(Color c) {this.color = c;}
 
     public void draw(Canvas c) {
         Paint p = new Paint();
         p.setColor(Color.RED);
-        c.drawCircle(this.x, this.y, this.rayon, p);
+        c.drawCircle(this.x, this.y, this.radius, p);
     }
     public void reverseYVelocity(){ this.Yspeed = -this.Yspeed;}
     public void reverseXVelocity(){
@@ -58,8 +59,8 @@ public class Cercle{
         }
     }
 
-    public void clearObstacleY(int y){this.y = (y - getRayon()*2);}
-    public void clearObstacleX(int x){this.x = (x + getRayon()*2);}
+    public void clearObstacleY(int y){this.y = (y - getRadius()*2);}
+    public void clearObstacleX(int x){this.x = (x + getRadius()*2);}
 
     public void move(long fps){
         this.x += (Xspeed / fps);
