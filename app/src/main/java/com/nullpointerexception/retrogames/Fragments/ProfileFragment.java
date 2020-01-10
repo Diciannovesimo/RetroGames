@@ -138,6 +138,10 @@ public class ProfileFragment extends Fragment
                             .getSharedPreferences(App.USER, Context.MODE_PRIVATE);
                     prefs.edit().clear().apply();
 
+                    SharedPreferences prefs2 =getContext().
+                            getSharedPreferences(App.APP_VARIABLES, Context.MODE_PRIVATE);
+                    prefs2.edit().putBoolean(App.PREFS_INVALIDATE_FIREBASE_SCORES, false).apply();
+
                     AuthenticationManager.get().logout();
                     startActivity(new Intent(getContext(), HomeActivity.class));
                     if (getActivity() != null)

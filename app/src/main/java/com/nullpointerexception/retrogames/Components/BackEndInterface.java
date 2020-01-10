@@ -20,7 +20,7 @@ import java.util.Vector;
 public class BackEndInterface
 {
 
-    private static BackEndInterface instance = null;
+    private static BackEndInterface instance = new BackEndInterface();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
 
@@ -37,11 +37,7 @@ public class BackEndInterface
             invalidateFirebaseScores();
     }
 
-    public static synchronized BackEndInterface get() {
-        if(instance == null)
-            instance = new BackEndInterface();
-        return instance;
-    }
+    public static synchronized BackEndInterface get() { return instance; }
 
     /**
      * Scrive sul database di Firebase lo score ottenuto dall'utente in un determinato gioco
@@ -50,18 +46,20 @@ public class BackEndInterface
      * @param score intero contenente il punteggio ottenuto dal giocatore
      * @param totalscore intero conente il punteggio complessivo ottenuto dal giocatore
      */
-    public void writeScoreFirebase(String game, String nickname, long score, long totalscore) {
+    public void writeScoreFirebase(String game, String nickname, long score, long totalscore)
+    {
+        if( ! isNetworkAvailable())
+        {
+            SharedPreferences prefs = context.getSharedPreferences(App.APP_VARIABLES, Context.MODE_PRIVATE);
+            prefs.edit().putBoolean(App.PREFS_INVALIDATE_FIREBASE_SCORES, true).apply();
+        }
 
         //Scrittura dello score di un singolo gioco
         myRef = database.getReference(game).child(nickname);
         myRef.setValue(score)
                 .addOnSuccessListener(aVoid ->
                 {
-                    if( ! isNetworkAvailable())
-                    {
-                        SharedPreferences prefs = context.getSharedPreferences(App.APP_VARIABLES, Context.MODE_PRIVATE);
-                        prefs.edit().putBoolean(App.PREFS_INVALIDATE_FIREBASE_SCORES, true).apply();
-                    }
+
                 })
                 .addOnFailureListener(e ->
                 {
@@ -74,11 +72,7 @@ public class BackEndInterface
         myRef.setValue(totalscore)
                 .addOnSuccessListener(aVoid ->
                 {
-                    if( ! isNetworkAvailable())
-                    {
-                        SharedPreferences prefs = context.getSharedPreferences(App.APP_VARIABLES, Context.MODE_PRIVATE);
-                        prefs.edit().putBoolean(App.PREFS_INVALIDATE_FIREBASE_SCORES, true).apply();
-                    }
+
                 })
                 .addOnFailureListener(e ->
                 {
@@ -318,12 +312,15 @@ public class BackEndInterface
 
     private static void invalidateFirebaseScores()
     {
+        SharedPreferences prefsNickname = context.getSharedPreferences(App.USER, Context.MODE_PRIVATE);
+
+        String nickname = prefsNickname.getString(App.NICKNAME, "");
         long totalScore = App.scoreboardDao.getScore(App.TOTALSCORE);
 
         List<Scoreboard> scoreboardList = App.scoreboardDao.getAll();
         for(Scoreboard score : scoreboardList)
             if( ! score.getGame().equals(App.TOTALSCORE))
-                instance.writeScoreFirebase(score.getGame(), score.getNickname(), score.getScore(), totalScore);
+                instance.writeScoreFirebase(score.getGame(), nickname, score.getScore(), totalScore);
 
         SharedPreferences prefs = context.getSharedPreferences(App.APP_VARIABLES, Context.MODE_PRIVATE);
         prefs.edit().putBoolean(App.PREFS_INVALIDATE_FIREBASE_SCORES, false).apply();

@@ -1,7 +1,5 @@
 package com.nullpointerexception.retrogames.Activities;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -13,9 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Components.AuthenticationManager;
-import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.Fragments.GamesFragment;
 import com.nullpointerexception.retrogames.Fragments.LeaderboardFragment;
@@ -50,11 +46,6 @@ public class HomeActivity extends AppCompatActivity
         leaderboardButton = findViewById(R.id.buttonLeaderBoard);
         profileButton = findViewById(R.id.buttonProfile);
 
-        SharedPreferences prefs = getSharedPreferences(App.APP_VARIABLES, Context.MODE_PRIVATE);
-        boolean prefsInvalidate = prefs.getBoolean(App.PREFS_INVALIDATE_FIREBASE_SCORES, false);
-
-        sendFirebase();
-
         gamesButton.setOnTouchListener(new OnTouchAnimatedListener()
         {
             @Override
@@ -85,6 +76,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
+        //  Ripiazza il fragment precedente salvato
         if(savedInstanceState != null)
         {
             int fragment = savedInstanceState.getInt("fragmentPlaced");
@@ -110,50 +102,18 @@ public class HomeActivity extends AppCompatActivity
             placeFragment(new GamesFragment());
     }
 
-
-    private void sendFirebase() {
-
-        //Prendo il nickname dell'utente loggato
-        SharedPreferences nicknameShared = getSharedPreferences(App.USER, 0);
-        String nickname = nicknameShared.getString(App.NICKNAME, "error");
-        long score = 0;
-        long totalscore = App.scoreboardDao.getScore(App.TOTALSCORE);
-
-        if(AuthenticationManager.get().isUserLogged()){
-            //Scrivo il punteggio di tetris
-            score = App.scoreboardDao.getScore(App.TETRIS);
-            if( score != 0)
-                BackEndInterface.get().writeScoreFirebase(App.TETRIS, nickname,score,totalscore);
-
-            //Scrivo il punteggio di snake
-            score = App.scoreboardDao.getScore(App.SNAKE);
-            if( score != 0)
-                BackEndInterface.get().writeScoreFirebase(App.SNAKE, nickname,score,totalscore);
-
-            //Scrivo il punteggio di hole
-            score = App.scoreboardDao.getScore(App.HOLE);
-            if( score != 0)
-                BackEndInterface.get().writeScoreFirebase(App.HOLE, nickname,score,totalscore);
-
-            //Scrivo il punteggio di breakout
-            score = App.scoreboardDao.getScore(App.BREAKOUT);
-            if( score != 0)
-                BackEndInterface.get().writeScoreFirebase(App.BREAKOUT, nickname,score,totalscore);
-
-            //Scrivo il punteggio di pong
-            score = App.scoreboardDao.getScore(App.PONG);
-            if( score != 0)
-                BackEndInterface.get().writeScoreFirebase(App.PONG, nickname,score,totalscore);
-        }
-    }
-
-
+    /**
+     *      Piazza il fragment della sezione da mostrare
+     *      @param newFragment Fragment della sezione da mostrare
+     */
     private void placeFragment(Fragment newFragment)
     {
+        //  Controlla che non sia il fragment della sezione attualmente mostrata
         if(currentFragment != null && newFragment.getClass().getSimpleName().equals(
                 currentFragment.getClass().getSimpleName() ))
             return;
 
+        //  Controlla di quale tasto della navigationView reipostare il colore di default
         if(currentFragment instanceof GamesFragment)
             resetSectionViewColor(gamesButton);
         else if(currentFragment instanceof LeaderboardFragment)
@@ -162,6 +122,7 @@ public class HomeActivity extends AppCompatActivity
                 currentFragment instanceof LoginFragment)
             resetSectionViewColor(profileButton);
 
+        //  Controlla di quale tasto della navigationView impostare il colore che indica l'attuale sezione
         if(newFragment instanceof GamesFragment)
             setCurrentSectionView(gamesButton);
         else if(newFragment instanceof LeaderboardFragment)
@@ -172,6 +133,7 @@ public class HomeActivity extends AppCompatActivity
 
         currentFragment = newFragment;
 
+        //  Piazza il fragment
         runOnUiThread(() ->
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -180,6 +142,9 @@ public class HomeActivity extends AppCompatActivity
                         .commit());
     }
 
+    /**
+            Colora il pulsante nel colore che indica la sezione corrente
+     */
     private void setCurrentSectionView(ViewGroup buttonView)
     {
         for(int i = 0; i < buttonView.getChildCount(); i++)
@@ -193,6 +158,10 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    /**
+     *      Reimposta il colore di default al pulsante della navigationView
+     *      @param buttonView Bottone da reimpostare.
+     */
     private void resetSectionViewColor(ViewGroup buttonView)
     {
         for(int i = 0; i < buttonView.getChildCount(); i++)
@@ -209,6 +178,10 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState)
     {
+        /*
+              Salva il fragment della sezione corrente, per ripristinarlo in seguito
+         */
+
         int value = GAMES_FRAGMENT;
 
         if(currentFragment instanceof GamesFragment)
