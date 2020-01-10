@@ -5,14 +5,16 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,14 +24,14 @@ import com.nullpointerexception.retrogames.Components.AuthenticationManager;
 import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
-import com.nullpointerexception.retrogames.Components.Scoreboard;
 import com.nullpointerexception.retrogames.Components.User;
 import com.nullpointerexception.retrogames.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity
+{
 
     private EditText mEmail, mPassword;
     private Button mLogin;
@@ -53,54 +55,78 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         //Listener login
-        mLogin.setOnTouchListener(new OnTouchAnimatedListener() {
+        mLogin.setOnTouchListener(new OnTouchAnimatedListener()
+        {
             private Blocker mBlocker = new Blocker();
 
             @Override
-            public void onClick(View view) {
-                if (!mBlocker.block()) {
-                    if (checkFields()) {
+            public void onClick(View view)
+            {
+                if ( ! mBlocker.block())
+                {
+                    if (checkFields())
+                    {
+                        /*
+                                Crea il layout con la progressbar e la mostra
+                         */
+                        FrameLayout frameLayout = new FrameLayout(LoginActivity.this);
+                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        params.gravity = Gravity.CENTER;
+                        frameLayout.setLayoutParams(params);
+                        frameLayout.setFocusable(true);
+                        frameLayout.setClickable(true);
+                        frameLayout.setBackgroundColor(Color.parseColor("#80000000"));
+                        ProgressBar progressBar = new ProgressBar(LoginActivity.this);
+                        FrameLayout.LayoutParams progParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
+                        progParams.gravity = Gravity.CENTER;
+                        progressBar.setLayoutParams(progParams);
+                        frameLayout.addView(progressBar);
+                        ((ViewGroup) mLogin.getRootView()).addView(frameLayout);
+
                         //Chiama l'AuthenticationManager per gestire il login con firebase
-                        AuthenticationManager.get().login(mEmail.getText().toString()
-                                , mPassword.getText().toString())
-                                .addOnLoginResultListener(result -> {
+                        AuthenticationManager.get().login(mEmail.getText().toString(), mPassword.getText().toString())
+                                .addOnLoginResultListener(result ->
+                                {
+                                    //  Rimuove la progressbar
+                                    ((ViewGroup) mLogin.getRootView()).removeView(frameLayout);
+
                                     //Se il result è vero allora l'utente ha loggato con successo
-                                    if (result) {
+                                    if (result)
+                                    {
                                         Log.i("claudio", "Loggato con successo");
+
                                         //currenUser si riempie con i dati dell'utente loggato
                                         currentUser = AuthenticationManager.get().getUserLogged();
+
                                         //Inserisce l'email nell'utente in quanto non salvata su firebase
                                         BackEndInterface
                                                 .get()
                                                 .readUser(currentUser.getEmail(), new BackEndInterface.OnDataReceivedListener() {
                                                     @Override
-                                                    public void onDataReceived(boolean success, String value) {
-                                                        runOnUiThread(() -> {
+                                                    public void onDataReceived(boolean success, String value)
+                                                    {
+                                                        runOnUiThread(() ->
+                                                        {
                                                             currentUser.setNickname(value);
-
-
 
                                                             //Salva il nickname nelle SharedPreferences
                                                             SharedPreferences preferences = getSharedPreferences(App.USER, MODE_PRIVATE);
                                                             preferences.edit().putString(App.NICKNAME, currentUser.getNickname()).apply();
 
-                                                            //Restore dei punteggi sul server firebase
-                                                            new restoreScoreboard().execute();
+                                                            loginProcedures();
                                                         });
                                                     }
                                                 });
-
-                                        //Dopo il login parte l'Home activity e LoginActivity viene disallocata
-                                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                                        finish();
-                                    } else {   //Il login non ha avuto successo in quanto l'utente ha sbagliato le credenziali
+                                    }
+                                    else
+                                    {   //Il login non ha avuto successo in quanto l'utente ha sbagliato le credenziali
                                         Log.i("claudio", "errore nel log in");
                                         mDlgMsg = new AlertDialog.Builder(LoginActivity.this)
                                                 .setTitle(getResources().getString(R.string.error_dialog_title))
                                                 .setMessage(getResources().getString(R.string.error_dialog_content))
-                                                .setPositiveButton(getResources().getString(R.string.again), (dialog, which) -> {
-                                                    mDlgMsg.dismiss();
-                                                })
+                                                .setPositiveButton(getResources().getString(R.string.again), (dialog, which) -> mDlgMsg.dismiss())
                                                 .show();
                                     }
                                 });
@@ -140,11 +166,9 @@ public class LoginActivity extends AppCompatActivity {
                                     preferences.edit().putString(App.NICKNAME, currentUser.getNickname()).apply();
                                     //Salva email e nickname nel database
                                     BackEndInterface.get().writeUser(currentUser.getEmail(), currentUser.getNickname());
-                                    //Restore dei punteggi sul server firebase
-                                    new restoreScoreboard().execute();
-                                    //Fa partire l'Homeactivity e disalloca LoginActivity
-                                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                                    finish();
+
+                                    loginProcedures();
+
                                 } else { //Se l'accesso con Google non è andato a buon fine
                                     Log.i("claudio", "errore nel log in");
                                     mDlgMsg = new AlertDialog.Builder(LoginActivity.this)
@@ -187,7 +211,8 @@ public class LoginActivity extends AppCompatActivity {
      * @param email Riceve una String email come parametro
      * @return Un boolean per capire se la mail è formattata correttamente
      */
-    private boolean emailCheck(String email) {
+    private boolean emailCheck(String email)
+    {
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
 
@@ -195,9 +220,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Inizializza l'interfaccia grafica
+     *      Inizializza l'interfaccia grafica
      */
-    private void initUI() {
+    private void initUI()
+    {
         mEmail             = findViewById(R.id.nicknameTextField);
         mPassword          = findViewById(R.id.emailTextField);
         mLogin             = findViewById(R.id.registration_btn);
@@ -205,101 +231,13 @@ public class LoginActivity extends AppCompatActivity {
         googleSignInButton = findViewById(R.id.googleSignInButton);
     }
 
-    /**
-     * Recupera gli eventuali punteggi salvati sul Database di Firebase
-     * e riempie il database locale
-     */
-    private class restoreScoreboard extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            SharedPreferences nicknameShared = getSharedPreferences(App.USER, MODE_PRIVATE);
-            String nickname = nicknameShared.getString(App.NICKNAME, "-");
-            Log.d("nicknameAsynkTask", nicknameShared.getString(App.NICKNAME,"nulla"));
-
-            //Recupero l'eventuale Totalscore
-            BackEndInterface.get().readScoreFirebase(App.TOTALSCORE, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success) {
-                        long score = Long.parseLong(value);
-                        if(App.scoreboardDao.getGame(App.TOTALSCORE) == null)
-                            App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, score));
-                    }
-                }
-            });
-
-
-            //Recupero l'eventuale score di Snake
-            BackEndInterface.get().readScoreFirebase(App.SNAKE, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success){
-                        long score = Long.parseLong(value);
-                        if(App.scoreboardDao.getGame(App.SNAKE) == null)
-                            App.scoreboardDao.insertAll(new Scoreboard(App.SNAKE, score));
-                    }
-                }
-            });
-
-
-            //Recupero l'eventuale score di MainActivityTetris
-            BackEndInterface.get().readScoreFirebase(App.TETRIS, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success) {
-                        long score = Long.parseLong(value);
-                        if(App.scoreboardDao.getGame(App.TETRIS) == null)
-                            App.scoreboardDao.insertAll(new Scoreboard(App.TETRIS, score));
-                    }
-                }
-            });
-
-            //Recupero l'eventuale score di Breakout
-            BackEndInterface.get().readScoreFirebase(App.BREAKOUT, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success) {
-                        long score = Long.parseLong(value);
-                        if(App.scoreboardDao.getGame(App.BREAKOUT) == null)
-                            App.scoreboardDao.insertAll(new Scoreboard(App.BREAKOUT, score));
-                    }
-                }
-            });
-
-            //Recupero l'eventuale score di Hole
-            BackEndInterface.get().readScoreFirebase(App.HOLE, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success){
-                        long score = Long.parseLong(value);
-                        if(App.scoreboardDao.getGame(App.HOLE) == null)
-                            App.scoreboardDao.insertAll(new Scoreboard(App.HOLE, score));
-                    }
-                }
-            });
-
-            //Recupero l'eventuale score di Pong
-            BackEndInterface.get().readScoreFirebase(App.PONG, nickname, new BackEndInterface.OnDataReceivedListener() {
-                @Override
-                public void onDataReceived(boolean success, String value) {
-                    if(success){
-                        long score = Long.parseLong(value);
-                        if(App.scoreboardDao.getGame(App.PONG) == null)
-                            App.scoreboardDao.insertAll(new Scoreboard(App.PONG, score));
-                    }
-                }
-            });
-            return null;
-        }
-
-        protected void onProgressUpdate(Void... voids) {
-        }
-
-        protected void onPostExecute() {
-            Toast.makeText(getApplicationContext(), "Informazioni ripristinate con successo", Toast.LENGTH_SHORT).show();
-        }
-
+    private void loginProcedures()
+    {
+        //Fa partire l'Homeactivity e disalloca LoginActivity
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+        intent.putExtra("newLogin", true);
+        startActivity(intent);
+        finish();
     }
 
     /**

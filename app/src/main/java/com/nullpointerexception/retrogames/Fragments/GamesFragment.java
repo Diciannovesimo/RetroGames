@@ -1,6 +1,8 @@
 package com.nullpointerexception.retrogames.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,12 +12,15 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Breakout.MainActivityBreakout;
+import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
+import com.nullpointerexception.retrogames.Components.Scoreboard;
 import com.nullpointerexception.retrogames.Hole.FullscreenActivity;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.R;
@@ -24,6 +29,19 @@ import com.nullpointerexception.retrogames.Tetris.MainActivityTetris;
 
 public class GamesFragment extends Fragment
 {
+    /*
+            Constants
+     */
+    private final int TETRIS = 0;
+    private final int SNAKE = 1;
+    private final int PONG = 2;
+    private final int HOLE = 3;
+    private final int BREAKOUT = 4;
+
+    /*
+            Variables
+     */
+    private boolean databaseLoadingNeeded = false;
 
     /*
            UI Components Portrait
@@ -46,6 +64,11 @@ public class GamesFragment extends Fragment
     private ViewGroup gamesCard, playButton;
     private TextView gamesTitleTextview, gamesHighscoreTextview;
 
+    public GamesFragment(boolean newLogin)
+    {
+        databaseLoadingNeeded = newLogin;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -57,7 +80,10 @@ public class GamesFragment extends Fragment
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
         {
-            showCardOfGame(App.TETRIS);
+            if( ! databaseLoadingNeeded)
+                showCardOfGame(App.TETRIS);
+            else
+                databaseLoading();
             setOnCardClickListenersLandscape();
         }
         else
@@ -114,11 +140,97 @@ public class GamesFragment extends Fragment
 
     private void setPortraitHighscores()
     {
-        tetrisHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.TETRIS) ));
-        snakeHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.SNAKE) ));
-        pongHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.PONG) ));
-        holeHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.HOLE) ));
-        breakoutHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.BREAKOUT) ));
+        if( ! databaseLoadingNeeded)
+        {
+            tetrisHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.TETRIS) ));
+            snakeHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.SNAKE) ));
+            pongHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.PONG) ));
+            holeHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.HOLE) ));
+            breakoutHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.BREAKOUT) ));
+        }
+        else
+            databaseLoading();
+    }
+
+    private void databaseLoading()
+    {
+        SharedPreferences nicknameShared = getContext().getSharedPreferences(App.USER, Context.MODE_PRIVATE);
+        String nickname = nicknameShared.getString(App.NICKNAME, "-");
+
+        //Recupero l'eventuale Totalscore
+        BackEndInterface.get().readScoreFirebase(App.TOTALSCORE, nickname, (success, value) ->
+        {
+            if(success) {
+                long score = Long.parseLong(value);
+                if(App.scoreboardDao.getGame(App.TOTALSCORE) == null)
+                    App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, score));
+            }
+        });
+
+
+        //Recupero l'eventuale score di Snake
+        BackEndInterface.get().readScoreFirebase(App.SNAKE, nickname, (success, value) ->
+        {
+            if(success){
+                long score = Long.parseLong(value);
+                if(App.scoreboardDao.getGame(App.SNAKE) == null)
+                    App.scoreboardDao.insertAll(new Scoreboard(App.SNAKE, score));
+
+                snakeHighscoreText.setText( String.valueOf(score));
+            }
+        });
+
+
+        //Recupero l'eventuale score di MainActivityTetris
+        BackEndInterface.get().readScoreFirebase(App.TETRIS, nickname, (success, value) ->
+        {
+            if(success) {
+                long score = Long.parseLong(value);
+                if(App.scoreboardDao.getGame(App.TETRIS) == null)
+                    App.scoreboardDao.insertAll(new Scoreboard(App.TETRIS, score));
+
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    showCardOfGame(App.TETRIS);
+                else
+                    tetrisHighscoreText.setText( String.valueOf(score));
+            }
+        });
+
+        //Recupero l'eventuale score di Breakout
+        BackEndInterface.get().readScoreFirebase(App.BREAKOUT, nickname, (success, value) ->
+        {
+            if(success) {
+                long score = Long.parseLong(value);
+                if(App.scoreboardDao.getGame(App.BREAKOUT) == null)
+                    App.scoreboardDao.insertAll(new Scoreboard(App.BREAKOUT, score));
+
+                breakoutHighscoreText.setText( String.valueOf(score));
+            }
+        });
+
+        //Recupero l'eventuale score di Hole
+        BackEndInterface.get().readScoreFirebase(App.HOLE, nickname, (success, value) ->
+        {
+            if(success){
+                long score = Long.parseLong(value);
+                if(App.scoreboardDao.getGame(App.HOLE) == null)
+                    App.scoreboardDao.insertAll(new Scoreboard(App.HOLE, score));
+
+                holeHighscoreText.setText( String.valueOf(score));
+            }
+        });
+
+        //Recupero l'eventuale score di Pong
+        BackEndInterface.get().readScoreFirebase(App.PONG, nickname, (success, value) ->
+        {
+            if(success){
+                long score = Long.parseLong(value);
+                if(App.scoreboardDao.getGame(App.PONG) == null)
+                    App.scoreboardDao.insertAll(new Scoreboard(App.PONG, score));
+
+                pongHighscoreText.setText( String.valueOf(score));
+            }
+        });
     }
 
     private void setOnPlayButtonClickListenerPortrait()
@@ -133,7 +245,7 @@ public class GamesFragment extends Fragment
                 if( ! blocker.block())
                 {
                     Intent intent = new Intent(getContext(), MainActivityTetris.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, TETRIS);
                 }
             }
         });
@@ -146,7 +258,7 @@ public class GamesFragment extends Fragment
             {
                 if(!blocker.block()) {
                     Intent intent = new Intent(getContext(), MainActivitySnake.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, SNAKE);
                 }
             }
         });
@@ -159,7 +271,7 @@ public class GamesFragment extends Fragment
             {
                 if(!blocker.block()) {
                     Intent intent = new Intent(getContext(), MainActivityPong.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, PONG);
                 }
             }
         });
@@ -172,7 +284,7 @@ public class GamesFragment extends Fragment
             {
                 if(!blocker.block()) {
                     Intent intent = new Intent(getContext(), FullscreenActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, HOLE);
                 }
             }
         });
@@ -185,7 +297,7 @@ public class GamesFragment extends Fragment
             {
                 if(!blocker.block()) {
                     Intent intent = new Intent(getContext(), MainActivityBreakout.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, BREAKOUT);
                 }
             }
         });
@@ -404,7 +516,7 @@ public class GamesFragment extends Fragment
                     if( ! blocker.block())
                     {
                         Intent intent = new Intent(getContext(), MainActivityTetris.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, TETRIS);
                     }
                 }
             });
@@ -422,7 +534,7 @@ public class GamesFragment extends Fragment
                     if( ! blocker.block())
                     {
                         Intent intent = new Intent(getContext(), MainActivitySnake.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, SNAKE);
                     }
                 }
             });
@@ -440,7 +552,7 @@ public class GamesFragment extends Fragment
                     if( ! blocker.block())
                     {
                         Intent intent = new Intent(getContext(), MainActivityPong.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, PONG);
                     }
                 }
             });
@@ -458,7 +570,7 @@ public class GamesFragment extends Fragment
                     if( ! blocker.block())
                     {
                         Intent intent = new Intent(getContext(), FullscreenActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, HOLE);
                     }
                 }
             });
@@ -476,11 +588,50 @@ public class GamesFragment extends Fragment
                     if( ! blocker.block())
                     {
                         Intent intent = new Intent(getContext(), MainActivityBreakout.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, BREAKOUT);
                     }
                 }
             });
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        switch (requestCode)
+        {
+            case TETRIS:
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    gamesHighscoreTextview.setText( String.valueOf(App.scoreboardDao.getScore(App.TETRIS) ));
+                else
+                    tetrisHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.TETRIS) ));
+                break;
+            case SNAKE:
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    gamesHighscoreTextview.setText( String.valueOf(App.scoreboardDao.getScore(App.SNAKE) ));
+                else
+                    snakeHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.SNAKE) ));
+                break;
+            case PONG:
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    gamesHighscoreTextview.setText( String.valueOf(App.scoreboardDao.getScore(App.PONG) ));
+                else
+                    pongHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.PONG) ));
+                break;
+            case HOLE:
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    gamesHighscoreTextview.setText( String.valueOf(App.scoreboardDao.getScore(App.HOLE) ));
+                else
+                    holeHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.HOLE) ));
+                break;
+            case BREAKOUT:
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    gamesHighscoreTextview.setText( String.valueOf(App.scoreboardDao.getScore(App.BREAKOUT) ));
+                else
+                    breakoutHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.BREAKOUT) ));
+                break;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

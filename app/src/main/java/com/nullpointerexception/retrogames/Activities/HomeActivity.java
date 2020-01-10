@@ -1,5 +1,6 @@
 package com.nullpointerexception.retrogames.Activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -31,6 +33,11 @@ public class HomeActivity extends AppCompatActivity
     private static final int ACCESS_FRAGMENT = 3;
 
     /*
+            Variables
+     */
+    private boolean newLogin = false;
+
+    /*
             UI Components
      */
     private Fragment currentFragment;
@@ -46,12 +53,15 @@ public class HomeActivity extends AppCompatActivity
         leaderboardButton = findViewById(R.id.buttonLeaderBoard);
         profileButton = findViewById(R.id.buttonProfile);
 
+        if(getIntent() != null && getIntent().hasExtra("newLogin"))
+            newLogin = true;
+
         gamesButton.setOnTouchListener(new OnTouchAnimatedListener()
         {
             @Override
             public void onClick(View view)
             {
-                placeFragment(new GamesFragment());
+                placeFragment(new GamesFragment(newLogin));
             }
         });
 
@@ -85,7 +95,7 @@ public class HomeActivity extends AppCompatActivity
             {
                 case GAMES_FRAGMENT:
                 default:
-                    placeFragment(new GamesFragment());
+                    placeFragment(new GamesFragment(false));
                     break;
                 case LEADERBOARD_FRAGMENT:
                     placeFragment(new LeaderboardFragment());
@@ -99,7 +109,7 @@ public class HomeActivity extends AppCompatActivity
             }
         }
         else
-            placeFragment(new GamesFragment());
+            placeFragment(new GamesFragment(false));
     }
 
     /**
@@ -196,5 +206,11 @@ public class HomeActivity extends AppCompatActivity
         outState.putInt("fragmentPlaced", value);
 
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
