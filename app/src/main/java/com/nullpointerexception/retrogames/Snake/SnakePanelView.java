@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
@@ -19,8 +20,10 @@ import com.nullpointerexception.retrogames.Components.SaveScore;
 import com.nullpointerexception.retrogames.R;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 
 public class SnakePanelView extends View {
@@ -30,8 +33,12 @@ public class SnakePanelView extends View {
     private List<List<GridSquare>> mGridSquare = new ArrayList<>();
     //Lista contenente le posizioni del serpente
     private List<GridPosition> mSnakePositions = new ArrayList<>();
+    //Lista creata per contenere le coordinate della mappa
+    private Set<Point> mapCoordinates = new HashSet<>();
 
     SaveScore game;
+
+    GameMainThread thread = new GameMainThread();
 
     //Listener per restituire score, highscore, e punteggio resettato
     private OnEatListener onEatListener;
@@ -97,15 +104,18 @@ public class SnakePanelView extends View {
         //Imposta coordinate cibo iniziali
         mFoodPosition = new GridPosition(0, 0);
         mIsEndGame    = true;
+        generateMapCoordinates();
     }
 
+    /**
+     * Inizializza SoundPool in base alla versione di android
+     */
     private void initSound() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             soundPool= new SoundPool.Builder()
                     .setMaxStreams(NUMBER_OF_SIMULTANEOUS_SOUNDS)
                     .build();
         } else
-            // Deprecated way of creating a SoundPool before Android API 21.
             soundPool= new SoundPool(NUMBER_OF_SIMULTANEOUS_SOUNDS, AudioManager.STREAM_MUSIC, 0);
 
         sm = new int[3];
@@ -115,6 +125,11 @@ public class SnakePanelView extends View {
         sm[1] = soundPool.load(getContext(), R.raw.snake_loose3, SOUND_PLAY_PRIORITY);
     }
 
+    /**
+     * Riproduce i suoni
+     *
+     * @param sound Riceve un intero in base al tipo di audio che si vuole riprodurre
+     */
     private void playSound(int sound) {
         soundPool.play(sm[sound],
                 LEFT_VOLUME_VALUE,
@@ -124,6 +139,9 @@ public class SnakePanelView extends View {
                 PLAY_RATE);
     }
 
+    /**
+     * Disalloca l'audio
+     */
     public final void cleanUpIfEnd() {
         sm = null;
         soundPool.release();
@@ -377,20 +395,34 @@ public class SnakePanelView extends View {
         } else
             mSnakeHeader = new GridPosition(10, 10);    //The initial position of the snake
 
+        //Svuote le posizioni del serpente
         mSnakePositions.clear();
+        //Aggiunge la testa nelle posizioni del serpente
         mSnakePositions.add(new GridPosition(mSnakeHeader.getX(), mSnakeHeader.getY()));
         mSnakeLength    = 3;                          //Lunghezza serpente
         mSnakeDirection = GameType.RIGHT;
 
+        //Genera il cibo
         if (mFoodPosition != null)
             generateFood();
 
         mIsEndGame = false;
-        if(!isRestart) {
-            GameMainThread thread = new GameMainThread();
+        if(!isRestart && difficulty == GameType.GENERIC_DIFFICULTY) {
+            mPoint = 0;
+            if(onResetListener != null)
+                onResetListener.onReset(mPoint);
+            thread = new GameMainThread();
             thread.start();
-        }
-        else {
+        } else if(!isRestart && thread.isAlive()) {
+            mPoint = 0;
+            if(onResetListener != null)
+                onResetListener.onReset(mPoint);
+        }else if(!isRestart){
+            mPoint = 0;
+            if(onResetListener != null)
+                onResetListener.onReset(mPoint);
+            thread.start();
+        }else {
             mPoint = 0;
             if(onResetListener != null)
                 onResetListener.onReset(mPoint);
@@ -401,22 +433,59 @@ public class SnakePanelView extends View {
      * Genera il cibo
      */
     private void generateFood() {
-        Random random = new Random();
-        int foodX = random.nextInt(mGridSize - 1);
-        int foodY = random.nextInt(mGridSize - 1);
-        for (int i = 0; i < mSnakePositions.size() - 1; i++) {
-            //Se il cibo si genera sulla posizione del corpo, lo rigenera
-            if (foodX == mSnakePositions.get(i).getX() && foodY == mSnakePositions.get(i).getY()) {
 
-                foodX = random.nextInt(mGridSize - 1);
-                foodY = random.nextInt(mGridSize - 1);
-                //Resetta il contatore
-                i = 0;
+        List<Point> cellsToDelete = new ArrayList<>();
+
+        for(int i = 0; i < mSnakePositions.size() - 1; i++) {
+            for (Point point : mapCoordinates) {
+                if (point.x == mSnakePositions.get(i).getX() && point.y == mSnakePositions.get(i).getY())
+                    cellsToDelete.add(point);
             }
         }
+
+        for(int i = 0; i < cellsToDelete.size(); i++) {
+            mapCoordinates.remove(cellsToDelete.get(i));
+        }
+
+        Random random = new Random();
+
+        int cellNumber = random.nextInt(mapCoordinates.size());
+        int iterator = 0;
+        Point randomCell = new Point(0, 0);
+
+        for(Point point : mapCoordinates) {
+            if(iterator == cellNumber)
+                randomCell = point;
+
+            iterator++;
+        }
+
+        int foodX = randomCell.x;
+        int foodY = randomCell.y;
+
         mFoodPosition.setX(foodX);
         mFoodPosition.setY(foodY);
         refreshFood(mFoodPosition);
+        generateMapCoordinates();
+    }
+
+    /**
+     * Genera ogni volta che il cibo viene mangiato una nuova griglia con tutte le
+     * coordinate
+     */
+    private void generateMapCoordinates() {
+        int x = 0;
+        int y = 0;
+
+        for(int i = 0; i < 225; i++) {
+            Point p = new Point(x, y);
+            mapCoordinates.add(p);
+            x++;
+            if(x == 15) {
+                y++;
+                x = 0;
+            }
+        }
     }
 
     /**
@@ -509,10 +578,20 @@ public class SnakePanelView extends View {
                 context.getResources().getDisplayMetrics());
     }
 
+    /**
+     * Imposta il listener per quando il serpente mangia
+     *
+     * @param onEatListener
+     */
     public void setOnEatListener(OnEatListener onEatListener) {
         this.onEatListener = onEatListener;
     }
 
+    /**
+     * Imposta il listener per quando il serpente mangia
+     *
+     * @param onResetListener
+     */
     public void setOnResetListener(OnResetListener onResetListener) {
         this.onResetListener = onResetListener;
     }
