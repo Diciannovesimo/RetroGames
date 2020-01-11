@@ -1,8 +1,16 @@
 package com.nullpointerexception.retrogames.Breakout;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.RectF;
 
-public class Paddle {
+import com.nullpointerexception.retrogames.R;
+
+public class Paddle
+{
     private RectF rect;
     private int x, y,length, height, paddleSpeed;
 
@@ -11,9 +19,12 @@ public class Paddle {
     public final int LEFT = 1;
     public final int RIGHT = 2;
 
+    private Bitmap bitmap;
+
     private int paddleMoving = STOPPED;
 
-    public Paddle(int screenX, int screenY){
+    public Paddle(int screenX, int screenY)
+    {
         this.x = screenX /2;
         this.y = screenY - 200;
 
@@ -47,6 +58,18 @@ public class Paddle {
 
         this.rect.left = this.x;
         this.rect.right = this.x + this.length;
+    }
+
+    public void createPaddleDrawable(Context context)
+    {
+        bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+                context.getResources(), R.drawable.paddle), (int) rect.width(), (int) rect.height(), false);
+        bitmap.setConfig(Bitmap.Config.ARGB_8888);
+    }
+
+    public void draw(Canvas c)
+    {
+        c.drawBitmap(bitmap, rect.left, rect.top, new Paint());
     }
 
 }
