@@ -11,7 +11,7 @@ import android.os.Bundle;
 import com.nullpointerexception.retrogames.R;
 
 
-public class FullscreenActivity extends Activity implements SensorEventListener {
+public class MainActivityHole extends Activity implements SensorEventListener {
     private SensorManager sensorManager;
 
     private CanvasView contentView;
@@ -27,36 +27,40 @@ public class FullscreenActivity extends Activity implements SensorEventListener 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
     }
 
+
     @Override
     protected void onResume()
     {
         super.onResume();
-        // Register this class as a listener for the accelerometer sensor
+        // Registrare questa classe come listener per il sensore accelerometro
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_GAME);
-        // ...and the orientation sensor
+        // ...e il sensore di orientamento
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
                 SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     protected void onStop() {
-        // Unregister the listener
+        // Annulla la registrazione del listener
         sensorManager.unregisterListener(this);
         super.onStop();
     }
 
+    /**
+     * Acquisisce i dati dal sensore accelerometro
+     * @param sensorEvent evento del sensore
+     */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float x = sensorEvent.values[0];
-            float y = sensorEvent.values[1];
-            contentView.changeVelocity(y*10, x*10);
+            float x = sensorEvent.values[0];    //coordinata x
+            float y = sensorEvent.values[1];    //coordinata y
+            contentView.changeVelocity(y, x); //Invia i dati
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 }

@@ -25,16 +25,16 @@ public class CanvasView extends View implements View.OnTouchListener {
     private static final int DOWN = 1;
     private static final int RIGHT = 1;
 
-    private double y;
-    private double x;
+    private double y;   //Coordinata dell'asse y della palla
+    private double x;   //Coordinata dell'asse x della palla
     private double directionY = DOWN;
     private double directionX = RIGHT;
-    private Bitmap ball2;
-    private Bitmap background;
-    private Bitmap hole;
+    private Bitmap ball2;   //Immagine della palla
+    private Bitmap background; //Immagine dello sfondo
+    private Bitmap hole;    //Immagine della buca
     private double vx;
     private double vy;
-    private int ballRadius;
+    private int ballRadius; //Raggio della palla
     private int holeX = 700;
     private int holeY = 600;
     private Random random = new Random();
@@ -51,51 +51,80 @@ public class CanvasView extends View implements View.OnTouchListener {
     private boolean gameOverDisplayed;
 
 
+    /**
+     * Crea il CanvasView e setta il contesto
+     * @param context contesto
+     */
+
     public CanvasView(Context context) {
         super(context);
         init();
     }
 
+
     Resources r = getResources();
     float fontSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, r.getDisplayMetrics());
+
+    /**
+     * Cra il CanvasView
+     * @param context contesto
+     * @param attrs attributi del layout xml
+     */
     public CanvasView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
+
+    /**
+     * Inizilizza le bitmap e determina il raggio della palla
+     */
     private void init() {
-        ball2 = BitmapFactory.decodeResource(getResources(), R.mipmap.ball2);
-        ballRadius = ball2.getWidth() / 2;
-        background = BitmapFactory.decodeResource(getResources(), R.mipmap.background);
-        hole = BitmapFactory.decodeResource(getResources(), R.mipmap.hole);
+        ball2 = BitmapFactory.decodeResource(getResources(), R.mipmap.ball2);   //Inizializza l'immagine della palla
+        ballRadius = ball2.getWidth() / 2;  //Determino il raggio della palla
+        background = BitmapFactory.decodeResource(getResources(), R.mipmap.background); //Inizializzo l'immagine dello sfondo
+        hole = BitmapFactory.decodeResource(getResources(), R.mipmap.hole); //Inizializzo l'immagine della buca
         setOnTouchListener(this);
     }
 
+    /**
+     * Reimposta tutti i valori di default per reiniziare una nuova partita
+     */
     private void restartGame() {
+        //Setta le coordinate della palline al centro dello schermo
         y = getHeight() / 2;
         x = getWidth() / 2;
+        //Reimposta lo score e le vite
         score = 0;
         lives = 3;
         gameStarted = true;
         gameOverDisplayed = false;
     }
 
+    /**
+     * Imposta la fine del gioco
+     */
     private void gameOver() {
         gameStarted = false;
         gameOverDisplayed = true;
 
     }
 
+    /**
+     * Gestisce il tocco della palla con il muro
+     */
     private void wallCrash() {
         if (warningVisible) {
             return;
         }
 
-        lives = lives - 1;
+        lives = lives - 1;  //Tolgo una vita
         if (lives == 0) {
             gameOver();
             return;
         }
+
+        //Rende immune per 3 secondi
         warningVisible = true;
         postDelayed(new Runnable() {
             @Override
@@ -104,33 +133,47 @@ public class CanvasView extends View implements View.OnTouchListener {
             }
         }, 3000);
 
+        //TODO: Vedere qui per il messaggio di quando si perde una vita
+
+        //Mostra il messaggio quando si eprde una vita
         TextView tv = new TextView(getContext());
         tv.setTextColor(Color.RED);
         tv.setTextSize(20);
         tv.setGravity(Gravity.CENTER_VERTICAL);
         tv.setText("BOOM!   -1");
 
+        //Genera un layout per mostrare la textView
         LinearLayout layout = new LinearLayout(getContext());
         layout.setBackgroundResource(R.color.black_overlay);
         layout.addView(tv);
 
+        //Inserisce nel toast nel layout e lo mostra
         Toast toast = new Toast(getContext());
         toast.setView(layout);
         toast.setGravity(Gravity.BOTTOM, 100, 300);
         toast.show();
     }
 
+    /**
+     * Gestisce il movimento della palla
+     */
     private void move() {
-        y = y + vy * directionY;
-        x = x + vx * directionX;
+        //y = y + vy * directionY;
+        //x = x + vx * directionX;
+        //determina la nuova posizione della pallina
+        y = y + vy;
+        x = x + vx;
 
+        //determina un range per il buco della pallina
         double distance = Math.sqrt(Math.pow(x - holeX, 2) + Math.pow(y - holeY, 2));
 
         if (distance < 50) {
+            //genera una nunova posizione per il buco
             holeX = random.nextInt(getWidth() - ballRadius * 2) + ballRadius;
             holeY = random.nextInt(getHeight() - ballRadius * 2) + ballRadius;
-            score = score + 1;
+            score ++;
         }
+
 
         if (x < ballRadius) {
             x = ballRadius;
@@ -159,12 +202,17 @@ public class CanvasView extends View implements View.OnTouchListener {
         }
     }
 
+    /**
+     * Imposta le nuove coordinate alla pallina aumentandone la velocità
+     * @param dx
+     * @param dy
+     */
     public void changeVelocity(float dx, float dy) {
         if (gameStarted == false) {
 
         } else {
-            vx = dx;
-            vy = dy;
+            vx = dx * 10;
+            vy = dy * 10;
             move();
         }
     }
