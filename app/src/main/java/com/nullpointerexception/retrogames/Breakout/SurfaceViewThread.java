@@ -3,6 +3,8 @@ package com.nullpointerexception.retrogames.Breakout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -17,7 +19,11 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
+import com.nullpointerexception.retrogames.App;
+import com.nullpointerexception.retrogames.Components.SaveScore;
 import com.nullpointerexception.retrogames.R;
+
+import java.util.Random;
 
 public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Callback, Runnable
 {
@@ -39,6 +45,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
 
     //  Variabili mie
     int totalScore = 48;
+    private Bitmap backgroundBitmap;
     private SoundPool soundPool;
     private static final int NUMBER_OF_SIMULTANEOUS_SOUNDS = 5;
     private final float LEFT_VOLUME_VALUE = 1.0f;
@@ -75,10 +82,16 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         screenWidth= ecran.getWidth();
         screenHeight= ecran.getHeight();
 
+        backgroundBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+                context.getResources(), R.drawable.breakout_background), screenWidth, screenHeight, false);
+        backgroundBitmap.setConfig(Bitmap.Config.ARGB_8888);
+
         //Initialisation paddle, balle, briques
         paddle = new Paddle(screenWidth, screenHeight);
+        paddle.createPaddleDrawable(context);
         circle = new Circle(screenWidth, screenHeight, 55, 15);
-        BuildWall();
+        circle.setBall(context);
+        buildWall();
 
         // Set the SurfaceView object at the top of View object.
         setZOrderOnTop(true);
@@ -201,7 +214,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
                     if (score == totalScore)
                     {
                         paused = true;
-                        BuildWall();
+                        buildWall();
                     }
                 }
             }
@@ -237,8 +250,8 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
             {
                 playSound(LOOSE_SOUND);
 
-                paused = true;
-                BuildWall();
+                //paused = true;
+                buildWall();
             }
             else
                 playSound(HURT_SOUND);
@@ -252,30 +265,51 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     // METHODE CONSTRUCTION DU MUR //
     //|---------------------------|//
 
-    public void BuildWall()
+    public void buildWall()
     {
         // Largeur et longueur des briques
         brickWidth = screenWidth / 8;
-        brickHeight = screenHeight / 15;
+        brickHeight = screenHeight / 30;    // Prima 15
 
         // En cas de reset du jeu
         circle.reset(screenWidth + 230, screenHeight- circle.getRadius());
 
         // Build a wall of bricks
         nbBricks = 0;
+        Random random = new Random();
         for (int column = 0; column < 8; column++)
         {
-            for (int row = 3; row < 9; row++)
+            for (int row = 6; row < 18; row++)
             {
                 bricks[nbBricks] = new Brick(column, row, brickWidth, brickHeight);
+
+                switch (random.nextInt(3))
+                {
+                    default:
+                    case 0:
+                        bricks[nbBricks].setColor(Brick.GREEN);
+                        break;
+                    case 1:
+                        bricks[nbBricks].setColor(Brick.BLUE);
+                        break;
+                    case 2:
+                        bricks[nbBricks].setColor(Brick.RED);
+                        break;
+                }
+
                 nbBricks++;
             }
         }
 
+        totalScore = nbBricks;
+
         // Restart game
-        if (lives == 0 || score == totalScore)
+        if (lives == 0)//|| score == totalScore)
         {
             Boolean lose = score != totalScore;
+
+            SaveScore pong = new SaveScore();
+            pong.save(App.BREAKOUT, score, getContext());
 
             pref = getContext().getSharedPreferences("PlayerScore", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = pref.edit();
@@ -291,11 +325,9 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     }
 
 
-
-
-    //|---------------------------|//
-    // METHODE RUN POUR LE THREAD  //
-    //|---------------------------|//
+    //|----------------------------|//
+    //| METHODE RUN POUR LE THREAD |//
+    //|----------------------------|//
 
     long calculatedFps = 0;
     private static final int TARGET_FPS = 30;
@@ -304,7 +336,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     public void run()
     {
         //Initialisation des briques
-        BuildWall();
+        buildWall();
 
         while(threadRunning)
         {
@@ -326,8 +358,6 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     }
 
 
-
-
     //|----------------------------------|//
     // METHODE DESSINE SUR LA SURFACEVIEW //
     //|----------------------------------|//
@@ -341,38 +371,28 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         int right = screenWidth;
         int bottom = screenHeight;
 
-        Rect screenRect = new Rect(0, 0, screenWidth, screenHeight);
-
-        Rect fond = new Rect(left, top, right, bottom);
-        Rect fond2 = new Rect(left, top, right, (int) (bottom/8));
-        Rect fond3 = new Rect(left, bottom-(bottom/12), right, bottom);
+        Rect topRect = new Rect(left, top, right, (bottom/8));
+        Rect screenRect = new Rect(0, topRect.bottom, screenWidth, screenHeight);
 
         if(surfaceHolder.getSurface().isValid())
         {
             canvas = surfaceHolder.lockCanvas();
 
-            paint.setColor(Color.BLACK);
-            canvas.drawRect(screenRect, paint);
+            //  Disegna il background
+            canvas.drawBitmap(backgroundBitmap, screenRect.left, screenRect.top, new Paint());
 
             Log.i("Performance", "[background - draw()]: " + (System.currentTimeMillis() - startms) + "ms.");
 
-            // Disegna lo sfondo
-            /*
-            Paint background = new Paint();
-            background.setColor(Color.argb(255, 60, 60, 60));
-            canvas.drawRect(fond, background);*/
-
             // Disegna la parte superiore dove vengono mostrati i punteggi
-            /*
             paint.setColor(Color.argb(240, 20, 20, 20));
-            canvas.drawRect(fond2, paint);*/
+            canvas.drawRect(topRect, paint);
 
             // Modifica l'oggetto paint
             paint.setColor(Color.argb(255, 255, 255, 255));
             paint.setTextSize(160);
 
             //  Disegna la linea
-            canvas.drawLine(fond2.left, fond2.bottom, fond2.right, fond2.bottom, paint);
+            canvas.drawLine(topRect.left, topRect.bottom, topRect.right, topRect.bottom, paint);
 
             //  Scrive gli fps
             canvas.drawText("" + calculatedFps, 50, screenHeight / 10, paint);
@@ -396,23 +416,14 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
                 canvas.drawText(String.valueOf(lives), screenWidth - 150, screenHeight / 11, paint);
             }
 
-            // Parte inferiore dello schermo
-            paint.setColor(Color.argb(240, 20, 20, 20));
-            canvas.drawRect(fond3, paint);
-
             // Draw the paddle
-            paint.setColor(Color.WHITE);
-            canvas.drawRect(paddle.getRect(), paint);
+            paddle.draw(canvas);
 
             long startms2 = System.currentTimeMillis();
             // Draw the bricks
             for (int i = 0; i < nbBricks; i++)
-            {
                 if (bricks[i].getVisibility())
-                {
                     bricks[i].draw(canvas);
-                }
-            }
             Log.i("Performance", "[ bricks draw()]: " + (System.currentTimeMillis() - startms2) + "ms.");
 
             // Draw the ball
@@ -424,9 +435,6 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
 
         Log.i("Performance", "draw(): " + (System.currentTimeMillis() - startms) + "ms.\n");
     }
-
-
-
 
     //|---------------------------------------|//
     // METHODE DETECTION DE TOUCHER DE L'ECRAN //

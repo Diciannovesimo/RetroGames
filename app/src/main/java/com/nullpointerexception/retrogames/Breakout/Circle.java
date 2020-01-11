@@ -1,8 +1,13 @@
 package com.nullpointerexception.retrogames.Breakout;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
+import com.nullpointerexception.retrogames.R;
 
 import java.util.Random;
 
@@ -13,6 +18,8 @@ public class Circle
     int Xspeed = 0;
     int Yspeed = 0;
     private Color color;
+
+    private Bitmap ballBitmap;
 
     public Circle(int x, int y, int r, int s) {
         super();
@@ -40,11 +47,25 @@ public class Circle
     public void setRadius(int r) {this.radius = r;}
     public void setColor(Color c) {this.color = c;}
 
-    public void draw(Canvas c) {
-        Paint p = new Paint();
-        p.setColor(Color.RED);
-        c.drawCircle(this.x, this.y, this.radius, p);
+    public void setBall(Context context)
+    {
+        ballBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+                context.getResources(), R.drawable.breakout_ball), radius*2, radius*2, false);
+        ballBitmap.setConfig(Bitmap.Config.ARGB_8888);
     }
+
+    public void draw(Canvas c)
+    {
+        if(ballBitmap != null)
+            c.drawBitmap(ballBitmap, x, y, new Paint());
+        else
+        {
+            Paint p = new Paint();
+            p.setColor(Color.RED);
+            c.drawCircle(this.x, this.y, this.radius, p);
+        }
+    }
+
     public void reverseYVelocity(){ this.Yspeed = -this.Yspeed;}
     public void reverseXVelocity(){
         this.Xspeed = -this.Xspeed;
