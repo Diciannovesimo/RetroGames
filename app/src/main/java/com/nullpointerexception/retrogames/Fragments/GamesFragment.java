@@ -64,6 +64,8 @@ public class GamesFragment extends Fragment
     private ViewGroup gamesCard, playButton;
     private TextView gamesTitleTextview, gamesHighscoreTextview;
 
+    public GamesFragment() {}
+
     public GamesFragment(boolean newLogin)
     {
         databaseLoadingNeeded = newLogin;

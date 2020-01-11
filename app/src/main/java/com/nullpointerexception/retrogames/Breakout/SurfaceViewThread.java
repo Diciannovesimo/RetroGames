@@ -64,6 +64,9 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         surfaceHolder = this.getHolder();
         surfaceHolder.addCallback(this);
 
+        //  Setta il context alla classe brick, usata per accedere alle risorse grafiche
+        Brick.setContext(context);
+
         //  Create soundPool
         initSoundpool();
 
@@ -185,7 +188,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
                     playSound(HIT_SOUND);
 
                     bricks[i].setRes();
-                    collisionLeftRight(circle,bricks[i]);
+                    collisionLeftRight(circle, bricks[i]);
                 }
                 else
                 {
@@ -193,7 +196,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
 
                     bricks[i].setInvisible();
                     bricks[i].setRes();
-                    collisionLeftRight(circle,bricks[i]);
+                    collisionLeftRight(circle, bricks[i]);
                     score += 1;
                     if (score == totalScore)
                     {
@@ -294,6 +297,9 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     // METHODE RUN POUR LE THREAD  //
     //|---------------------------|//
 
+    long calculatedFps = 0;
+    private static final int TARGET_FPS = 30;
+
     @Override
     public void run()
     {
@@ -302,11 +308,20 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
 
         while(threadRunning)
         {
-            if (!paused)
+            long startms = System.currentTimeMillis();
+
+            if ( ! paused)
                 update();
 
             draw();
-            try { Thread.sleep(fps); } catch (InterruptedException ex) {}
+
+            long frameTime = System.currentTimeMillis() - startms;
+            if(frameTime != 0)
+                calculatedFps = 1000 / frameTime;
+
+            /*
+            try { Thread.sleep(fps); }
+            catch (InterruptedException ex) {}*/
         }
     }
 
@@ -319,38 +334,56 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
 
     private void draw()
     {
+        long startms = System.currentTimeMillis();
+
         int left = 0;
         int top = 0;
         int right = screenWidth;
         int bottom = screenHeight;
+
+        Rect screenRect = new Rect(0, 0, screenWidth, screenHeight);
+
         Rect fond = new Rect(left, top, right, bottom);
-        Rect fond2 = new Rect(left, top, right, (int)(bottom/8));
+        Rect fond2 = new Rect(left, top, right, (int) (bottom/8));
         Rect fond3 = new Rect(left, bottom-(bottom/12), right, bottom);
 
         if(surfaceHolder.getSurface().isValid())
         {
             canvas = surfaceHolder.lockCanvas();
 
-            // Draw the specify canvas background color.
+            paint.setColor(Color.BLACK);
+            canvas.drawRect(screenRect, paint);
+
+            Log.i("Performance", "[background - draw()]: " + (System.currentTimeMillis() - startms) + "ms.");
+
+            // Disegna lo sfondo
+            /*
             Paint background = new Paint();
             background.setColor(Color.argb(255, 60, 60, 60));
-            canvas.drawRect(fond, background);
+            canvas.drawRect(fond, background);*/
 
-            // Background top of the screen
+            // Disegna la parte superiore dove vengono mostrati i punteggi
+            /*
             paint.setColor(Color.argb(240, 20, 20, 20));
-            canvas.drawRect(fond2, paint);
+            canvas.drawRect(fond2, paint);*/
 
-            // Choose the brush color for drawing
+            // Modifica l'oggetto paint
             paint.setColor(Color.argb(255, 255, 255, 255));
             paint.setTextSize(160);
 
-            // Draw the score
+            //  Disegna la linea
+            canvas.drawLine(fond2.left, fond2.bottom, fond2.right, fond2.bottom, paint);
+
+            //  Scrive gli fps
+            canvas.drawText("" + calculatedFps, 50, screenHeight / 10, paint);
+
+            // Aggiorna lo score
             if(score < 10)
-                canvas.drawText(String.valueOf("0"+score), (int) (screenWidth / 2.4), screenHeight / 10, paint);
+                canvas.drawText("0" + score, (int) (screenWidth / 2.4), screenHeight / 10, paint);
             else
                 canvas.drawText(String.valueOf(score), (int) (screenWidth / 2.4), screenHeight / 10, paint);
 
-            // Draw life
+            // Aggiorna le vite
             if(lives == 1)
             {
                 paint.setTextSize(90);
@@ -363,7 +396,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
                 canvas.drawText(String.valueOf(lives), screenWidth - 150, screenHeight / 11, paint);
             }
 
-            // Background bottom of the screen
+            // Parte inferiore dello schermo
             paint.setColor(Color.argb(240, 20, 20, 20));
             canvas.drawRect(fond3, paint);
 
@@ -371,6 +404,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
             paint.setColor(Color.WHITE);
             canvas.drawRect(paddle.getRect(), paint);
 
+            long startms2 = System.currentTimeMillis();
             // Draw the bricks
             for (int i = 0; i < nbBricks; i++)
             {
@@ -379,6 +413,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
                     bricks[i].draw(canvas);
                 }
             }
+            Log.i("Performance", "[ bricks draw()]: " + (System.currentTimeMillis() - startms2) + "ms.");
 
             // Draw the ball
             circle.draw(canvas);
@@ -386,6 +421,8 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
             // Send message to main UI thread to update the drawing to the main view special area.
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
+
+        Log.i("Performance", "draw(): " + (System.currentTimeMillis() - startms) + "ms.\n");
     }
 
 
