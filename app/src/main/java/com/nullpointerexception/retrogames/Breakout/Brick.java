@@ -14,13 +14,16 @@ public class Brick
 {
     private static Context context;
 
-    private int x,y,width,height,resistance;
+    private int x,y,width,height,resistance, oldResistance;
     private RectF rect;
     private boolean isVisible;
     private int padding = 5;
     private int r = (int) (Math.random()*255);
     private int v = (int) (Math.random()*255);
     private int b = (int) (Math.random()*255);
+    private boolean firstDraw = true;
+    private Bitmap bitmap, decoded;
+    private int res;
 
     public Brick(int x, int y, int width, int height)
     {
@@ -50,7 +53,10 @@ public class Brick
     public boolean getVisibility(){return this.isVisible;}
 
     public void setX(int x){this.x = x;}
-    public void setRes(){this.resistance -= 1;}
+    public void setRes(){
+        oldResistance = this.resistance;
+        this.resistance -= 1;
+    }
     public void setY(int y){this.y = y;}
     public void setWidth(int width){this.width = width;}
     public void setHeight(int height){this.height = height;}
@@ -66,32 +72,40 @@ public class Brick
 
     public void draw(Canvas c)
     {
-        /*
-        Paint p = new Paint();
-        //int rgb = argb(255,r,v,b);
-
-        if(this.resistance == 2)
-            p.setColor(Color.GREEN);
-        else if(this.resistance == 1)
-            p.setColor(Color.YELLOW);
-        else
-            p.setColor(Color.RED);
-        c.drawRect(rect,p);*/
-
-        int res;
-
-        if(this.resistance == 2)
-            res = R.drawable.cell4;
-        else if(this.resistance == 1)
-            res = R.drawable.cell2;
-        else
-            res = R.drawable.cell1;
-
-        Bitmap bitmap = Bitmap.createScaledBitmap( BitmapFactory.decodeResource(
-                context.getResources(), res), (int) rect.width(), (int) rect.height(), false);
-
-        Paint pi = new Paint();
-        c.drawBitmap(bitmap, rect.left, rect.top, pi);
+        if ((oldResistance > resistance) || oldResistance == 0) {
+            if (this.resistance == 2 && res != R.drawable.cell4) {
+                res    = R.drawable.cell4;
+                bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+                        context.getResources(), res), (int) rect.width(), (int) rect.height(), false);
+                bitmap.setConfig(Bitmap.Config.ARGB_8888);
+                Paint pi = new Paint();
+                c.drawBitmap(bitmap, rect.left, rect.top, pi);
+            } else if(this.resistance == 2) {
+                Paint pi = new Paint();
+                c.drawBitmap(bitmap, rect.left, rect.top, pi);
+            } else if (this.resistance == 1 && res != R.drawable.cell2) {
+                res    = R.drawable.cell2;
+                bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+                        context.getResources(), res), (int) rect.width(), (int) rect.height(), false);
+                Paint pi = new Paint();
+                c.drawBitmap(bitmap, rect.left, rect.top, pi);
+                bitmap.setConfig(Bitmap.Config.ARGB_8888);
+            } else if (this.resistance == 1) {
+                Paint pi = new Paint();
+                c.drawBitmap(bitmap, rect.left, rect.top, pi);
+            } else if (this.resistance == 0 && res != R.drawable.cell1) {
+                res    = R.drawable.cell1;
+                bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+                        context.getResources(), res), (int) rect.width(), (int) rect.height(), false);
+                bitmap.setConfig(Bitmap.Config.ARGB_8888);
+                Paint pi = new Paint();
+                c.drawBitmap(bitmap, rect.left, rect.top, pi);
+            } else {
+                Paint pi = new Paint();
+                c.drawBitmap(bitmap, rect.left, rect.top, pi);
+            }
+        }
     }
+        
 }
 
