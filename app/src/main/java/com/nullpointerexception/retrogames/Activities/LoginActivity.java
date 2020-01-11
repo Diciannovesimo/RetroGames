@@ -135,17 +135,6 @@ public class LoginActivity extends AppCompatActivity
             }
         });
 
-        //Listener pulsante registrazione
-        mSignin.setOnTouchListener(new OnTouchAnimatedListener() {
-            private Blocker mBlocker = new Blocker();
-
-            @Override
-            public void onClick(View view) {
-                if (!mBlocker.block()) {
-                    startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
-                }
-            }
-        });
 
         //Listener log in con Google
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -178,6 +167,18 @@ public class LoginActivity extends AppCompatActivity
                                             .show();
                                 }
                             });
+                }
+            }
+        });
+
+        //Listener pulsante registrazione
+        mSignin.setOnTouchListener(new OnTouchAnimatedListener() {
+            private Blocker mBlocker = new Blocker();
+
+            @Override
+            public void onClick(View view) {
+                if (!mBlocker.block()) {
+                    startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
                 }
             }
         });
@@ -252,6 +253,5 @@ public class LoginActivity extends AppCompatActivity
         //Fa partire l/accesso con Google
         AuthenticationManager.get().loginWithGoogle(requestCode, data);
     }
-
 
 }
