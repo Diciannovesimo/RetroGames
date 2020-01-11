@@ -150,8 +150,7 @@ public class MainActivityPong extends AppCompatActivity {
                             })
                             .setNegativeButton(context.getString(R.string.exit), (dialog, which) -> {
                                 mDlgMsg.dismiss();
-                                if(context instanceof MainActivityPong)
-                                    ((MainActivityPong) context).finish();
+                                finish();
                             })
                             .show();
                 }
@@ -167,8 +166,7 @@ public class MainActivityPong extends AppCompatActivity {
                             })
                             .setNegativeButton(context.getString(R.string.exit), (dialog, which) -> {
                                 mDlgMsg.dismiss();
-                                if(context instanceof MainActivityPong)
-                                    ((MainActivityPong) context).finish();
+                                finish();
                             })
                             .show();
                 }
@@ -184,8 +182,8 @@ public class MainActivityPong extends AppCompatActivity {
                             })
                             .setNegativeButton(context.getString(R.string.exit), (dialog, which) -> {
                                 mDlgMsg.dismiss();
-                                if(context instanceof MainActivityPong)
-                                    ((MainActivityPong) context).finish();
+                                finish();
+
                             })
                             .show();
                 }

@@ -354,10 +354,5 @@ public class HomeActivity extends AppCompatActivity
 
             }
         }, 1000);
-
-
-
-
-
     }
 }
