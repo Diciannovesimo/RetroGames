@@ -21,9 +21,9 @@ public class Brick
     private int r = (int) (Math.random()*255);
     private int v = (int) (Math.random()*255);
     private int b = (int) (Math.random()*255);
-    private boolean firstDraw = true;
-    private Bitmap bitmap, decoded;
+    private Bitmap bitmap;
     private int res;
+    private Paint p;
 
     public Brick(int x, int y, int width, int height)
     {
@@ -39,6 +39,7 @@ public class Brick
                 this.y * this.height + this.height - padding);
 
         this.isVisible = true;
+        p = new Paint();
     }
 
     public int getX(){return this.x;}
@@ -78,34 +79,27 @@ public class Brick
                 bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
                         context.getResources(), res), (int) rect.width(), (int) rect.height(), false);
                 bitmap.setConfig(Bitmap.Config.ARGB_8888);
-                Paint pi = new Paint();
-                c.drawBitmap(bitmap, rect.left, rect.top, pi);
+                c.drawBitmap(bitmap, rect.left, rect.top, p);
             } else if(this.resistance == 2) {
-                Paint pi = new Paint();
-                c.drawBitmap(bitmap, rect.left, rect.top, pi);
+                c.drawBitmap(bitmap, rect.left, rect.top, p);
             } else if (this.resistance == 1 && res != R.drawable.cell2) {
                 res    = R.drawable.cell2;
                 bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
                         context.getResources(), res), (int) rect.width(), (int) rect.height(), false);
-                Paint pi = new Paint();
-                c.drawBitmap(bitmap, rect.left, rect.top, pi);
                 bitmap.setConfig(Bitmap.Config.ARGB_8888);
+                c.drawBitmap(bitmap, rect.left, rect.top, p);
             } else if (this.resistance == 1) {
-                Paint pi = new Paint();
-                c.drawBitmap(bitmap, rect.left, rect.top, pi);
+                c.drawBitmap(bitmap, rect.left, rect.top, p);
             } else if (this.resistance == 0 && res != R.drawable.cell1) {
                 res    = R.drawable.cell1;
                 bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
                         context.getResources(), res), (int) rect.width(), (int) rect.height(), false);
                 bitmap.setConfig(Bitmap.Config.ARGB_8888);
-                Paint pi = new Paint();
-                c.drawBitmap(bitmap, rect.left, rect.top, pi);
-            } else {
-                Paint pi = new Paint();
-                c.drawBitmap(bitmap, rect.left, rect.top, pi);
-            }
+                c.drawBitmap(bitmap, rect.left, rect.top, p);
+            } else
+                c.drawBitmap(bitmap, rect.left, rect.top, p);
         }
     }
-        
+
 }
 
