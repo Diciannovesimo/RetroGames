@@ -164,7 +164,7 @@ public class CanvasView extends View implements View.OnTouchListener {
         y = y + vy;
         x = x + vx;
 
-        //determina un range per il buco della pallina
+        //determina un range per il buco della pallina, norma 1
         double distance = Math.sqrt(Math.pow(x - holeX, 2) + Math.pow(y - holeY, 2));
 
         if (distance < 50) {
@@ -174,28 +174,31 @@ public class CanvasView extends View implements View.OnTouchListener {
             score ++;
         }
 
-
-        if (x < ballRadius) {
+        //la palla prende la posizione della buca
+        if (x < ballRadius)
             x = ballRadius;
-        }
-        if (y < ballRadius) {
+
+        if (y < ballRadius)
             y = ballRadius;
-        }
-        if (x >= getWidth() - ballRadius) {
+
+        if (x >= getWidth() - ballRadius)
             x = getWidth() - ballRadius;
-        }
-        if (y >= getHeight() - ballRadius) {
+
+        if (y >= getHeight() - ballRadius)
             y = getHeight() - ballRadius;
-        }
+
+        //determino se la palla ha toccato il muro
         if (x >= getWidth() - ballRadius) {
-            wallCrash();} else
-        if (y >= getHeight() - ballRadius) {
-            wallCrash();} else
-        if (x <= ballRadius) {
-            wallCrash();} else
-        if (y <= ballRadius) {
+            wallCrash();
+        } else if (y >= getHeight() - ballRadius) {
+            wallCrash();
+        } else if (x <= ballRadius) {
+            wallCrash();
+        } else if (y <= ballRadius) {
             wallCrash();
         }
+
+        //TODO:aiutatemi a capire questo
         if (System.currentTimeMillis() - lastInvalidate > 5) {
             invalidate();
             lastInvalidate = System.currentTimeMillis();
@@ -204,8 +207,8 @@ public class CanvasView extends View implements View.OnTouchListener {
 
     /**
      * Imposta le nuove coordinate alla pallina aumentandone la velocità
-     * @param dx
-     * @param dy
+     * @param dx coordinata dell'asse x
+     * @param dy coordinata dell'asse y
      */
     public void changeVelocity(float dx, float dy) {
         if (gameStarted == false) {
@@ -251,6 +254,14 @@ public class CanvasView extends View implements View.OnTouchListener {
 
     private final Rect textBounds = new Rect(); //don't new this up in a draw method
 
+    /**
+     * Disegna il testo centrato
+     * @param canvas
+     * @param paint
+     * @param text
+     * @param cx
+     * @param cy
+     */
     public void drawTextCentred(Canvas canvas, Paint paint, String text, float cx, float cy){
         paint.getTextBounds(text, 0, text.length(), textBounds);
         canvas.drawText(text, cx, cy - textBounds.exactCenterY(), paint);
