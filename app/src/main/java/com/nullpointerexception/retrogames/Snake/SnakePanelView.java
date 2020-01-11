@@ -313,7 +313,18 @@ public class SnakePanelView extends View {
      * lo si carica sul DB
      */
     private void addPoint() {
-        mPoint ++;
+        switch (mDifficulty) {
+            case GameType.EASY:
+                mPoint += 5;
+                break;
+            case GameType.MEDIUM:
+                    mPoint += 7;
+                    break;
+            case GameType.HARD:
+                mPoint += 9;
+                break;
+        }
+
         if(mPoint > mHighScore) {
             mHighScore = mPoint;
             game.save(App.SNAKE, mPoint, getContext());
