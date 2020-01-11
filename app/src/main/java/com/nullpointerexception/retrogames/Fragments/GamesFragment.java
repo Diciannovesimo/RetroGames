@@ -1,8 +1,6 @@
 package com.nullpointerexception.retrogames.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,10 +15,8 @@ import androidx.fragment.app.Fragment;
 
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Breakout.MainActivityBreakout;
-import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
-import com.nullpointerexception.retrogames.Components.Scoreboard;
 import com.nullpointerexception.retrogames.Hole.FullscreenActivity;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.R;
@@ -37,11 +33,6 @@ public class GamesFragment extends Fragment
     private final int PONG = 2;
     private final int HOLE = 3;
     private final int BREAKOUT = 4;
-
-    /*
-            Variables
-     */
-    private boolean databaseLoadingNeeded = false;
 
     /*
            UI Components Portrait
@@ -66,11 +57,6 @@ public class GamesFragment extends Fragment
 
     public GamesFragment() {}
 
-    public GamesFragment(boolean newLogin)
-    {
-        databaseLoadingNeeded = newLogin;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -82,11 +68,7 @@ public class GamesFragment extends Fragment
 
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
         {
-            if( ! databaseLoadingNeeded)
-                showCardOfGame(App.TETRIS);
-            else
-                databaseLoading();
-
+            showCardOfGame(App.TETRIS);
             setOnCardClickListenersLandscape();
         }
         else
@@ -143,97 +125,11 @@ public class GamesFragment extends Fragment
 
     private void setPortraitHighscores()
     {
-        if( ! databaseLoadingNeeded)
-        {
-            tetrisHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.TETRIS) ));
-            snakeHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.SNAKE) ));
-            pongHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.PONG) ));
-            holeHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.HOLE) ));
-            breakoutHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.BREAKOUT) ));
-        }
-        else
-            databaseLoading();
-    }
-
-    private void databaseLoading()
-    {
-        SharedPreferences nicknameShared = getContext().getSharedPreferences(App.USER, Context.MODE_PRIVATE);
-        String nickname = nicknameShared.getString(App.NICKNAME, "-");
-
-        //Recupero l'eventuale Totalscore
-        BackEndInterface.get().readScoreFirebase(App.TOTALSCORE, nickname, (success, value) ->
-        {
-            if(success) {
-                long score = Long.parseLong(value);
-                if(App.scoreboardDao.getGame(App.TOTALSCORE) == null)
-                    App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, score));
-            }
-        });
-
-
-        //Recupero l'eventuale score di Snake
-        BackEndInterface.get().readScoreFirebase(App.SNAKE, nickname, (success, value) ->
-        {
-            if(success){
-                long score = Long.parseLong(value);
-                if(App.scoreboardDao.getGame(App.SNAKE) == null)
-                    App.scoreboardDao.insertAll(new Scoreboard(App.SNAKE, score));
-
-                snakeHighscoreText.setText( String.valueOf(score));
-            }
-        });
-
-
-        //Recupero l'eventuale score di MainActivityTetris
-        BackEndInterface.get().readScoreFirebase(App.TETRIS, nickname, (success, value) ->
-        {
-            if(success) {
-                long score = Long.parseLong(value);
-                if(App.scoreboardDao.getGame(App.TETRIS) == null)
-                    App.scoreboardDao.insertAll(new Scoreboard(App.TETRIS, score));
-
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-                    showCardOfGame(App.TETRIS);
-                else
-                    tetrisHighscoreText.setText( String.valueOf(score));
-            }
-        });
-
-        //Recupero l'eventuale score di Breakout
-        BackEndInterface.get().readScoreFirebase(App.BREAKOUT, nickname, (success, value) ->
-        {
-            if(success) {
-                long score = Long.parseLong(value);
-                if(App.scoreboardDao.getGame(App.BREAKOUT) == null)
-                    App.scoreboardDao.insertAll(new Scoreboard(App.BREAKOUT, score));
-
-                breakoutHighscoreText.setText( String.valueOf(score));
-            }
-        });
-
-        //Recupero l'eventuale score di Hole
-        BackEndInterface.get().readScoreFirebase(App.HOLE, nickname, (success, value) ->
-        {
-            if(success){
-                long score = Long.parseLong(value);
-                if(App.scoreboardDao.getGame(App.HOLE) == null)
-                    App.scoreboardDao.insertAll(new Scoreboard(App.HOLE, score));
-
-                holeHighscoreText.setText( String.valueOf(score));
-            }
-        });
-
-        //Recupero l'eventuale score di Pong
-        BackEndInterface.get().readScoreFirebase(App.PONG, nickname, (success, value) ->
-        {
-            if(success){
-                long score = Long.parseLong(value);
-                if(App.scoreboardDao.getGame(App.PONG) == null)
-                    App.scoreboardDao.insertAll(new Scoreboard(App.PONG, score));
-
-                pongHighscoreText.setText( String.valueOf(score));
-            }
-        });
+        tetrisHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.TETRIS) ));
+        snakeHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.SNAKE) ));
+        pongHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.PONG) ));
+        holeHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.HOLE) ));
+        breakoutHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.BREAKOUT) ));
     }
 
     private void setOnPlayButtonClickListenerPortrait()

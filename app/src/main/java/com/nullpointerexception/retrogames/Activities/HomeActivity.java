@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -62,7 +60,6 @@ public class HomeActivity extends AppCompatActivity
         leaderboardButton = findViewById(R.id.buttonLeaderBoard);
         profileButton = findViewById(R.id.buttonProfile);
 
-
         if(getIntent() != null && getIntent().hasExtra("newLogin"))
             newLogin = true;
 
@@ -71,7 +68,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                placeFragment(new GamesFragment(newLogin));
+                placeFragment(new GamesFragment());
             }
         });
 
@@ -105,7 +102,7 @@ public class HomeActivity extends AppCompatActivity
             {
                 case GAMES_FRAGMENT:
                 default:
-                    placeFragment(new GamesFragment(false));
+                    placeFragment(new GamesFragment());
                     break;
                 case LEADERBOARD_FRAGMENT:
                     placeFragment(new LeaderboardFragment());
@@ -119,14 +116,19 @@ public class HomeActivity extends AppCompatActivity
             }
         }
         else
-            placeFragment(new GamesFragment(false));
+        {
+            if(newLogin)
+                restoreScore(() -> placeFragment(new GamesFragment()));
+            else
+                placeFragment(new GamesFragment());
+        }
+
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
-        restoreScore();
-
     }
 
     /**
@@ -231,12 +233,14 @@ public class HomeActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    boolean[] dataReceived;
+
     /**
      * Sincronizza il database locale con quello di firebase
      * @param nickname nome dell'utente loggato
      */
-    private void sincDatabase(String nickname) {
-
+    private void syncDatabase(String nickname, Runnable runnable)
+    {
         List<String> games = new ArrayList<>();
         games.add(App.SNAKE);
         games.add(App.TETRIS);
@@ -244,37 +248,36 @@ public class HomeActivity extends AppCompatActivity
         games.add(App.HOLE);
         games.add(App.BREAKOUT);
 
+        dataReceived = new boolean[5];
+
+        for(int i = 0; i < dataReceived.length; i++)
+            dataReceived[i] = false;
+
         for(int i = 0; i < games.size(); i++)
         {
             //Recupero l'eventuale score
             long localscore = 0;
-            if(App.scoreboardDao.getGame(games.get(i)) != null)//Recupero l'eventuale valore dal database locale
+            if(App.scoreboardDao.getGame(games.get(i)) != null) //Recupero l'eventuale valore dal database locale
                 localscore = App.scoreboardDao.getScore(games.get(i));
-
 
             long finalLocalScore = localscore;
             String stringGame = games.get(i);
-            Log.d("vito", stringGame);
 
+            int finalI = i;
             BackEndInterface.get().readScoreFirebase(stringGame, nickname, (success, value) ->
             {
-                if(success){   //Il valore sta su Firebase
+                if(success)
+                {
+                    //Il valore sta su Firebase
                     long scoreFirebase = Long.parseLong(value);
-                    Log.d("vito", stringGame+ "sono dentro il listener");
 
-                    if(finalLocalScore >= scoreFirebase)
-                    {
-                        //Scrivo sul database di firebase il punteggio del database locale
-                        //BackEndInterface.get().writeScoreFirebase(stringGame, nickname, finalLocalScore);
-                    }
-                    else
+                    if(finalLocalScore < scoreFirebase)
                     {
                         //Scrivo sul database locale il punteggio di firebase
                         if(App.scoreboardDao.getGame(stringGame) == null)
                             App.scoreboardDao.insertAll(new Scoreboard(stringGame, scoreFirebase));
                         else
                             App.scoreboardDao.update(new Scoreboard(stringGame, scoreFirebase));
-
                     }
                 }
                 else    //Il valore non sta su firebase
@@ -285,10 +288,16 @@ public class HomeActivity extends AppCompatActivity
                         BackEndInterface.get().writeScoreFirebase(stringGame, nickname, finalLocalScore);
                     }
                 }
+
+                dataReceived[finalI] = true;
+                boolean proceed = true;
+                for(boolean b : dataReceived)
+                    proceed = proceed && b;
+
+                if(proceed)
+                    runnable.run();
             });
-
         }
-
     }
 
     /**
@@ -297,63 +306,59 @@ public class HomeActivity extends AppCompatActivity
      * tra il database locale e quello di Firebase
      * e riempie il database locale
      */
-    private void restoreScore ()
+    private void restoreScore(Runnable runnable)
     {
         SharedPreferences nicknameShared = getSharedPreferences(App.USER, MODE_PRIVATE);
         String nickname = nicknameShared.getString(App.NICKNAME, "-");
 
+        syncDatabase(nickname, () ->
+        {
+            //Genero il nuovo totalscore
+            long newTotalscore = 0;
 
-        if(!nickname.equals("-"))
-            sincDatabase(nickname);
-
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.d("vito", "handler");
-                //Genero il nuovo totalscore
-                long newTotalscore = 0;
-
-                if(App.scoreboardDao.getGame(App.TETRIS) != null) {
-                    //Recupero l'eventuale valore dal database locale
-                    newTotalscore = newTotalscore + App.scoreboardDao.getScore(App.TETRIS);
-                }
-
-                if(App.scoreboardDao.getGame(App.SNAKE) != null) {
-                    //Recupero l'eventuale valore dal database locale
-                    newTotalscore = newTotalscore + App.scoreboardDao.getScore(App.SNAKE);
-                }
-
-                if(App.scoreboardDao.getGame(App.HOLE) != null) {
-                    //Recupero l'eventuale valore dal database locale
-                    newTotalscore = newTotalscore + App.scoreboardDao.getScore(App.HOLE);
-                }
-
-                if(App.scoreboardDao.getGame(App.BREAKOUT) != null) {
-                    //Recupero l'eventuale valore dal database locale
-                    newTotalscore = newTotalscore + App.scoreboardDao.getScore(App.BREAKOUT);
-                }
-
-                if(App.scoreboardDao.getGame(App.PONG) != null) {
-                    //Recupero l'eventuale valore dal database locale
-                    newTotalscore = newTotalscore + App.scoreboardDao.getScore(App.PONG);
-                }
-
-
-                //Scrivo il nuovo totalscore su firebase e sul database locale
-                if(App.scoreboardDao.getGame(App.TOTALSCORE) != null)   //Recupero l'eventuale valore dal database locale
-                    App.scoreboardDao.update(new Scoreboard(App.TOTALSCORE, newTotalscore));
-                else
-                    App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, newTotalscore));
-
-                if(!nickname.equals("-"))
-                {
-                    BackEndInterface.get().writeScoreFirebase(nickname);
-                    BackEndInterface.get().writeScoreFirebase(App.TOTALSCORE, nickname, newTotalscore);
-                }
-
+            if(App.scoreboardDao.getGame(App.TETRIS) != null)
+            {
+                //Recupero l'eventuale valore dal database locale
+                newTotalscore = newTotalscore + App.scoreboardDao.getScore(App.TETRIS);
             }
-        }, 1000);
+
+            if(App.scoreboardDao.getGame(App.SNAKE) != null)
+            {
+                //Recupero l'eventuale valore dal database locale
+                newTotalscore = newTotalscore + App.scoreboardDao.getScore(App.SNAKE);
+            }
+
+            if(App.scoreboardDao.getGame(App.HOLE) != null)
+            {
+                //Recupero l'eventuale valore dal database locale
+                newTotalscore = newTotalscore + App.scoreboardDao.getScore(App.HOLE);
+            }
+
+            if(App.scoreboardDao.getGame(App.BREAKOUT) != null)
+            {
+                //Recupero l'eventuale valore dal database locale
+                newTotalscore = newTotalscore + App.scoreboardDao.getScore(App.BREAKOUT);
+            }
+
+            if(App.scoreboardDao.getGame(App.PONG) != null)
+            {
+                //Recupero l'eventuale valore dal database locale
+                newTotalscore = newTotalscore + App.scoreboardDao.getScore(App.PONG);
+            }
+
+            //Scrivo il nuovo totalscore su firebase e sul database locale
+            if(App.scoreboardDao.getGame(App.TOTALSCORE) != null)   //Recupero l'eventuale valore dal database locale
+                App.scoreboardDao.update(new Scoreboard(App.TOTALSCORE, newTotalscore));
+            else
+                App.scoreboardDao.insertAll(new Scoreboard(App.TOTALSCORE, newTotalscore));
+
+            if( ! nickname.equals("-"))
+            {
+                BackEndInterface.get().writeScoreFirebase(nickname);
+                BackEndInterface.get().writeScoreFirebase(App.TOTALSCORE, nickname, newTotalscore);
+            }
+
+            runnable.run();
+        });
     }
 }

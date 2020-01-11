@@ -125,73 +125,88 @@ public class BackEndInterface
 
         //Scrittura dello score di un tetris
         score = App.scoreboardDao.getScore(App.TETRIS);
-        myRef = database.getReference(App.TETRIS).child(nickname);
-        myRef.setValue(score)
-                .addOnSuccessListener(aVoid ->
-                {
+        if(score != 0)
+        {
+            myRef = database.getReference(App.TETRIS).child(nickname);
+            myRef.setValue(score)
+                    .addOnSuccessListener(aVoid ->
+                    {
 
-                })
-                .addOnFailureListener(e ->
-                {
-                    // Write failed
-                    Log.d("writeScoreFirebase", "Elemento non scritto");
-                });
+                    })
+                    .addOnFailureListener(e ->
+                    {
+                        // Write failed
+                        Log.d("writeScoreFirebase", "Elemento non scritto");
+                    });
+        }
 
         //Scrittura dello score di un tetris
         score = App.scoreboardDao.getScore(App.SNAKE);
-        myRef = database.getReference(App.SNAKE).child(nickname);
-        myRef.setValue(score)
-                .addOnSuccessListener(aVoid ->
-                {
+        if(score != 0)
+        {
+            myRef = database.getReference(App.SNAKE).child(nickname);
+            myRef.setValue(score)
+                    .addOnSuccessListener(aVoid ->
+                    {
 
-                })
-                .addOnFailureListener(e ->
-                {
-                    // Write failed
-                    Log.d("writeScoreFirebase", "Elemento non scritto");
-                });
+                    })
+                    .addOnFailureListener(e ->
+                    {
+                        // Write failed
+                        Log.d("writeScoreFirebase", "Elemento non scritto");
+                    });
+        }
 
         //Scrittura dello score di un tetris
         score = App.scoreboardDao.getScore(App.PONG);
-        myRef = database.getReference(App.PONG).child(nickname);
-        myRef.setValue(score)
-                .addOnSuccessListener(aVoid ->
-                {
+        if(score != 0)
+        {
+            myRef = database.getReference(App.PONG).child(nickname);
+            myRef.setValue(score)
+                    .addOnSuccessListener(aVoid ->
+                    {
 
-                })
-                .addOnFailureListener(e ->
-                {
-                    // Write failed
-                    Log.d("writeScoreFirebase", "Elemento non scritto");
-                });
+                    })
+                    .addOnFailureListener(e ->
+                    {
+                        // Write failed
+                        Log.d("writeScoreFirebase", "Elemento non scritto");
+                    });
+        }
 
         //Scrittura dello score di un tetris
         score = App.scoreboardDao.getScore(App.BREAKOUT);
-        myRef = database.getReference(App.BREAKOUT).child(nickname);
-        myRef.setValue(score)
-                .addOnSuccessListener(aVoid ->
-                {
+        if(score != 0)
+        {
+            myRef = database.getReference(App.BREAKOUT).child(nickname);
+            myRef.setValue(score)
+                    .addOnSuccessListener(aVoid ->
+                    {
 
-                })
-                .addOnFailureListener(e ->
-                {
-                    // Write failed
-                    Log.d("writeScoreFirebase", "Elemento non scritto");
-                });
+                    })
+                    .addOnFailureListener(e ->
+                    {
+                        // Write failed
+                        Log.d("writeScoreFirebase", "Elemento non scritto");
+                    });
+        }
 
         //Scrittura dello score di un tetris
         score = App.scoreboardDao.getScore(App.HOLE);
-        myRef = database.getReference(App.HOLE).child(nickname);
-        myRef.setValue(score)
-                .addOnSuccessListener(aVoid ->
-                {
+        if(score != 0)
+        {
+            myRef = database.getReference(App.HOLE).child(nickname);
+            myRef.setValue(score)
+                    .addOnSuccessListener(aVoid ->
+                    {
 
-                })
-                .addOnFailureListener(e ->
-                {
-                    // Write failed
-                    Log.d("writeScoreFirebase", "Elemento non scritto");
-                });
+                    })
+                    .addOnFailureListener(e ->
+                    {
+                        // Write failed
+                        Log.d("writeScoreFirebase", "Elemento non scritto");
+                    });
+        }
 
     }
 
