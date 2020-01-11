@@ -17,7 +17,7 @@ import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Breakout.MainActivityBreakout;
 import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
-import com.nullpointerexception.retrogames.Hole.FullscreenActivity;
+import com.nullpointerexception.retrogames.Hole.MainActivityHole;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.R;
 import com.nullpointerexception.retrogames.Snake.MainActivitySnake;
@@ -182,7 +182,7 @@ public class GamesFragment extends Fragment
             public void onClick(View view)
             {
                 if(!blocker.block()) {
-                    Intent intent = new Intent(getContext(), FullscreenActivity.class);
+                    Intent intent = new Intent(getContext(), MainActivityHole.class);
                     startActivityForResult(intent, HOLE);
                 }
             }
@@ -468,7 +468,7 @@ public class GamesFragment extends Fragment
                 {
                     if( ! blocker.block())
                     {
-                        Intent intent = new Intent(getContext(), FullscreenActivity.class);
+                        Intent intent = new Intent(getContext(), MainActivityHole.class);
                         startActivityForResult(intent, HOLE);
                     }
                 }

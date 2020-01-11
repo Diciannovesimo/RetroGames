@@ -58,7 +58,7 @@
     <string name="gameOver">Fine partita</string>
     <string name="again">Riprova</string>
     <string name="your_score_is">Il tuo punteggio è </string>
-    <string name="dialog_registration_succes">Sei stato registrato correttamente</string>
+    <string name="dialog_registration_succes">Ti sei registrato correttamente\n\nControlla la tua casella di posta\nSe usi Gmail, assicurati che la tua e-mail non arrivi nella tabella delle promozioni</string>
     <string name="dialog_registrazion_error">Errore di registrazione</string>
     <string name="error_wrong_email">Email non corretta</string>
     <string name="error_short_username">Username troppo corto</string>

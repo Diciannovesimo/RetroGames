@@ -50,10 +50,6 @@ public class LoginActivity extends AppCompatActivity
         //Inizializzo l'UI
         initUI();
 
-        //Rende l'activity transparente e a schermo intero
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-
         //Listener login
         mLogin.setOnTouchListener(new OnTouchAnimatedListener()
         {

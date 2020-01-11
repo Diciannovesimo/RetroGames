@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:background="#0099cc"
-    tools:context=".Hole.FullscreenActivity">
+    tools:context=".Hole.MainActivityHole">
 
 
     <com.nullpointerexception.retrogames.Hole.CanvasView android:id="@+id/fullscreen_content" android:layout_width="match_parent"

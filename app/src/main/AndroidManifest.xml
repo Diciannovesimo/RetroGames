@@ -48,7 +48,7 @@
             android:screenOrientation="landscape" />
         <activity android:name=".Snake.MainActivitySnake" />
         <activity
-            android:name=".Hole.FullscreenActivity"
+            android:name=".Hole.MainActivityHole"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="landscape"></activity>
