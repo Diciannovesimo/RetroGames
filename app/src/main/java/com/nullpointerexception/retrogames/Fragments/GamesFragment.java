@@ -1,6 +1,8 @@
 package com.nullpointerexception.retrogames.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,8 +17,10 @@ import androidx.fragment.app.Fragment;
 
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.Breakout.MainActivityBreakout;
+import com.nullpointerexception.retrogames.Components.BackEndInterface;
 import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
+import com.nullpointerexception.retrogames.Components.Scoreboard;
 import com.nullpointerexception.retrogames.Hole.FullscreenActivity;
 import com.nullpointerexception.retrogames.Pong.MainActivityPong;
 import com.nullpointerexception.retrogames.R;
@@ -81,9 +85,7 @@ public class GamesFragment extends Fragment
             if( ! databaseLoadingNeeded)
                 showCardOfGame(App.TETRIS);
             else
-            {
-                //databaseLoading();
-            }
+                databaseLoading();
 
             setOnCardClickListenersLandscape();
         }
@@ -150,12 +152,9 @@ public class GamesFragment extends Fragment
             breakoutHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.BREAKOUT) ));
         }
         else
-        {
-            //databaseLoading();
-        }
+            databaseLoading();
     }
 
-    /**
     private void databaseLoading()
     {
         SharedPreferences nicknameShared = getContext().getSharedPreferences(App.USER, Context.MODE_PRIVATE);
@@ -236,7 +235,7 @@ public class GamesFragment extends Fragment
             }
         });
     }
-**/
+
     private void setOnPlayButtonClickListenerPortrait()
     {
         playButtonTetris.setOnTouchListener(new OnTouchAnimatedListener()

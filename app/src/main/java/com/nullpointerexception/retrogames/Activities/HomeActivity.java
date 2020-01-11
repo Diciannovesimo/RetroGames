@@ -297,7 +297,8 @@ public class HomeActivity extends AppCompatActivity
      * tra il database locale e quello di Firebase
      * e riempie il database locale
      */
-    private void restoreScore (){
+    private void restoreScore ()
+    {
         SharedPreferences nicknameShared = getSharedPreferences(App.USER, MODE_PRIVATE);
         String nickname = nicknameShared.getString(App.NICKNAME, "-");
 
