@@ -2,11 +2,11 @@ package com.nullpointerexception.retrogames.Activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +28,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private String email, password, confirmPassword, nickName;
     private List<String> mNicknames = new ArrayList<>();
     private AlertDialog mDlgMsg;
+    private ImageView mInfo;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -35,10 +36,6 @@ public class RegistrationActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-
-        //Rende l'activity transparente e a schermo intero
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
 
         //Inizializza l'interfaccia grafica
         initUI();
@@ -60,6 +57,17 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //Listener pulsante informazioni
+        mInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(RegistrationActivity.this)
+                        .setMessage("La password può contenere tutti i tipi di caratteri " +
+                                "ma deve essere lunga almeno 8 caratteri")
+                        .show();
+            }
+        });
     }
 
     /**
@@ -71,6 +79,7 @@ public class RegistrationActivity extends AppCompatActivity {
         mPassword = findViewById(R.id.passwordTextField);
         mConfirmPassword = findViewById(R.id.confPasswordTextField3);
         mRegister = findViewById(R.id.registration_btn);
+        mInfo = findViewById(R.id.info_btn);
     }
 
     /**

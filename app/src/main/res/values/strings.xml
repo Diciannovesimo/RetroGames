@@ -86,7 +86,7 @@
     <!-- Registration activity -->
     <string name="registration_title">New account</string>
     <string name="error_edittext_username">The username already exists</string>
-    <string name="dialog_registration_succes">You have been successfully registered</string>
+    <string name="dialog_registration_succes">You have been successfully registered!\n\nCheck your inbox to confirm the email\nIf you use Gmail, take care, that your email is not arrived in promotion table</string>
     <string name="dialog_registrazion_error">Registration error</string>
     <string name="error_wrong_email">Wrong email</string>
     <string name="error_short_username">Too short username</string>
