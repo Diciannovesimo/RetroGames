@@ -37,10 +37,8 @@
         <activity
             android:name=".Tetris.MainActivityTetris"
             android:screenOrientation="portrait" />
-        <activity android:name=".Breakout.MainActivityBreakout" />
-        <activity
-            android:name=".Breakout.Scoreboard"
-            android:parentActivityName=".Breakout.MainActivityBreakout" />
+        <activity android:name=".Breakout.MainActivityBreakout"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Pong.MainActivityPong"
             android:configChanges="keyboardHidden|orientation"

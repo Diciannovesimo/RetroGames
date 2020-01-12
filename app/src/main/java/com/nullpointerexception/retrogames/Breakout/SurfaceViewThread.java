@@ -28,7 +28,7 @@ import java.util.Random;
 
 public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Callback, Runnable
 {
-    private SurfaceHolder surfaceHolder = null;
+    private SurfaceHolder surfaceHolder;
     private Thread thread = null;
     private Paint paint = new Paint();
     private Canvas canvas = null;
@@ -43,8 +43,10 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     int score = 0;
     int lives = 3;
 
-
+    long highscore;
     long calculatedFps = 0;
+    int level = 1;
+    boolean newLevel = false;
     private static final int TARGET_FPS = 60;
     float fpsDelay = 1f;
     int totalScore = 48;
@@ -230,9 +232,13 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
                     bricks[i].setInvisible();
                     bricks[i].setRes();
                     collisionLeftRight(ball, bricks[i]);
-                    score += 1;
-                    if (score == totalScore)
-                        buildWall(false);
+                    score++;
+                    if(score % totalScore == 0)
+                    {
+                        level++;
+                        newLevel = true;
+                        buildWall(true);
+                    }
                 }
             }
         }
@@ -259,6 +265,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         {
             ball.reverseXVelocity();
         }
+        //  Controlla se è stato raggiunto il bordo inferiore dello schermo
         if (ball.getY() + ball.getYSpeed() > (screenHeight- ball.getRadius()))
         {
             ball.reverseYVelocity();
@@ -304,6 +311,8 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
             // Reset posizione palla
             ball.reset(screenWidth - 230, (int) paddle.getRect().top - ball.getRadius());
             this.paused = true;
+
+            highscore = App.scoreboardDao.getScore(App.BREAKOUT);
         }
         else
             playSound(NEW_WALL_SOUND);
@@ -342,8 +351,6 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         // Restart game
         if (lives == 0)
         {
-            Boolean lose = score != totalScore;
-
             SaveScore pong = new SaveScore();
             pong.save(App.BREAKOUT, score, getContext());
 
@@ -355,8 +362,6 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     @Override
     public void run()
     {
-        buildWall(true);
-
         while(threadRunning)
         {
             long startms = System.currentTimeMillis();
@@ -376,10 +381,9 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     }
 
 
-    //|----------------------------------|//
-    // METHODE DESSINE SUR LA SURFACEVIEW //
-    //|----------------------------------|//
-
+    /**
+     *      Metodo principale dove viene disegnato tutto il canvas ad ogni frame
+     */
     private void draw()
     {
         long startms = System.currentTimeMillis();
@@ -407,12 +411,10 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
 
             // Modifica l'oggetto paint
             paint.setColor(Color.argb(255, 255, 255, 255));
-            paint.setTextSize(90);
+            paint.setTextSize(72);
 
             //  Disegna la linea
             canvas.drawLine(topRect.left, topRect.bottom, topRect.right, topRect.bottom, paint);
-
-            int linesY = screenHeight / 11;
 
             /* // Scrive gli fps
             canvas.drawText("" + calculatedFps, 50, linesY, paint);
@@ -421,12 +423,16 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
 
             // Aggiorna lo score
             canvas.drawText(getResources().getString(R.string.score)
-                    + " " + score, 50, linesY, paint);
+                    + " " + score, 50, (topRect.height() / 2), paint);
+            paint.setTextSize(48);
+            canvas.drawText(getResources().getString(R.string.highscore)
+                    + " " + highscore, 50, topRect.bottom - 36, paint);
 
             // Aggiorna le vite
+            paint.setTextSize(90);
             canvas.drawBitmap(lifeBitmap, (screenWidth - 158) - lifeBitmap.getWidth(),
-                    linesY - lifeBitmap.getHeight(), paint);
-            canvas.drawText(String.valueOf(lives), screenWidth - 150, linesY, paint);
+                    screenHeight / 11 - lifeBitmap.getHeight(), paint);
+            canvas.drawText(String.valueOf(lives), screenWidth - 150, screenHeight / 11, paint);
 
             // Draw the paddle
             paddle.draw(canvas);
@@ -440,6 +446,25 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
 
             // Draw the ball
             ball.draw(canvas);
+
+            //  Disegna la scritta 'in pausa' o 'nuovo livello'
+            if(paused)
+            {
+                // Disegna un contorno alla scritta 'pausa'
+                paint.setColor(Color.argb(178, 0, 0, 0));
+                canvas.drawRect(new Rect(0, (screenHeight/2) - 100, screenWidth,
+                        (screenHeight/2) + 100), paint);
+                //  Scrive la scritta 'pausa'
+                paint.setColor(Color.WHITE);
+                paint.setTextSize(90);
+
+                if(newLevel)
+                    canvas.drawText(String.format(getResources().getString(R.string.level), level),
+                            200, screenHeight / 2 + 32, paint);
+                else
+                    canvas.drawText(getResources().getString(R.string.press_to_continue),
+                            100, screenHeight/2 + 32, paint);
+            }
 
             // Send message to main UI thread to update the drawing to the main view special area.
             surfaceHolder.unlockCanvasAndPost(canvas);
@@ -460,6 +485,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
             // Player has touched the screen
             case MotionEvent.ACTION_DOWN:
                 paused = false;
+                newLevel = false;
                 if (motionEvent.getX() > screenWidth / 2)
                 {
                     paddle.setMovementState(paddle.RIGHT);
@@ -477,12 +503,12 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         return true;
     }
 
-
     //|----------------------------------|//
     // METHODE PAUSE POUR LA GAME_ACTIVITY //
     //|----------------------------------|//
     public void pause()
     {
+        paused = true;
         threadRunning = false;
         try
         {
