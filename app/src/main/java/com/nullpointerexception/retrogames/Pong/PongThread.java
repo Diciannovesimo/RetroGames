@@ -82,6 +82,7 @@ public class PongThread extends Thread {
     private int   mCanvasWidth;
 
     private onEndGameListener onEndGameListener;
+    private OnAddScoreListener onAddScoreListener;
 
     /**
      * usato per permettere al computer di "dimenticarsi" di muovere il canvas in modo tale da
@@ -104,7 +105,7 @@ public class PongThread extends Thread {
     private final int MUSIC_LOOP = 0;
     private final int SOUND_PLAY_PRIORITY = 1;
     private final float PLAY_RATE= 1.0f;
-    static int[] sm;
+    static int idSound;
 
     PongThread(final SurfaceHolder surfaceHolder,
                final Context context,
@@ -301,14 +302,18 @@ public class PongThread extends Thread {
                 case STATE_WIN:
                     setStatusText(res.getString(R.string.mode_win));
                     mHumanPlayer.score++;
+                    if(onAddScoreListener != null)
+                        onAddScoreListener.onAddScore(mHumanPlayer.score, mComputerPlayer.score);
                     setupNewRound();
                     break;
                 case STATE_LOSE:
                     setStatusText(res.getString(R.string.mode_lose));
                     mComputerPlayer.score++;
+                    if(onAddScoreListener != null)
+                        onAddScoreListener.onAddScore(mHumanPlayer.score, mComputerPlayer.score);
                     if (mComputerPlayer.score == LOSE_VALUE)
                     {
-                        playSound(1);
+                        playSound();
                         game_over(mComputerPlayer.score,mHumanPlayer.score);
                         startNewGame();
 
@@ -344,6 +349,7 @@ public class PongThread extends Thread {
     public void game_over(int cpuScore, int humanScore){
 
         int score_pong = humanScore - cpuScore;
+
         int exit_mode = 1;
 
         if (score_pong < 0)
@@ -366,7 +372,6 @@ public class PongThread extends Thread {
         if(onEndGameListener != null)
             onEndGameListener.onEnd(score_pong, exit_mode);
 
-
     }
 
     /**
@@ -380,20 +385,15 @@ public class PongThread extends Thread {
         } else
             soundPool= new SoundPool(NUMBER_OF_SIMULTANEOUS_SOUNDS, AudioManager.STREAM_MUSIC, 0);
 
-        sm = new int[2];
-
         //inserisce i suoni
-        sm[0] = soundPool.load(mContext, R.raw.hit_pong, SOUND_PLAY_PRIORITY);
-        sm[1] = soundPool.load(mContext, R.raw.gameover_pong, SOUND_PLAY_PRIORITY);
+        idSound = soundPool.load(mContext, R.raw.hit_pong, SOUND_PLAY_PRIORITY);
     }
 
     /**
      * Riproduce i suoni
-     *
-     * @param sound Riceve un intero in base al tipo di audio che si vuole riprodurre
      */
-    public void playSound(int sound) {
-        soundPool.play(sm[sound],
+    public int playSound() {
+        return soundPool.play(idSound,
                 LEFT_VOLUME_VALUE,
                 RIGHT_VOLUME_VALUE,
                 SOUND_PLAY_PRIORITY,
@@ -405,7 +405,6 @@ public class PongThread extends Thread {
      * Disalloca l'audio
      */
     public final void cleanUpIfEnd() {
-        sm = null;
         soundPool.release();
         soundPool = null;
     }
@@ -492,22 +491,22 @@ public class PongThread extends Thread {
         }
 
         if (collision(mHumanPlayer, mBall)) {
-            playSound(0);
+            playSound();
             handleCollision(mHumanPlayer, mBall);
             mHumanPlayer.collision = PHYS_COLLISION_FRAMES;
         } else if (collision(mComputerPlayer, mBall)) {
-            playSound(0);
+            playSound();
             handleCollision(mComputerPlayer, mBall);
             mComputerPlayer.collision = PHYS_COLLISION_FRAMES;
         } else if (ballCollidedWithTopOrBottomWall()) {
-            playSound(0);
+            playSound();
             mBall.dy = -mBall.dy;
         } else if (ballCollidedWithRightWall()) {
-            playSound(0);
+            playSound();
             setState(STATE_WIN);    // human plays on left
             return;
         } else if (ballCollidedWithLeftWall()) {
-            playSound(0);
+            playSound();
             setState(STATE_LOSE);
             return;
         }
@@ -583,7 +582,7 @@ public class PongThread extends Thread {
         canvas.drawRect(5, 8, mCanvasWidth, mCanvasHeight - 5 , mCanvasBoundsPaint);
 
         final int middle = mCanvasWidth / 2;
-        canvas.drawLine(middle, 5, middle, mCanvasHeight - 5, mMedianLinePaint);
+        canvas.drawLine(middle, 8, middle, mCanvasHeight - 5, mMedianLinePaint);
 
         setScoreText(mHumanPlayer.score + "    " + mComputerPlayer.score);
 
@@ -742,9 +741,16 @@ public class PongThread extends Thread {
         this.onEndGameListener = onEndGameListener;
     }
 
+    public void setOnAddScoreListener(OnAddScoreListener onAddScoreListener) {
+        this.onAddScoreListener = onAddScoreListener;
+    }
+
     public interface onEndGameListener{
         void onEnd(int score, int exit_mode);
     }
 
+    public interface OnAddScoreListener {
+        void onAddScore(int humanScore, int computerScore);
+    }
 
 }
