@@ -32,20 +32,19 @@ import java.util.Random;
  */
 public class PongThread extends Thread {
 
-    public Bundle universal_map;
+    private Bundle universal_map;
 
-    public static final int STATE_PAUSE   = 0;
-    public static final int STATE_READY   = 1;
-    public static final int STATE_RUNNING = 2;
-    public static final int STATE_LOSE    = 3;
-    public static final int STATE_WIN     = 4;
+    static final int STATE_PAUSE   = 0;
+    static final int STATE_READY   = 1;
+    static final int STATE_RUNNING = 2;
+    static final int STATE_LOSE    = 3;
+    static final int STATE_WIN     = 4;
 
-    public static final int LOSE_VALUE = 3;
+    private static final int LOSE_VALUE = 3;
 
     private static final int    PHYS_BALL_SPEED       = 15;
     private static final int    PHYS_PADDLE_SPEED     = 8;
     private static final int    PHYS_FPS              = 60;
-    //todo: Eventualmente modificare l'angolo del rimbalzo per una migliore giocabilità
     private static final double PHYS_MAX_BOUNCE_ANGLE = 2 * Math.PI / 12; //75 degrees in radians
     private static final int    PHYS_COLLISION_FRAMES = 5;
 
@@ -105,7 +104,7 @@ public class PongThread extends Thread {
     private final int MUSIC_LOOP = 0;
     private final int SOUND_PLAY_PRIORITY = 1;
     private final float PLAY_RATE= 1.0f;
-    static int idSound;
+    private static int idSound;
 
     PongThread(final SurfaceHolder surfaceHolder,
                final Context context,
@@ -210,9 +209,7 @@ public class PongThread extends Thread {
     }
 
     /**
-     * setta lo stato del thread nella view
-     * a seconda del parametro passato.
-     * questa funzione viene chiamata in pongview
+     * Setta lo stato del thread nella view a seconda del parametro passato.
      * @param running
      */
     void setRunning(boolean running) {

@@ -12,8 +12,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nullpointerexception.retrogames.App;
-import com.nullpointerexception.retrogames.Components.SaveScore;
-import com.nullpointerexception.retrogames.Hole.MainActivityHole;
 import com.nullpointerexception.retrogames.R;
 
 /**
@@ -49,9 +47,6 @@ public class MainActivityPong extends AppCompatActivity {
         else
             //Non esiste un topscore
             highScore = 0;
-
-
-
 
 
         context = this;
@@ -145,7 +140,7 @@ public class MainActivityPong extends AppCompatActivity {
                 if (exit_mode == 1)
                 {
                     mDlgMsg = new AlertDialog.Builder(context)
-                        .setTitle(context.getString(R.string.gameOver))
+                            .setTitle(context.getString(R.string.gameOver))
                             .setMessage(context.getString(R.string.your_score_is) + ": " + score + "\n" + context.getString(R.string.no_point))
                             .setPositiveButton(context.getString(R.string.again), (dialog, which) -> {
                                 mDlgMsg.dismiss();
@@ -233,15 +228,24 @@ public class MainActivityPong extends AppCompatActivity {
         mGameThread.setOnAddScoreListener(new PongThread.OnAddScoreListener() {
             @Override
             public void onAddScore(int humanScore, int computerScore) {
-                int score = humanScore - computerScore;
-                if(score >= 0)
-                    mScore.setText(getResources().getString(R.string.score) + score);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int score = humanScore - computerScore;
+                        if(score >= 0)
+                            mScore.setText(getResources().getString(R.string.score) + score);
 
-                if(score > highScore)
-                    mHighScore.setText(getResources().getString(R.string.high_score) + score);
+                        if(score > highScore) {
+                            mHighScore.setText(getResources().getString(R.string.high_score) + score);
+                        } else {
+                            if (score < highScore)
+                                mHighScore.setText(getResources().getString(R.string.high_score) + highScore);
+                        }
+                    }
+                });
+
             }
         });
-
 
     }
 

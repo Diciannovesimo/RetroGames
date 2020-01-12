@@ -225,7 +225,6 @@ public class AuthenticationManager
     public LoginAttempt requestLoginWithGoogle(Activity activity)
     {
         currentLoginAttempt = new LoginAttempt();
-        //TODO: Creare una nuova chiave per l'applicazione
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(context.getString(R.string.default_web_client_id))
