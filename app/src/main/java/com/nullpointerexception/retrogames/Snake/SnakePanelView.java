@@ -315,13 +315,13 @@ public class SnakePanelView extends View {
     private void addPoint() {
         switch (mDifficulty) {
             case GameType.EASY:
-                mPoint += 5;
+                mPoint += 1;
                 break;
             case GameType.MEDIUM:
-                    mPoint += 7;
+                    mPoint += 2;
                     break;
             case GameType.HARD:
-                mPoint += 9;
+                mPoint += 3;
                 break;
         }
 

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nullpointerexception.retrogames.Snake.MainActivitySnake"
-    android:background="@color/grey">
+    android:background="@color/grey"
+    tools:context="com.nullpointerexception.retrogames.Snake.MainActivitySnake">
 
   <androidx.constraintlayout.widget.Guideline
       android:id="@+id/guideline4"
@@ -14,15 +14,15 @@
       android:orientation="horizontal"
       app:layout_constraintGuide_percent="0.71" />
 
-    <com.nullpointerexception.retrogames.Snake.SnakePanelView
-        android:id="@+id/snake_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline6" />
+  <com.nullpointerexception.retrogames.Snake.SnakePanelView
+      android:id="@+id/snake_view"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toTopOf="@+id/guideline3"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="1.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
   <Button
       android:id="@+id/top_btn"
@@ -82,32 +82,32 @@
 
   <TextView
       android:id="@+id/score_tv"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
       android:layout_marginStart="4dp"
-      android:layout_marginTop="2dp"
-      android:layout_marginBottom="2dp"
+      android:autoSizeMaxTextSize="20sp"
+      android:autoSizeTextType="uniform"
       android:textColor="@color/black"
-      android:textSize="20sp"
       android:textStyle="bold"
       app:layout_constraintBottom_toTopOf="@+id/guideline6"
+      app:layout_constraintEnd_toStartOf="@+id/guideline7"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
       android:id="@+id/highscore_tv"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="2dp"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
       android:layout_marginEnd="4dp"
-      android:layout_marginBottom="2dp"
+      android:autoSizeMinTextSize="15sp"
+      android:autoSizeTextType="uniform"
       android:clickable="true"
       android:textAlignment="textEnd"
       android:textColor="@color/black"
-      android:textSize="20sp"
       android:textStyle="bold"
       app:layout_constraintBottom_toTopOf="@+id/guideline6"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="@+id/guideline7"
       app:layout_constraintTop_toTopOf="parent"
       tools:ignore="KeyboardInaccessibleWidget" />
 
@@ -139,5 +139,12 @@
       app:layout_constraintTop_toBottomOf="@+id/snake_view"
       app:srcCompat="@drawable/ic_play"
       tools:ignore="KeyboardInaccessibleWidget" />
+
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline7"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
