@@ -13,7 +13,6 @@ import com.nullpointerexception.retrogames.R;
 
 public class MainActivityHole extends Activity implements SensorEventListener {
     private SensorManager sensorManager;
-
     private CanvasView contentView;
 
     @Override
@@ -22,8 +21,7 @@ public class MainActivityHole extends Activity implements SensorEventListener {
 
         setContentView(R.layout.activity_fullscreen_hole);
 
-        contentView = (CanvasView) findViewById(R.id.fullscreen_content);
-
+        contentView = findViewById(R.id.fullscreen_content);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
     }
 
@@ -35,9 +33,7 @@ public class MainActivityHole extends Activity implements SensorEventListener {
         // Registrare questa classe come listener per il sensore accelerometro
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_GAME);
-        // ...e il sensore di orientamento
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
-                SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 
     @Override

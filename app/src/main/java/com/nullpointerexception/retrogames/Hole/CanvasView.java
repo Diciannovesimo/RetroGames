@@ -22,40 +22,34 @@ import com.nullpointerexception.retrogames.R;
 import java.util.Random;
 
 public class CanvasView extends View implements View.OnTouchListener {
-    private static final int DOWN = 1;
-    private static final int RIGHT = 1;
 
     private double y;   //Coordinata dell'asse y della palla
     private double x;   //Coordinata dell'asse x della palla
-    private double directionY = DOWN;
-    private double directionX = RIGHT;
+    private double vx;  //nuova coordinata asse x della palla
+    private double vy;  //nuova coordinata asse y della palla
     private Bitmap ball2;   //Immagine della palla
     private Bitmap background; //Immagine dello sfondo
     private Bitmap hole;    //Immagine della buca
-    private double vx;
-    private double vy;
     private int ballRadius; //Raggio della palla
-    private int holeX = 700;
-    private int holeY = 600;
+    private int holeX = 700;   //Dimensione della buca asse x
+    private int holeY = 600;    //Dimensione della buca asse y
     private Random random = new Random();
-    private int score;
-    private boolean warningVisible;
-    private boolean wallCrash;
-    private Paint brush = new Paint();
-    private Paint scorePaint = new Paint();
-    private Paint warningPaint = new Paint();
-    private Paint startGamePaint = new Paint();
-    private long lastInvalidate;
-    private int lives;
-    private boolean gameStarted;
-    private boolean gameOverDisplayed;
+    private int score;  //punteggio
+    private boolean warningVisible; //serve per rendere immuni
+    private Paint brush = new Paint();  //stile dello sfondo dei messaggi di warning e del punteggio
+    private Paint scorePaint = new Paint(); //stile del messaggio del punteggio
+    private Paint livePaint = new Paint(); //stile del messaggio delle vite
+    private long lastInvalidate; //contiene il tempo in ms dell'ultima volta che è stato refreshato lo schermo
+    private int lives; //vite
+    private final Rect textBounds = new Rect(); //don't new this up in a draw method
+    private boolean gameStarted; //indica se il game è iniziato
+    private boolean gameOverDisplayed; //indica se il game over è mostrato
 
 
     /**
      * Crea il CanvasView e setta il contesto
      * @param context contesto
      */
-
     public CanvasView(Context context) {
         super(context);
         init();
@@ -133,7 +127,6 @@ public class CanvasView extends View implements View.OnTouchListener {
             }
         }, 3000);
 
-        //TODO: Vedere qui per il messaggio di quando si perde una vita
 
         //Mostra il messaggio quando si eprde una vita
         TextView tv = new TextView(getContext());
@@ -198,9 +191,9 @@ public class CanvasView extends View implements View.OnTouchListener {
             wallCrash();
         }
 
-        //TODO:aiutatemi a capire questo
+        //Refresh dello schermo solo dopo 5ms,
         if (System.currentTimeMillis() - lastInvalidate > 5) {
-            invalidate();
+            invalidate(); //Refresh della schermata
             lastInvalidate = System.currentTimeMillis();
         }
     }
@@ -220,47 +213,58 @@ public class CanvasView extends View implements View.OnTouchListener {
         }
     }
 
+    /**
+     *
+     * @param canvas
+     */
     protected void onDraw(Canvas canvas) {
+        //determina lo stile del punteggio
         scorePaint.setColor(Color.BLACK);
         scorePaint.setFakeBoldText(true);
         scorePaint.setTextSize(fontSize);
-        warningPaint.setColor(Color.RED);
-        warningPaint.setTextSize(120);
-        warningPaint.setTextAlign(Paint.Align.CENTER);
-//        startGamePaint.setColor(Color.RED);
-//        startGamePaint.setTextSize(fontSize);
-//        startGamePaint.setFakeBoldText(true);
+        //determina lo stile delle vite
+        livePaint.setColor(Color.RED);
+        livePaint.setTextSize(120);
+        livePaint.setTextAlign(Paint.Align.CENTER);
+        //determina lo stile dello sfondo dei messaggi
         brush.setStrokeWidth(10);
         brush.setColor(Color.WHITE);
-        canvas.drawBitmap(background, 0, 0, null);
-        canvas.drawBitmap(hole, holeX - ballRadius, holeY - ballRadius, null);
-        canvas.drawBitmap(ball2, (int) (x - ballRadius), (int) (y - ballRadius), null);
+
+        canvas.drawBitmap(background, 0, 0, null);  //disegna lo sfondo
+        canvas.drawBitmap(hole, holeX - ballRadius, holeY - ballRadius, null);  //disegna la buca
+        canvas.drawBitmap(ball2, (int) (x - ballRadius), (int) (y - ballRadius), null);  //disegna la palla
+
         float width = 49 * fontSize / 8;
         float height = 14 * fontSize / 8;
-        canvas.drawRect(30, 30, 30 + width, 30 + height, brush);
-        canvas.drawRect(getWidth() - width - 30, 30, getWidth() - 30, height + 30, brush);
-        if (gameStarted == false) {
-        canvas.drawRect(getWidth() / 2 - 290, getHeight() / 2 - 70, getWidth() / 2 + 290, getHeight() / 2 + 70, brush);
+
+        canvas.drawRect(30, 30, 30 + width, 30 + height, brush);    //disegna rettangolo per lo score
+        canvas.drawRect(getWidth() - width - 30, 30, getWidth() - 30, height + 30, brush);  //disegna rettangolo per le vite
+
+
+        if (gameStarted == false)
+        {
+            canvas.drawRect(getWidth() / 2 - 290, getHeight() / 2 - 70, getWidth() / 2 + 290, getHeight() / 2 + 70, brush); //disegna rettangolo per lo start game
+            drawTextCentred(canvas, scorePaint, "START GAME", getWidth() / 2 - width / 2, getHeight() / 2); //scrive nel rettangolo di start game
         }
-        drawTextCentred(canvas, scorePaint, "Score: " + score, 70, 30 + height / 2);
-        drawTextCentred(canvas, scorePaint, "Lives: " + lives, getWidth() - width + 30, 30 + height / 2);
-        if (gameStarted == false) {
-            drawTextCentred(canvas, scorePaint, "START GAME", getWidth() / 2 - width / 2, getHeight() / 2);
-        }
-        if (gameOverDisplayed == true) {
-            drawTextCentred(canvas, warningPaint, "GAME OVER", getWidth() / 2, getHeight() / 4);
-        }
+
+        drawTextCentred(canvas, scorePaint, "Score: " + score, 70, 30 + height / 2);    //scrive il punteggio nel rettangolo
+        drawTextCentred(canvas, scorePaint, "Lives: " + lives, getWidth() - width + 30, 30 + height / 2);   //scrive le vite nel rettangolo
+
+        if (gameOverDisplayed == true)
+            drawTextCentred(canvas, livePaint, "GAME OVER", getWidth() / 2, getHeight() / 4); //scrive nel rettangolo di start game "game over"
+
+
     }
 
-    private final Rect textBounds = new Rect(); //don't new this up in a draw method
+
 
     /**
      * Disegna il testo centrato
-     * @param canvas
-     * @param paint
-     * @param text
-     * @param cx
-     * @param cy
+     * @param canvas canvas
+     * @param paint stile
+     * @param text testo
+     * @param cx asse x
+     * @param cy asse y
      */
     public void drawTextCentred(Canvas canvas, Paint paint, String text, float cx, float cy){
         paint.getTextBounds(text, 0, text.length(), textBounds);
