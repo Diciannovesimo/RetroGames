@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class Circle
 {
-    int radius,x,y;
+    int radius, x, y;
     int speed = 0;
     int Xspeed = 0;
     int Yspeed = 0;
@@ -21,11 +21,12 @@ public class Circle
 
     private Bitmap ballBitmap;
 
-    public Circle(int x, int y, int r, int s) {
+    public Circle(int x, int y, int r, int s)
+    {
         super();
-        this.x = x/2;
-        this.y = y-200;
-        this.radius = r/2;
+        this.x = x / 2;
+        this.y = y - 200;
+        this.radius = r / 2;
         this.Xspeed = s;
         this.Yspeed = s;
     }
@@ -83,9 +84,16 @@ public class Circle
     public void clearObstacleY(int y){this.y = (y - getRadius()*2);}
     public void clearObstacleX(int x){this.x = (x + getRadius()*2);}
 
-    public void move(long fps){
+    public void move(long fps)
+    {
         this.x += (Xspeed / fps);
         this.y += (Yspeed / fps);
+    }
+
+    public void move(long fps, float delay)
+    {
+        this.x += ((Xspeed / fps) * delay);
+        this.y += ((Yspeed / fps) * delay);
     }
 
     public void reset(int x, int y){
