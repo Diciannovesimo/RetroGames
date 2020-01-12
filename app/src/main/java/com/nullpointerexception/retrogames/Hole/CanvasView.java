@@ -1,13 +1,16 @@
 package com.nullpointerexception.retrogames.Hole;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -37,27 +40,32 @@ public class CanvasView extends View implements View.OnTouchListener {
     private int score;  //punteggio
     private boolean warningVisible; //serve per rendere immuni
     private Paint brush = new Paint();  //stile dello sfondo dei messaggi di warning e del punteggio
-    private Paint scorePaint = new Paint(); //stile del messaggio del punteggio
-    private Paint livePaint = new Paint(); //stile del messaggio delle vite
+    private Paint paint = new Paint(); //stile del messaggio di start
     private long lastInvalidate; //contiene il tempo in ms dell'ultima volta che è stato refreshato lo schermo
-    private int lives; //vite
+    private int life; //vita
     private final Rect textBounds = new Rect(); //don't new this up in a draw method
     private boolean gameStarted; //indica se il game è iniziato
     private boolean gameOverDisplayed; //indica se il game over è mostrato
+    private float fontSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()); //dimensione del testo
+    private AlertDialog mDlgMsg = null;
+    private OnChangeScoreListener onChangeScoreListener;
+
+    //SoundPool costants
+    private SoundPool soundPool;
+    private final int NUMBER_OF_SIMULTANEOUS_SOUNDS = 5;
+    private final float LEFT_VOLUME_VALUE = 1.0f;
+    private final float RIGHT_VOLUME_VALUE = 1.0f;
+    private final int MUSIC_LOOP = 0;
+    private final int SOUND_PLAY_PRIORITY = 1;
+    private final float PLAY_RATE= 1.0f;
+    static int[] sm;
 
 
-    /**
-     * Crea il CanvasView e setta il contesto
-     * @param context contesto
-     */
     public CanvasView(Context context) {
         super(context);
         init();
+        initSound();
     }
-
-
-    Resources r = getResources();
-    float fontSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, r.getDisplayMetrics());
 
     /**
      * Cra il CanvasView
@@ -67,6 +75,7 @@ public class CanvasView extends View implements View.OnTouchListener {
     public CanvasView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+        initSound();
     }
 
 
@@ -90,7 +99,9 @@ public class CanvasView extends View implements View.OnTouchListener {
         x = getWidth() / 2;
         //Reimposta lo score e le vite
         score = 0;
-        lives = 3;
+        life = 3;
+        if(onChangeScoreListener != null)
+            onChangeScoreListener.onChangeScore(score, life);
         gameStarted = true;
         gameOverDisplayed = false;
     }
@@ -99,6 +110,24 @@ public class CanvasView extends View implements View.OnTouchListener {
      * Imposta la fine del gioco
      */
     private void gameOver() {
+        mDlgMsg = new AlertDialog.Builder(getContext())
+                .setTitle(getResources().getString(R.string.gameOver))
+                .setMessage(getResources().getString(R.string.your_score_is) + ": " + score)
+                .setPositiveButton(getResources().getString(R.string.again), (dialog, which) -> {
+                    mDlgMsg.dismiss();
+                    restartGame();
+                })
+                .setNegativeButton(getResources().getString(R.string.exit), (dialog, which) -> {
+                    mDlgMsg.dismiss();
+                    if(getContext() instanceof MainActivityHole)
+                    {
+                        cleanUpIfEnd();
+                        ((MainActivityHole) getContext()).finish();
+                    }
+
+                })
+                .show();
+
         gameStarted = false;
         gameOverDisplayed = true;
 
@@ -112,8 +141,12 @@ public class CanvasView extends View implements View.OnTouchListener {
             return;
         }
 
-        lives = lives - 1;  //Tolgo una vita
-        if (lives == 0) {
+        playSound(1);
+        life = life - 1;  //Tolgo una vita
+        if(onChangeScoreListener != null)
+            onChangeScoreListener.onChangeScore(score, life);
+
+        if (life == 0) {
             gameOver();
             return;
         }
@@ -128,12 +161,12 @@ public class CanvasView extends View implements View.OnTouchListener {
         }, 3000);
 
 
-        //Mostra il messaggio quando si eprde una vita
+        //Mostra il messaggio quando si perde una vita
         TextView tv = new TextView(getContext());
-        tv.setTextColor(Color.RED);
+        tv.setTextColor(Color.WHITE);
         tv.setTextSize(20);
         tv.setGravity(Gravity.CENTER_VERTICAL);
-        tv.setText("BOOM!   -1");
+        tv.setText(getResources().getString(R.string.you_hit_the_wall));
 
         //Genera un layout per mostrare la textView
         LinearLayout layout = new LinearLayout(getContext());
@@ -151,8 +184,6 @@ public class CanvasView extends View implements View.OnTouchListener {
      * Gestisce il movimento della palla
      */
     private void move() {
-        //y = y + vy * directionY;
-        //x = x + vx * directionX;
         //determina la nuova posizione della pallina
         y = y + vy;
         x = x + vx;
@@ -165,6 +196,9 @@ public class CanvasView extends View implements View.OnTouchListener {
             holeX = random.nextInt(getWidth() - ballRadius * 2) + ballRadius;
             holeY = random.nextInt(getHeight() - ballRadius * 2) + ballRadius;
             score ++;
+            playSound(0);
+            if(onChangeScoreListener != null)
+                onChangeScoreListener.onChangeScore(score, life);
         }
 
         //la palla prende la posizione della buca
@@ -214,18 +248,16 @@ public class CanvasView extends View implements View.OnTouchListener {
     }
 
     /**
-     *
-     * @param canvas
+     * Disegna tutti i canvas
+     * @param canvas canvas
      */
     protected void onDraw(Canvas canvas) {
-        //determina lo stile del punteggio
-        scorePaint.setColor(Color.BLACK);
-        scorePaint.setFakeBoldText(true);
-        scorePaint.setTextSize(fontSize);
-        //determina lo stile delle vite
-        livePaint.setColor(Color.RED);
-        livePaint.setTextSize(120);
-        livePaint.setTextAlign(Paint.Align.CENTER);
+
+        //determina lo stile dello start game
+        paint.setColor(Color.BLACK);
+        paint.setFakeBoldText(true);
+        paint.setTextSize(fontSize);
+
         //determina lo stile dello sfondo dei messaggi
         brush.setStrokeWidth(10);
         brush.setColor(Color.WHITE);
@@ -235,28 +267,16 @@ public class CanvasView extends View implements View.OnTouchListener {
         canvas.drawBitmap(ball2, (int) (x - ballRadius), (int) (y - ballRadius), null);  //disegna la palla
 
         float width = 49 * fontSize / 8;
-        float height = 14 * fontSize / 8;
 
-        canvas.drawRect(30, 30, 30 + width, 30 + height, brush);    //disegna rettangolo per lo score
-        canvas.drawRect(getWidth() - width - 30, 30, getWidth() - 30, height + 30, brush);  //disegna rettangolo per le vite
-
-
-        if (gameStarted == false)
+        if (!gameStarted && !gameOverDisplayed)
         {
             canvas.drawRect(getWidth() / 2 - 290, getHeight() / 2 - 70, getWidth() / 2 + 290, getHeight() / 2 + 70, brush); //disegna rettangolo per lo start game
-            drawTextCentred(canvas, scorePaint, "START GAME", getWidth() / 2 - width / 2, getHeight() / 2); //scrive nel rettangolo di start game
+            drawTextCentred(canvas, paint, getContext().getResources().getString(R.string.start_game), getWidth() / 2 - width / 2, getHeight() / 2); //scrive nel rettangolo di start game
         }
 
-        drawTextCentred(canvas, scorePaint, "Score: " + score, 70, 30 + height / 2);    //scrive il punteggio nel rettangolo
-        drawTextCentred(canvas, scorePaint, "Lives: " + lives, getWidth() - width + 30, 30 + height / 2);   //scrive le vite nel rettangolo
-
-        if (gameOverDisplayed == true)
-            drawTextCentred(canvas, livePaint, "GAME OVER", getWidth() / 2, getHeight() / 4); //scrive nel rettangolo di start game "game over"
 
 
     }
-
-
 
     /**
      * Disegna il testo centrato
@@ -277,6 +297,7 @@ public class CanvasView extends View implements View.OnTouchListener {
             float x = event.getX();
             float y = event.getY();
 
+            //determino pressapoco la dimensione del tasto start game
             if ((x >= getWidth() / 2 - 290 && x <= getWidth() / 2 + 290) && (y >= getHeight() / 2 - 70 && y <= getHeight() / 2 + 70)) {
                 if (gameStarted == false) {
                     restartGame();
@@ -284,5 +305,54 @@ public class CanvasView extends View implements View.OnTouchListener {
             }
         }
         return true;
+    }
+
+    public interface OnChangeScoreListener{
+        void onChangeScore(long score, int life);
+    }
+
+    public void setOnChangeScoreListener(OnChangeScoreListener onChangeScoreListener){
+        this.onChangeScoreListener = onChangeScoreListener;
+    }
+
+    /**
+     * Inizializza SoundPool in base alla versione di android
+     */
+    private void initSound() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            soundPool= new SoundPool.Builder()
+                    .setMaxStreams(NUMBER_OF_SIMULTANEOUS_SOUNDS)
+                    .build();
+        } else
+            soundPool= new SoundPool(NUMBER_OF_SIMULTANEOUS_SOUNDS, AudioManager.STREAM_MUSIC, 0);
+
+        sm = new int[3];
+
+        //inserisce i suoni
+        sm[0] = soundPool.load(getContext(), R.raw.glug, SOUND_PLAY_PRIORITY);
+        sm[1] = soundPool.load(getContext(), R.raw.hit, SOUND_PLAY_PRIORITY);
+    }
+
+    /**
+     * Riproduce i suoni
+     *
+     * @param sound Riceve un intero in base al tipo di audio che si vuole riprodurre
+     */
+    private void playSound(int sound) {
+        soundPool.play(sm[sound],
+                LEFT_VOLUME_VALUE,
+                RIGHT_VOLUME_VALUE,
+                SOUND_PLAY_PRIORITY,
+                MUSIC_LOOP,
+                PLAY_RATE);
+    }
+
+    /**
+     * Disalloca l'audio
+     */
+    public final void cleanUpIfEnd() {
+        sm = null;
+        soundPool.release();
+        soundPool = null;
     }
 }

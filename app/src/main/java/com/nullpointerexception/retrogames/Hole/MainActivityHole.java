@@ -7,22 +7,66 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.widget.TextView;
 
+import com.nullpointerexception.retrogames.App;
+import com.nullpointerexception.retrogames.Components.SaveScore;
 import com.nullpointerexception.retrogames.R;
 
 
 public class MainActivityHole extends Activity implements SensorEventListener {
     private SensorManager sensorManager;
     private CanvasView contentView;
+    private TextView textViewTopScore, textViewScore, textViewLife;
+    private long topScore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_fullscreen_hole);
+
+        textViewTopScore = findViewById(R.id.textViewTopScore);
+        textViewScore = findViewById(R.id.textViewScore);
+        textViewLife = findViewById(R.id.textViewLife);
 
         contentView = findViewById(R.id.fullscreen_content);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+
+        //Prendo il topscore dal database locale
+        if(App.scoreboardDao.getGame(App.HOLE) != null) //Controllo se già esiste un topscore
+            //Esiste già un topscore
+            topScore = App.scoreboardDao.getScore(App.HOLE); //Leggo il vecchio topscore
+        else
+            //Non esiste un topscore
+            topScore = 0;
+
+        textViewTopScore.setText(getResources().getString(R.string.high_score_) + topScore);
+        textViewScore.setText(getResources().getString(R.string.score_0));
+        textViewLife.setText(getResources().getString(R.string.life_3));
+
+
+
+
+        contentView.setOnChangeScoreListener(new CanvasView.OnChangeScoreListener() {
+            @Override
+            public void onChangeScore(long score, int life) {
+                if(score > topScore)
+                {
+                    topScore = score;
+                    textViewTopScore.setText(getResources().getString(R.string.high_score) + topScore);
+                    SaveScore saveScore = new SaveScore();
+                    saveScore.save(App.HOLE, (int) topScore, MainActivityHole.this);
+
+                }
+                textViewScore.setText(getResources().getString(R.string.score) + score);
+
+                String itemsFound = getResources().getQuantityString(R.plurals.life, life);
+                textViewLife.setText(itemsFound+ life);
+            }
+        });
+
     }
 
 
@@ -59,4 +103,6 @@ public class MainActivityHole extends Activity implements SensorEventListener {
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
+
+
 }

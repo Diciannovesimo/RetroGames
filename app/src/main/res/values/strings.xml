@@ -115,5 +115,18 @@
     <string name="snake_dialog_hard">Hard</string>
 
 
+    <!-- Hole -->
+    <string name="start_game">START GAME</string>
+    <string name="high_score_">High score:</string>
+    <string name="score_0">Score: 0</string>
+    <string name="life_3">Life: 3</string>
+    <string name="you_hit_the_wall">You hit the wall!</string>
+
+    <plurals name="life">
+        <item quantity="zero">Life:</item>
+        <item quantity="one">Life:</item>
+        <item quantity="other">Lifes:</item>
+    </plurals>
+
 
 </resources>
