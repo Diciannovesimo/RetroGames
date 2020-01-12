@@ -47,7 +47,7 @@
     <string name="loading_leaderboard">Caricamento classifica...</string>
     <string name="error_dialog_content">Nome utente o password errata</string>
     <string name="error_dialog_title">Errore</string>
-    <string name="error_edittext_mail">Email non corretto</string>
+    <string name="error_edittext_mail">Email non corretta</string>
     <string name="error_edittext_password">Password troppo corta</string>
     <string name="error_google_dialog_content">Accesso con Google fallito</string>
     <string name="total_score">Punteggio totale</string>
