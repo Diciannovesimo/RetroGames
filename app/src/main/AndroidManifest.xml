@@ -37,7 +37,6 @@
         <activity
             android:name=".Tetris.MainActivityTetris"
             android:screenOrientation="portrait" />
-        <activity android:name=".Breakout.GameActivity" />
         <activity android:name=".Breakout.MainActivityBreakout" />
         <activity
             android:name=".Breakout.Scoreboard"

@@ -1,12 +1,9 @@
 package com.nullpointerexception.retrogames.Breakout;
 
-import android.content.Intent;
-import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,48 +11,60 @@ import com.nullpointerexception.retrogames.R;
 
 public class MainActivityBreakout extends AppCompatActivity
 {
-
-    private Button btPlay, btScore;
-    private LinearLayout background;
-    private TextView title;
+    SurfaceViewThread surfaceViewThread;
+    private MediaPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_breakout);
-
-        // Hide app title bar.
-        //getSupportActionBar().hide();
+        setContentView(R.layout.activity_game_breakout);
 
         // Make app full screen to hide top status bar.
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        title = findViewById(R.id.activity_main_title);
-        background =  findViewById(R.id.activity_main);
-        btPlay =  findViewById(R.id.activity_main_bt_play);
-        btScore =  findViewById(R.id.activity_main_bt_score);
+        // Create the SurfaceViewThread object.
+        surfaceViewThread = new SurfaceViewThread(this);
 
-        // Couleurs
-        background.setBackgroundColor(Color.BLACK);
-        title.setTextColor(Color.WHITE);
-        btPlay.setBackgroundColor(Color.WHITE);
-        btScore.setBackgroundColor(Color.WHITE);
+        // Get text drawing LinearLayout canvas.
+        LinearLayout drawCanvas = findViewById(R.id.drawCanvas);
+        // Add surfaceView object to the LinearLayout object.
+        drawCanvas.addView(surfaceViewThread);
 
-        // Action sur les boutons
-        btPlay.setOnClickListener(v ->
-        {
-            Intent GameActivity = new Intent(MainActivityBreakout.this, GameActivity.class);
-            startActivity(GameActivity);
-        });
-        btScore.setOnClickListener(v ->
-        {
-            Boolean show;
-            show = false;
-            Intent ScoreActivity = new Intent(MainActivityBreakout.this, Scoreboard.class);
-            ScoreActivity.putExtra("ShowButton", show);
-            startActivity(ScoreActivity);
-        });
+        startMusic();
+    }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        // Tell the gameView resume method to execute
+        surfaceViewThread.start();
+
+        if(player != null && ! player.isPlaying())
+            startMusic();
+    }
+
+    // This method executes when the player quits the game
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        // Tell the gameView pause method to execute
+        surfaceViewThread.pause();
+
+        if(player != null)
+            player.stop();
+    }
+
+    /**
+     *  Fa partire la classica musica di Breakout
+     */
+    private void startMusic()
+    {
+        player = MediaPlayer.create(this, R.raw.breakout_theme);
+        player.setVolume(100, 100);
+        player.setLooping(true);
+        player.start();
     }
 }

@@ -23,18 +23,23 @@ public class Paddle
 
     private int paddleMoving = STOPPED;
 
-    public Paddle(int screenX, int screenY)
+    public Paddle(int screenX, int screenY, int speed)
     {
-        this.x = screenX /2;
-        this.y = screenY - 200;
-
-        this.length = 230;
+        this.length = screenX / 4;
         this.height = 30;
+
+        this.x = (screenX / 2) - (length / 2);
+        this.y = screenY - (screenY / 16);
 
         this.rect = new RectF(this.x, this.y, this.x + this.length, this.y + this.height);
 
-        this.paddleSpeed = 25;
+        this.paddleSpeed = speed;
     }
+
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public void setX(int x) { this.x = x; }
+    public void setY(int y) { this.y = y; }
 
     public RectF getRect(){
         return this.rect;
@@ -45,15 +50,34 @@ public class Paddle
         this.paddleMoving = state;
     }
 
-    // This method determines if the paddle needs to move and changes the coordinates
-    // contained in rect if necessary
-    public void update(int w){
-        if(this.paddleMoving == this.LEFT && this.x > 0){
+    //  Aggiorna le coordinate durante movimento
+    public void update(int w)
+    {
+        if(this.paddleMoving == this.LEFT && this.x > 0)
+        {
             this.x -= this.paddleSpeed;
         }
 
-        if(this.paddleMoving == this.RIGHT && this.x + this.length < w){
+        if(this.paddleMoving == this.RIGHT && this.x + this.length < w)
+        {
             this.x += this.paddleSpeed;
+        }
+
+        this.rect.left = this.x;
+        this.rect.right = this.x + this.length;
+    }
+
+    //  Aggiorna le coordinate durante movimento
+    public void update(int w, float delay)
+    {
+        if(this.paddleMoving == this.LEFT && this.x > 0)
+        {
+            this.x -= this.paddleSpeed * delay;
+        }
+
+        if(this.paddleMoving == this.RIGHT && this.x + this.length < w)
+        {
+            this.x += this.paddleSpeed * delay;
         }
 
         this.rect.left = this.x;
