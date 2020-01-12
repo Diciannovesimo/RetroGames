@@ -308,6 +308,7 @@ public class PongThread extends Thread {
                     mComputerPlayer.score++;
                     if (mComputerPlayer.score == LOSE_VALUE)
                     {
+                        playSound(1);
                         game_over(mComputerPlayer.score,mHumanPlayer.score);
                         startNewGame();
 
@@ -362,7 +363,6 @@ public class PongThread extends Thread {
             exit_mode = 3;
         }
 
-        cleanUpIfEnd();
         if(onEndGameListener != null)
             onEndGameListener.onEnd(score_pong, exit_mode);
 
@@ -380,10 +380,11 @@ public class PongThread extends Thread {
         } else
             soundPool= new SoundPool(NUMBER_OF_SIMULTANEOUS_SOUNDS, AudioManager.STREAM_MUSIC, 0);
 
-        sm = new int[3];
+        sm = new int[2];
 
         //inserisce i suoni
-        sm[0] = soundPool.load(mContext, R.raw.pong_effect, SOUND_PLAY_PRIORITY);
+        sm[0] = soundPool.load(mContext, R.raw.hit_pong, SOUND_PLAY_PRIORITY);
+        sm[1] = soundPool.load(mContext, R.raw.gameover_pong, SOUND_PLAY_PRIORITY);
     }
 
     /**
@@ -391,7 +392,7 @@ public class PongThread extends Thread {
      *
      * @param sound Riceve un intero in base al tipo di audio che si vuole riprodurre
      */
-    private void playSound(int sound) {
+    public void playSound(int sound) {
         soundPool.play(sm[sound],
                 LEFT_VOLUME_VALUE,
                 RIGHT_VOLUME_VALUE,
@@ -491,9 +492,11 @@ public class PongThread extends Thread {
         }
 
         if (collision(mHumanPlayer, mBall)) {
+            playSound(0);
             handleCollision(mHumanPlayer, mBall);
             mHumanPlayer.collision = PHYS_COLLISION_FRAMES;
         } else if (collision(mComputerPlayer, mBall)) {
+            playSound(0);
             handleCollision(mComputerPlayer, mBall);
             mComputerPlayer.collision = PHYS_COLLISION_FRAMES;
         } else if (ballCollidedWithTopOrBottomWall()) {
@@ -600,7 +603,6 @@ public class PongThread extends Thread {
      */
     private void handleHit(Player player) {
         if (player.collision > 0) {
-            playSound(0);
             player.paint.setShadowLayer(player.paddleWidth / 2, 0, 0, player.paint.getColor());
         } else {
             player.paint.setShadowLayer(0, 0, 0, 0);

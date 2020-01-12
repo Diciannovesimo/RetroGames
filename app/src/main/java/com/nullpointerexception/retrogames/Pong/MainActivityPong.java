@@ -80,6 +80,7 @@ public class MainActivityPong extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mGameThread.playSound(1);
                 if (exit_mode == 1)
                 {
                     mDlgMsg = new AlertDialog.Builder(context)
@@ -90,6 +91,7 @@ public class MainActivityPong extends AppCompatActivity {
                             })
                             .setNegativeButton(context.getString(R.string.exit), (dialog, which) -> {
                                 mDlgMsg.dismiss();
+                                mGameThread.cleanUpIfEnd();
                                 finish();
                             })
                             .show();
@@ -104,6 +106,7 @@ public class MainActivityPong extends AppCompatActivity {
                             })
                             .setNegativeButton(context.getString(R.string.exit), (dialog, which) -> {
                                 mDlgMsg.dismiss();
+                                mGameThread.cleanUpIfEnd();
                                 finish();
                             })
                             .show();
@@ -118,6 +121,7 @@ public class MainActivityPong extends AppCompatActivity {
                             })
                             .setNegativeButton(context.getString(R.string.exit), (dialog, which) -> {
                                 mDlgMsg.dismiss();
+                                mGameThread.cleanUpIfEnd();
                                 finish();
                             })
                             .show();
@@ -152,4 +156,5 @@ public class MainActivityPong extends AppCompatActivity {
         }
 
     }
+
 }
