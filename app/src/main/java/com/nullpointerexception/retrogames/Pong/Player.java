@@ -5,8 +5,14 @@ import android.graphics.RectF;
 
 class Player {
 
+    /*
+    grandezza dei rettangoli
+     */
     int paddleWidth;
     int paddleHeight;
+    /*
+    stile dei rettangoli
+     */
     Paint paint;
     int score;
     RectF bounds;

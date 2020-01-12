@@ -8,6 +8,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -91,6 +94,17 @@ public class PongThread extends Thread {
      */
     private float mComputerMoveProbability;
 
+    /**
+     * SoundPool costants
+     */
+    private SoundPool soundPool;
+    private final int NUMBER_OF_SIMULTANEOUS_SOUNDS = 5;
+    private final float LEFT_VOLUME_VALUE = 1.0f;
+    private final float RIGHT_VOLUME_VALUE = 1.0f;
+    private final int MUSIC_LOOP = 0;
+    private final int SOUND_PLAY_PRIORITY = 1;
+    private final float PLAY_RATE= 1.0f;
+    static int[] sm;
 
     PongThread(final SurfaceHolder surfaceHolder,
                final Context context,
@@ -155,7 +169,7 @@ public class PongThread extends Thread {
     }
 
     /**
-     * The game loop.
+     * loop del gioco
      */
     @Override
     public void run() {
@@ -194,6 +208,12 @@ public class PongThread extends Thread {
         }
     }
 
+    /**
+     * setta lo stato del thread nella view
+     * a seconda del parametro passato.
+     * questa funzione viene chiamata in pongview
+     * @param running
+     */
     void setRunning(boolean running) {
         synchronized (mRunLock) {
             mRun = running;
@@ -268,6 +288,7 @@ public class PongThread extends Thread {
      */
     void setState(int mode) {
         synchronized (mSurfaceHolder) {
+            initSound();
             mState = mode;
             Resources res = mContext.getResources();
             switch (mState) {
@@ -310,6 +331,15 @@ public class PongThread extends Thread {
         }
     }
 
+    /**
+     * metodo chiamato quando il gioco finisce,
+     * gli vengono passati lo score della cpu e dell'umano,
+     * dopodichè calcola il punteggio,
+     * controlla se è stato fatto un nuovo highscore
+     * e fa partire il dialog.
+     * @param cpuScore
+     * @param humanScore
+     */
     public void game_over(int cpuScore, int humanScore){
 
         int score_pong = humanScore - cpuScore;
@@ -318,33 +348,66 @@ public class PongThread extends Thread {
         if (score_pong < 0)
         {
             score_pong = 0;
-
             exit_mode = 1;
         }
 
         if (highscore_point < score_pong)
         {
             highscore_point = score_pong;
-
             SaveScore pong = new SaveScore();
             pong.save(App.PONG, highscore_point,mContext);
-
-
             exit_mode = 2;
         }
         else if(score_pong != 0) {
             exit_mode = 3;
         }
 
-
-
+        cleanUpIfEnd();
         if(onEndGameListener != null)
             onEndGameListener.onEnd(score_pong, exit_mode);
 
 
     }
 
+    /**
+     * Inizializza SoundPool in base alla versione di android
+     */
+    private void initSound() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            soundPool= new SoundPool.Builder()
+                    .setMaxStreams(NUMBER_OF_SIMULTANEOUS_SOUNDS)
+                    .build();
+        } else
+            soundPool= new SoundPool(NUMBER_OF_SIMULTANEOUS_SOUNDS, AudioManager.STREAM_MUSIC, 0);
 
+        sm = new int[3];
+
+        //inserisce i suoni
+        sm[0] = soundPool.load(mContext, R.raw.pong_effect, SOUND_PLAY_PRIORITY);
+    }
+
+    /**
+     * Riproduce i suoni
+     *
+     * @param sound Riceve un intero in base al tipo di audio che si vuole riprodurre
+     */
+    private void playSound(int sound) {
+        soundPool.play(sm[sound],
+                LEFT_VOLUME_VALUE,
+                RIGHT_VOLUME_VALUE,
+                SOUND_PLAY_PRIORITY,
+                MUSIC_LOOP,
+                PLAY_RATE);
+    }
+
+    /**
+     * Disalloca l'audio
+     */
+    public final void cleanUpIfEnd() {
+        sm = null;
+        soundPool.release();
+        soundPool = null;
+    }
     /**
     *il metodo pause in pongthread viene chiamato
     *solo se si è effettivamente
@@ -360,13 +423,6 @@ public class PongThread extends Thread {
             if (mState != STATE_PAUSE) {
                 setState(STATE_PAUSE);
             }
-        }
-    }
-
-
-    void unPause() {
-        synchronized (mSurfaceHolder) {
-            setState(STATE_RUNNING);
         }
     }
 
@@ -441,11 +497,14 @@ public class PongThread extends Thread {
             handleCollision(mComputerPlayer, mBall);
             mComputerPlayer.collision = PHYS_COLLISION_FRAMES;
         } else if (ballCollidedWithTopOrBottomWall()) {
+            playSound(0);
             mBall.dy = -mBall.dy;
         } else if (ballCollidedWithRightWall()) {
+            playSound(0);
             setState(STATE_WIN);    // human plays on left
             return;
         } else if (ballCollidedWithLeftWall()) {
+            playSound(0);
             setState(STATE_LOSE);
             return;
         }
@@ -518,7 +577,7 @@ public class PongThread extends Thread {
      */
     private void updateDisplay(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
-        canvas.drawRect(5, 5, mCanvasWidth, mCanvasHeight - 5 , mCanvasBoundsPaint);
+        canvas.drawRect(5, 8, mCanvasWidth, mCanvasHeight - 5 , mCanvasBoundsPaint);
 
         final int middle = mCanvasWidth / 2;
         canvas.drawLine(middle, 5, middle, mCanvasHeight - 5, mMedianLinePaint);
@@ -541,6 +600,7 @@ public class PongThread extends Thread {
      */
     private void handleHit(Player player) {
         if (player.collision > 0) {
+            playSound(0);
             player.paint.setShadowLayer(player.paddleWidth / 2, 0, 0, player.paint.getColor());
         } else {
             player.paint.setShadowLayer(0, 0, 0, 0);
@@ -624,6 +684,12 @@ public class PongThread extends Thread {
 
     }
 
+    /**
+     * gestisce i movimenti del giocatore
+     * @param player
+     * @param left
+     * @param top
+     */
     private void movePlayer(Player player, float left, float top) {
         if (left < 2) {
             left = 2;

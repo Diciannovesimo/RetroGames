@@ -20,6 +20,12 @@ public class PongView extends SurfaceView implements SurfaceHolder.Callback {
 
     private TextView mScoreView;
 
+    /**
+     * crea la view di pong passandogli
+     * il contesto e lo stato del gioco
+     * @param context
+     * @param attributeSet
+     */
     public PongView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
 
@@ -46,10 +52,19 @@ public class PongView extends SurfaceView implements SurfaceHolder.Callback {
         setFocusable(true);
     }
 
+    /**
+     * setta lo stato della partita
+     * (win,lose,pause)
+     * @param textView
+     */
     public void setStatusView(TextView textView) {
         mStatusView = textView;
     }
 
+    /**
+     * setta lo score
+     * @param textView
+     */
     public void setScoreView(TextView textView) {
         mScoreView = textView;
     }
@@ -119,6 +134,10 @@ public class PongView extends SurfaceView implements SurfaceHolder.Callback {
         return true;
     }
 
+    /**
+     * ritorna il thread
+     * @return
+     */
     public PongThread getGameThread() {
         return mGameThread;
     }
