@@ -6,7 +6,6 @@ import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,8 +13,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nullpointerexception.retrogames.R;
-
-import org.w3c.dom.Text;
 
 public class MainActivityTetris extends AppCompatActivity {
 
@@ -118,7 +115,7 @@ public class MainActivityTetris extends AppCompatActivity {
 
     /**
      * Gestisce i bottoni per spostare i blocchi
-     * @param view
+     * @param view view
      */
     public void buttonDirection(View view) {
         switch( view.getId() ) {

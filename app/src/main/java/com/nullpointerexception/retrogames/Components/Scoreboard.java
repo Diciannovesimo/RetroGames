@@ -24,6 +24,7 @@ public class Scoreboard {
 
     private String nickname;
 
+    @Ignore
     public Scoreboard() { }
 
     public Scoreboard(String game, long score) {
