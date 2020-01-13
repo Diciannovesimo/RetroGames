@@ -14,6 +14,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
         CustomSnakeDialog.CustomSnakeDialogListener {
 
     private SnakePanelView mSnakePanelView;
+    private int ms;
     private TextView mScore, mHighScore;
     private String mhighScoreLoaded;
     Blocker mBlocker = new Blocker();
@@ -90,7 +91,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
      */
     @Override
     public void onClick(View v) {
-        if (!mBlocker.block(55)) {
+        if (!mBlocker.block(ms)) {
             switch (v.getId()) {
                 case R.id.left_btn:
                     mSnakePanelView.setSnakeDirection(GameType.LEFT);
@@ -121,6 +122,18 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
 
     @Override
     public void applyDifficult(int difficulty) {
+        switch (difficulty) {
+            case GameType.EASY:
+                ms = 1000 / 4;
+                break;
+            case GameType.MEDIUM:
+                ms = 1000 / 8;
+                break;
+            case GameType.HARD:
+                ms = (int) (1000 / 12);
+                break;
+        }
+
         mSnakePanelView.startGame(difficulty, false);
         if(mhighScoreLoaded != null && !mhighScoreLoaded.isEmpty())
             mHighScore.setText(getResources().getString(R.string.highscore) + mhighScoreLoaded);

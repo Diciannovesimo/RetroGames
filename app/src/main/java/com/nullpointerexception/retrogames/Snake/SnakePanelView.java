@@ -447,7 +447,7 @@ public class SnakePanelView extends View {
 
         List<Point> cellsToDelete = new ArrayList<>();
 
-        for(int i = 0; i < mSnakePositions.size() - 1; i++) {
+        for(int i = 0; i < mSnakePositions.size(); i++) {
             for (Point point : mapCoordinates) {
                 if (point.x == mSnakePositions.get(i).getX() && point.y == mSnakePositions.get(i).getY())
                     cellsToDelete.add(point);
@@ -465,8 +465,10 @@ public class SnakePanelView extends View {
         Point randomCell = new Point(0, 0);
 
         for(Point point : mapCoordinates) {
-            if(iterator == cellNumber)
+            if(iterator == cellNumber) {
                 randomCell = point;
+                break;
+            }
 
             iterator++;
         }
