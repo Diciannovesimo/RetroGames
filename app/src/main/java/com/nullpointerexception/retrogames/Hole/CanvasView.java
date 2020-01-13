@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nullpointerexception.retrogames.App;
+import com.nullpointerexception.retrogames.Components.SaveScore;
 import com.nullpointerexception.retrogames.R;
 
 import java.util.Random;
@@ -60,7 +62,10 @@ public class CanvasView extends View implements View.OnTouchListener {
     private final float PLAY_RATE= 1.0f;
     static int[] sm;
 
-
+    /**
+     * Cra il CanvasView
+     * @param context contesto
+     */
     public CanvasView(Context context) {
         super(context);
         init();
@@ -78,12 +83,13 @@ public class CanvasView extends View implements View.OnTouchListener {
         initSound();
     }
 
-
     /**
      * Inizilizza le bitmap e determina il raggio della palla
      */
     private void init() {
-        ball2 = BitmapFactory.decodeResource(getResources(), R.mipmap.ball2);   //Inizializza l'immagine della palla
+        //ball2 = BitmapFactory.decodeResource(getResources(), R.mipmap.ball2);   //Inizializza l'immagine della palla
+        ball2 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+                getContext().getResources(), R.mipmap.ball2),  125,  125, false);
         ballRadius = ball2.getWidth() / 2;  //Determino il raggio della palla
         background = BitmapFactory.decodeResource(getResources(), R.mipmap.background); //Inizializzo l'immagine dello sfondo
         hole = BitmapFactory.decodeResource(getResources(), R.mipmap.hole); //Inizializzo l'immagine della buca
@@ -110,6 +116,8 @@ public class CanvasView extends View implements View.OnTouchListener {
      * Imposta la fine del gioco
      */
     private void gameOver() {
+        SaveScore saveScore = new SaveScore();
+        saveScore.save(App.HOLE, score, getContext());
         mDlgMsg = new AlertDialog.Builder(getContext())
                 .setTitle(getResources().getString(R.string.gameOver))
                 .setMessage(getResources().getString(R.string.your_score_is) + ": " + score)
@@ -188,13 +196,13 @@ public class CanvasView extends View implements View.OnTouchListener {
         y = y + vy;
         x = x + vx;
 
-        //determina un range per il buco della pallina, norma 1
+        //determina un range per il buco della pallina
         double distance = Math.sqrt(Math.pow(x - holeX, 2) + Math.pow(y - holeY, 2));
 
         if (distance < 50) {
             //genera una nunova posizione per il buco
             holeX = random.nextInt(getWidth() - ballRadius * 2) + ballRadius;
-            holeY = random.nextInt(getHeight() - ballRadius * 2) + ballRadius;
+            holeY = random.nextInt((getHeight() - 20) - ballRadius * 2) + (ballRadius - 20);
             score ++;
             playSound(0);
             if(onChangeScoreListener != null)
@@ -238,9 +246,7 @@ public class CanvasView extends View implements View.OnTouchListener {
      * @param dy coordinata dell'asse y
      */
     public void changeVelocity(float dx, float dy) {
-        if (gameStarted == false) {
-
-        } else {
+        if (gameStarted ) {
             vx = dx * 10;
             vy = dy * 10;
             move();
@@ -273,8 +279,6 @@ public class CanvasView extends View implements View.OnTouchListener {
             canvas.drawRect(getWidth() / 2 - 290, getHeight() / 2 - 70, getWidth() / 2 + 290, getHeight() / 2 + 70, brush); //disegna rettangolo per lo start game
             drawTextCentred(canvas, paint, getContext().getResources().getString(R.string.start_game), getWidth() / 2 - width / 2, getHeight() / 2); //scrive nel rettangolo di start game
         }
-
-
 
     }
 

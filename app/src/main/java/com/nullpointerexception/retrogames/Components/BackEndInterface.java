@@ -140,7 +140,7 @@ public class BackEndInterface
                     });
         }
 
-        //Scrittura dello score di un tetris
+        //Scrittura dello score di un snake
         score = App.scoreboardDao.getScore(App.SNAKE);
         if(score != 0)
         {
@@ -157,7 +157,7 @@ public class BackEndInterface
                     });
         }
 
-        //Scrittura dello score di un tetris
+        //Scrittura dello score di un pong
         score = App.scoreboardDao.getScore(App.PONG);
         if(score != 0)
         {
@@ -174,7 +174,7 @@ public class BackEndInterface
                     });
         }
 
-        //Scrittura dello score di un tetris
+        //Scrittura dello score di un breakout
         score = App.scoreboardDao.getScore(App.BREAKOUT);
         if(score != 0)
         {
@@ -191,7 +191,7 @@ public class BackEndInterface
                     });
         }
 
-        //Scrittura dello score di un tetris
+        //Scrittura dello score di un hole
         score = App.scoreboardDao.getScore(App.HOLE);
         if(score != 0)
         {
