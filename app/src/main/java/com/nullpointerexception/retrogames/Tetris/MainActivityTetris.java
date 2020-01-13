@@ -60,7 +60,7 @@ public class MainActivityTetris extends AppCompatActivity {
         RelativeLayout layoutCanvas = findViewById(R.id.layoutCanvas);
         layoutCanvas.addView(mTetrisCtrl);
     }
-    
+
 
     /**
      * Gestisce i bottoni per spostare i blocchi
