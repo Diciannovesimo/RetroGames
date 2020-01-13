@@ -293,6 +293,10 @@ public class SnakePanelView extends View {
                 //Il serpente si è morso
                 playSound(GameType.SNAKE_LOOSE);
                 mIsEndGame = true;
+                if(mPoint > mHighScore) {
+                    mHighScore = mPoint;
+                    game.save(App.SNAKE, mPoint, getContext());
+                }
                 showMessageDialog();
                 return;
             }
@@ -325,10 +329,6 @@ public class SnakePanelView extends View {
                 break;
         }
 
-        if(mPoint > mHighScore) {
-            mHighScore = mPoint;
-            game.save(App.SNAKE, mPoint, getContext());
-        }
         if(onEatListener != null)
             onEatListener.onEat(mPoint, mHighScore);
     }

@@ -38,8 +38,8 @@
 
   <Button
       android:id="@+id/left_btn"
-      android:layout_width="60dp"
-      android:layout_height="0dp"
+      android:layout_width="70dp"
+      android:layout_height="120dp"
       android:background="@drawable/direction_arrove"
       android:textColor="@android:color/white"
       app:layout_constraintBottom_toTopOf="@+id/bottom_btn"
@@ -50,8 +50,8 @@
 
   <Button
       android:id="@+id/right_btn"
-      android:layout_width="60dp"
-      android:layout_height="0dp"
+      android:layout_width="70dp"
+      android:layout_height="120dp"
       android:background="@drawable/direction_arrove"
       android:rotation="180"
       android:textColor="@android:color/white"
