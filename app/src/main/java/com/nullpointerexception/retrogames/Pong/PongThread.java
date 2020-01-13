@@ -124,7 +124,7 @@ public class PongThread extends Thread {
         TypedArray a = context.obtainStyledAttributes(attributeSet, R.styleable.PongView);
 
         int paddleHeight = a.getInt(R.styleable.PongView_paddleHeight, 200);
-        int paddleWidth = a.getInt(R.styleable.PongView_paddleWidth, 35);
+        int paddleWidth = a.getInt(R.styleable.PongView_paddleWidth, 45);
         int ballRadius = a.getInt(R.styleable.PongView_ballRadius, 32);
 
         a.recycle();
