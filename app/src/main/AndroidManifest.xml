@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         android:hardwareAccelerated="true">
-        <activity android:name=".Activities.ProfileDisplayActivity"></activity>
+        <activity android:name=".Activities.ProfileDisplayActivity"/>
         <activity
             android:name=".Activities.HomeActivity"
             android:hardwareAccelerated="true" />
@@ -43,12 +43,14 @@
             android:name=".Pong.MainActivityPong"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
-        <activity android:name=".Snake.MainActivitySnake" />
+        <activity
+            android:name=".Snake.MainActivitySnake"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Hole.MainActivityHole"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

@@ -115,7 +115,7 @@ public class RegistrationActivity extends AppCompatActivity {
         confirmPassword = mConfirmPassword.getText().toString();
         if(password.length() < 8) {
             alright = false;
-            mPassword.setError(getResources().getString(R.string.error_short_username));
+            mPassword.setError(getResources().getString(R.string.error_short_password));
         }
 
         if(!confirmPassword.equals(password)) {

@@ -238,7 +238,6 @@ public class LoginActivity extends AppCompatActivity
     }
 
     /**
-     *
      * @param requestCode Il codice di richiesta dello startActivityForResult
      * @param resultCode  Il codice ottenuto come risultato della richiesta
      * @param data        I dati scambiati tra le activity
