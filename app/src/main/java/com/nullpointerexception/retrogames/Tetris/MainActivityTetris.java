@@ -6,7 +6,6 @@ import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,8 +13,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nullpointerexception.retrogames.R;
-
-import org.w3c.dom.Text;
 
 public class MainActivityTetris extends AppCompatActivity {
 
@@ -66,59 +63,8 @@ public class MainActivityTetris extends AppCompatActivity {
 
 
     /**
-     * Gestisce gli eventi causati da un tocco sullo schermo, non è usata
-     * @param event gestisce i tocchi sullo schermo
-     * @return
-    public boolean onTouchEvent(MotionEvent event) {
-        super.onTouchEvent(event);
-
-        //Gestisco il tocco sullo schermo
-        switch( event.getAction() ) {
-
-            //Quando tocco lo schermo parte ACTION_DOWN
-            case MotionEvent.ACTION_DOWN :
-                mIsTouchMove = false;
-                if( event.getY() < (int)(mScreenSize.y * 0.75)) { //Il tocco è vero solo quando si preme sulla parte superiore dello schermo (il 75%)
-                    //Prendo la posizione del tocco sullo schermo
-                    mMousePos.x = (int) event.getX();
-                    mMousePos.y = (int) event.getY();
-                }
-                break;
-
-            //Quando cambia la parte di schermo premuta parte ACTION_MOVE
-            case MotionEvent.ACTION_MOVE :
-                if( mMousePos.x < 0 )
-                    break;
-
-                if( (event.getX() - mMousePos.x) > mCellSize ) {
-                    mTetrisCtrl.block2Right(); //Ruoto il blocco a destra
-                    //Prendo la posizione del tocco sullo schermo
-                    mMousePos.x = (int) event.getX();
-                    mMousePos.y = (int) event.getY();
-                    mIsTouchMove = true;
-                } else if( (mMousePos.x - event.getX()) > mCellSize ) {
-                    mTetrisCtrl.block2Left(); //Ruoto il blocco a sinistra
-                    //Prendo la posizione del tocco sullo schermo
-                    mMousePos.x = (int) event.getX();
-                    mMousePos.y = (int) event.getY();
-                    mIsTouchMove = true;
-                }
-                break;
-
-            //Quando tolgo il dito parte ACTION_UP
-            case MotionEvent.ACTION_UP :
-                if( mIsTouchMove == false && mMousePos.x > 0 )
-                    mTetrisCtrl.block2Rotate(); //Ruoto il blocco
-                mMousePos.set(-1, -1);  //Risetto la posizione a -1,-1 del puntatore
-                break;
-        }
-        return true;
-    }
-    */
-
-    /**
      * Gestisce i bottoni per spostare i blocchi
-     * @param view
+     * @param view view
      */
     public void buttonDirection(View view) {
         switch( view.getId() ) {

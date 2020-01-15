@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.nullpointerexception.retrogames.App;
-import com.nullpointerexception.retrogames.Components.SaveScore;
 import com.nullpointerexception.retrogames.R;
 
 
@@ -56,9 +55,6 @@ public class MainActivityHole extends Activity implements SensorEventListener {
                 {
                     topScore = score;
                     textViewTopScore.setText(getResources().getString(R.string.high_score) + topScore);
-                    SaveScore saveScore = new SaveScore();
-                    saveScore.save(App.HOLE, (int) topScore, MainActivityHole.this);
-
                 }
                 textViewScore.setText(getResources().getString(R.string.score) + score);
 

@@ -309,7 +309,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         if(paused)
         {
             // Reset posizione palla
-            ball.reset(screenWidth - 230, (int) paddle.getRect().top - ball.getRadius());
+            ball.reset(screenWidth, (int) paddle.getRect().top + 140);
             this.paused = true;
 
             highscore = App.scoreboardDao.getScore(App.BREAKOUT);

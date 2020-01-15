@@ -338,13 +338,9 @@ public class TetrisCtrl extends View {
 
 
         mScore += filledCount * filledCount;
-        if( mTopScore < mScore ) {
+        if( mTopScore < mScore )
             mTopScore = mScore;
 
-            SaveScore tetris = new SaveScore();
-            tetris.save(App.TETRIS, mScore,getContext());
-
-        }
         return filledCount;
     }
 
@@ -583,6 +579,9 @@ public class TetrisCtrl extends View {
                 TimerGapNormal -= 2;
                 mTimerGap = TimerGapNormal;
                 if( isGameOver() ) {
+                    //Salva il punteggio sul database
+                    SaveScore tetris = new SaveScore();
+                    tetris.save(App.TETRIS, mScore,getContext());
                     showDialog_GameOver();
                     return;
                 }
