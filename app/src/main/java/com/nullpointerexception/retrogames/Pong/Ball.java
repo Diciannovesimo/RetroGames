@@ -20,6 +20,11 @@ class Ball {
     */
     Paint paint;
 
+    /**
+     *
+     * @param radius
+     * @param paint
+     */
     Ball(int radius, Paint paint) {
         this.radius = radius;
         this.paint = paint;

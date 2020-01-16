@@ -13,16 +13,23 @@ import java.util.Random;
 
 public class Circle
 {
-    int radius, x, y;
-    int speed = 0;
-    int Xspeed = 0;
-    int Yspeed = 0;
+    private int radius; //raggio della palla
+    private int x; //posizione della palla sull'asse x
+    private int y; //posizione della palla sull'asse y
+    private int Xspeed; //velocità asse x
+    private int Yspeed; //velocità asse y
     private Color color;
 
     private Bitmap ballBitmap;
 
-    public Circle(int x, int y, int r, int s)
-    {
+    /**
+     * Costruttore della palla
+     * @param x posizione sull'asse x
+     * @param y posizione sull'asse y
+     * @param r raggio della palla
+     * @param s velocità della palla
+     */
+    Circle(int x, int y, int r, int s) {
         super();
         this.x = x / 2;
         this.y = y - 200;
@@ -30,49 +37,38 @@ public class Circle
         this.Xspeed = s;
         this.Yspeed = s;
     }
-    public int getSpeed(){return this.speed;}
-    public int getXSpeed(){return this.Xspeed;}
-    public int getYSpeed(){return this.Yspeed;}
-    public int getX() {return this.x;}
-    public int getY() {return this.y;}
 
-    public void setSpeed(int s){this.speed +=s;}
-    public void setXSpeed(int s){this.Xspeed +=s;}
-    public void setYSpeed(int s){this.Yspeed +=s;}
-    public void setX(int x) {this.x = x;}
-    public void setY(int y) {this.y = y;}
-
-    public int getRadius() {return this.radius;}
-    public Color getColor() {return this.color;}
-
-    public void setRadius(int r) {this.radius = r;}
-    public void setColor(Color c) {this.color = c;}
-
-    public void setBall(Context context)
+    /**
+     * Setta il bitmap della palla
+     * @param context contesto
+     */
+    void setBall(Context context)
     {
         ballBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
                 context.getResources(), R.drawable.breakout_ball), radius*2, radius*2, false);
         ballBitmap.setConfig(Bitmap.Config.ARGB_8888);
     }
 
-    public void draw(Canvas c)
+    /**
+     * Disegna la palla
+     * @param c oggetto di tipo canvas
+     */
+    void draw(Canvas c)
     {
         if(ballBitmap != null)
             c.drawBitmap(ballBitmap, x, y, new Paint());
         else
-        {
+        {   //Se il bitmap non esiste genera una palla rossa
             Paint p = new Paint();
             p.setColor(Color.RED);
             c.drawCircle(this.x, this.y, this.radius, p);
         }
     }
 
-    public void reverseYVelocity(){ this.Yspeed = -this.Yspeed;}
-    public void reverseXVelocity(){
-        this.Xspeed = -this.Xspeed;
-    }
-
-    public void setRandomXVelocity(){
+    /**
+     * Setta in maniera random la velocità della palla
+     */
+    void setRandomXVelocity() {
         Random generator = new Random();
         int answer = generator.nextInt(2);
 
@@ -81,23 +77,49 @@ public class Circle
         }
     }
 
-    public void clearObstacleY(int y){this.y = (y - getRadius()*2);}
-    public void clearObstacleX(int x){this.x = (x + getRadius()*2);}
+    /**
+     * Elimina l'ostacolo per sorpassa la coordinata del blocco rotto
+     * @param y posizione sull'asse y della palla
+     */
+    void clearObstacleY(int y){this.y = (y - getRadius()*2);}
 
-    public void move(long fps)
+    /**
+     * Muove la palla
+     * @param fps numero di fps
+     */
+    void move(long fps)
     {
         this.x += (Xspeed / fps);
         this.y += (Yspeed / fps);
     }
 
-    public void move(long fps, float delay)
-    {
-        this.x += ((Xspeed / fps) * delay);
-        this.y += ((Yspeed / fps) * delay);
-    }
-
-    public void reset(int x, int y){
+    /**
+     * Resetta la posizione della palla
+     * @param x coordinata asse x
+     * @param y coordinata asse y
+     */
+    void reset(int x, int y){
         this.x = x / 2;
         this.y = y - 200;
     }
+
+    void reverseYVelocity(){ this.Yspeed = -this.Yspeed;}
+
+    void reverseXVelocity(){ this.Xspeed = -this.Xspeed;}
+
+    int getXSpeed(){return this.Xspeed;}
+
+    int getYSpeed(){return this.Yspeed;}
+
+    int getX() {return this.x;}
+
+    int getY() {return this.y;}
+
+    void setX(int x) {this.x = x;}
+
+    int getRadius() {return this.radius;}
+
+    Color getColor() {return this.color;}
+
+    void setColor(Color c) {this.color = c;}
 }

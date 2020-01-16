@@ -14,7 +14,7 @@ public class Paddle
     private RectF rect;
     private int x, y,length, height, paddleSpeed;
 
-    // Which ways can the paddle move
+    // In che modo si può muovere
     public final int STOPPED = 0;
     public final int LEFT = 1;
     public final int RIGHT = 2;
@@ -37,15 +37,13 @@ public class Paddle
     }
 
     public int getX() { return x; }
-    public int getY() { return y; }
     public void setX(int x) { this.x = x; }
-    public void setY(int y) { this.y = y; }
 
     public RectF getRect(){
         return this.rect;
     }
 
-    // This method will be used to change/set if the paddle is going left, right or nowhere
+    // Questo metodo verrà utilizzato per cambiare/impostare se la barra sta andando a sinistra, a destra o da nessuna parte
     public void setMovementState(int state){
         this.paddleMoving = state;
     }
@@ -67,22 +65,6 @@ public class Paddle
         this.rect.right = this.x + this.length;
     }
 
-    //  Aggiorna le coordinate durante movimento
-    public void update(int w, float delay)
-    {
-        if(this.paddleMoving == this.LEFT && this.x > 0)
-        {
-            this.x -= this.paddleSpeed * delay;
-        }
-
-        if(this.paddleMoving == this.RIGHT && this.x + this.length < w)
-        {
-            this.x += this.paddleSpeed * delay;
-        }
-
-        this.rect.left = this.x;
-        this.rect.right = this.x + this.length;
-    }
 
     public void createPaddleDrawable(Context context)
     {

@@ -40,18 +40,20 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     private int fps = 1;
     private boolean threadRunning = false;
     boolean paused = true;
-    int score = 0;
-    int lives = 3;
+    private int score = 0;
+    private int lives = 3;
 
-    long highscore;
-    long calculatedFps = 0;
-    int level = 1;
-    boolean newLevel = false;
+    private long highscore;
+    private long calculatedFps = 0;
+    private int level = 1;
+    private boolean newLevel = false;
     private static final int TARGET_FPS = 60;
-    float fpsDelay = 1f;
-    int totalScore = 48;
+    private float fpsDelay = 1f;
+    private int totalScore = 48;
     private Bitmap backgroundBitmap;
     private Bitmap lifeBitmap;
+
+    //SoundPool costants
     private SoundPool soundPool;
     private static final int NUMBER_OF_SIMULTANEOUS_SOUNDS = 3;
     private final float LEFT_VOLUME_VALUE = 1.0f;
@@ -65,10 +67,11 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     private static final int HURT_SOUND = 2;
     private static final int BREAK_SOUND = 3;
 
-    //|-----------------------|//
-    // CONSTRUCTEUR DE LA VIEW //
-    //|-----------------------|//
 
+    /**
+     *
+     * @param context
+     */
     public SurfaceViewThread(Context context)
     {
         super(context);
@@ -503,9 +506,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         return true;
     }
 
-    //|----------------------------------|//
-    // METHODE PAUSE POUR LA GAME_ACTIVITY //
-    //|----------------------------------|//
+    //Metodo pausa per la game activity
     public void pause()
     {
         paused = true;

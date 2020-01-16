@@ -3,7 +3,6 @@ package com.nullpointerexception.retrogames.Tetris;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -48,7 +47,6 @@ public class TetrisCtrl extends View {
     private Bitmap[] mArBmpCell = new Bitmap[8]; //Immagini delle celle
     private AlertDialog mDlgMsg = null;
     private int mScore = 0; //Punteggio corrente
-    private SharedPreferences totalscoreShared;
     private long mTopScore;
     private TextView score, totalscore;
 

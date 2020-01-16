@@ -18,6 +18,12 @@ class Player {
     RectF bounds;
     int collision;
 
+    /**
+     *
+     * @param paddleWidth
+     * @param paddleHeight
+     * @param paint
+     */
     Player(int paddleWidth, int paddleHeight, Paint paint) {
         this.paddleWidth = paddleWidth;
         this.paddleHeight = paddleHeight;

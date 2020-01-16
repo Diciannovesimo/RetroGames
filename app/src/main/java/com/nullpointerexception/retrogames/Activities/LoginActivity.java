@@ -228,6 +228,9 @@ public class LoginActivity extends AppCompatActivity
         googleSignInButton = findViewById(R.id.googleSignInButton);
     }
 
+    /**
+     * Fa partire l'homeactivity e disalloca loginActivity
+     */
     private void loginProcedures()
     {
         //Fa partire l'Homeactivity e disalloca LoginActivity

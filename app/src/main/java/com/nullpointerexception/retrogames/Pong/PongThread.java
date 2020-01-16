@@ -343,7 +343,7 @@ public class PongThread extends Thread {
      * @param cpuScore
      * @param humanScore
      */
-    public void game_over(int cpuScore, int humanScore){
+    void game_over(int cpuScore, int humanScore){
 
         int score_pong = humanScore - cpuScore;
 
@@ -734,11 +734,11 @@ public class PongThread extends Thread {
         }
     }
 
-    public void setOnEndGameListener(onEndGameListener onEndGameListener){
+    void setOnEndGameListener(onEndGameListener onEndGameListener){
         this.onEndGameListener = onEndGameListener;
     }
 
-    public void setOnAddScoreListener(OnAddScoreListener onAddScoreListener) {
+    void setOnAddScoreListener(OnAddScoreListener onAddScoreListener) {
         this.onAddScoreListener = onAddScoreListener;
     }
 

@@ -19,10 +19,8 @@ public class MainActivityTetris extends AppCompatActivity {
 
     private static MediaPlayer player; //Gestione della riproduzione audio
     private Point mScreenSize = new Point(0, 0); //dimensione dello schermo
-    private Point mMousePos = new Point(-1, -1); //posizione del tocco
     private int mCellSize = 0; //dimensione di una singola cella
     private TetrisCtrl mTetrisCtrl;
-    private boolean mIsTouchMove = false;
     private TextView textViewScore, textViewTotalscore;
 
     @Override
