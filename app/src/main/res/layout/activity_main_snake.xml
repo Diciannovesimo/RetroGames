@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
-    tools:context="com.nullpointerexception.retrogames.Snake.MainActivitySnake">
+    tools:context="com.nullpointerexception.retrogames.Snake.MainActivitySnake"
+    android:background="@android:color/white">
 
   <androidx.constraintlayout.widget.Guideline
       android:id="@+id/guideline4"
@@ -31,18 +31,17 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/guideline3" />
+      app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
   <Button
       android:id="@+id/top_btn"
       android:layout_width="70dp"
       android:layout_height="70dp"
-      android:layout_marginTop="12dp"
       android:background="@android:color/transparent"
       app:layout_constraintEnd_toEndOf="@+id/right_btn"
       app:layout_constraintHorizontal_bias="0.503"
       app:layout_constraintStart_toStartOf="@+id/left_btn"
-      app:layout_constraintTop_toTopOf="@+id/guideline3" />
+      app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
   <Button
       android:id="@+id/left_btn"
@@ -75,7 +74,6 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />
-
 
 
   <androidx.constraintlayout.widget.Guideline
@@ -125,24 +123,24 @@
 
   <ImageView
       android:id="@+id/restart_btn"
-      android:layout_width="50sp"
-      android:layout_height="50sp"
+      android:layout_width="60sp"
+      android:layout_height="60dp"
       android:layout_marginStart="16dp"
       app:layout_constraintBottom_toTopOf="@+id/guideline4"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/snake_view"
-      app:srcCompat="@drawable/rotate_tetris" />
+      app:srcCompat="@drawable/restart" />
 
   <ImageView
       android:id="@+id/start_btn"
-      android:layout_width="52dp"
-      android:layout_height="52dp"
+      android:layout_width="60dp"
+      android:layout_height="60dp"
       android:layout_marginEnd="16dp"
       android:clickable="true"
       app:layout_constraintBottom_toTopOf="@+id/guideline4"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/snake_view"
-      app:srcCompat="@drawable/ic_play"
+      app:srcCompat="@drawable/start"
       tools:ignore="KeyboardInaccessibleWidget" />
 
   <androidx.constraintlayout.widget.Guideline

@@ -273,7 +273,7 @@ public class SnakePanelView extends View {
     /**
      * Thread principale del gioco
      */
-    private class GameMainThread extends Thread {
+    public class GameMainThread extends Thread {
 
         @Override
         public void run() {
@@ -618,6 +618,14 @@ public class SnakePanelView extends View {
         }
     }
 
+    public boolean ismIsEndGame() {
+        return mIsEndGame;
+    }
+
+    public void setmIsEndGame(boolean mIsEndGame) {
+        this.mIsEndGame = mIsEndGame;
+    }
+
     /**
      * Converte la dimensione dei dp in pixels
      */
@@ -625,6 +633,8 @@ public class SnakePanelView extends View {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpVal,
                 context.getResources().getDisplayMetrics());
     }
+
+
 
 
     /**

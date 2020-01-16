@@ -13,7 +13,7 @@ public class GridSquare {
   public int getColor() {
     switch (mType) {
       case GameType.GRID:       //Posto vuoto
-        return Color.parseColor("#BCBED4");
+        return Color.WHITE;
       case GameType.FOOD:       //Cibo
         return Color.parseColor("#F36D6D");
       case GameType.SNAKE:      //Serpente
