@@ -16,16 +16,16 @@ import androidx.annotation.NonNull;
 /**
  *      ProfileImageGenerator
  *
- *      Is used to retrieve or generate a drawable to use as profile image.
+ *      Viene utilizzato per recuperare o generare un disegno da utilizzare come immagine del profilo.
  */
 public class ProfileImageGenerator
 {
-    /**   Context used to do functionality of this object  */
+    /**   Contesto utilizzato per eseguire le funzionalità di questo oggetto  */
     private Context context;
-    /**   Drawable loaded (or generated)  */
+    /**   Drawable caricato (o generato)  */
     private Drawable resource;
 
-    /**   Interface used to provide an implementation of the callback method invoked when resource is ready.  */
+    /**   Interfaccia utilizzata per fornire un'implementazione del metodo di callback richiamato quando la risorsa è pronta.  */
     public interface OnImageGeneratedListener
     { void onImageGenerated(Drawable drawable); }
 
@@ -36,10 +36,10 @@ public class ProfileImageGenerator
     }
 
     /**
-     *      Generate an image for the given name.
+     *      Genera un'immagine per il nome specificato.
      *
-     *      @param name     name from by generate image.
-     *      @param onImageGeneratedListener   Implementation of the callback method.
+     *      @param name     Nome dal quale generare un'immagine
+     *      @param onImageGeneratedListener   Implementazione del metodo di callback.
      */
     @SuppressLint("CheckResult")
     public void fetchImageOf(@NonNull String name, OnImageGeneratedListener onImageGeneratedListener)
@@ -64,17 +64,17 @@ public class ProfileImageGenerator
 /**
  *      ProfileImageLetter
  *
- *      Drawable generated from a given string
+ *      Drawable generato da una determinata stringa
  */
 class ProfileImageLetter extends ShapeDrawable
 {
-    /**   Letter displayed into drawable  */
+    /**   Lettera visualizzata in un disegno  */
     private char letter;
 
     /**
-     *      Constructs object
+     *      Costruisce l'oggetto
      *
-     *      @param name Name of user
+     *      @param name Nome dell'utente
      */
     ProfileImageLetter(String name)
     {
@@ -102,10 +102,10 @@ class ProfileImageLetter extends ShapeDrawable
     }
 
     /**
-     *      It generates a color based on the given string.
+     *      Genera un colore in base alla stringa specificata.
      *
-     *      @param name     String from which get color.
-     *      @return         Color generated.
+     *      @param name     Stringa da cui ottenere il colore.
+     *      @return         Colore generato.
      */
     private int generateColorFor(String name)
     {
@@ -120,12 +120,11 @@ class ProfileImageLetter extends ShapeDrawable
     }
 
     /**
-     *      Calculation of an equivalent number from x mod y.
-     *      Method created to support versions below API 24. ( Math.floorMod() needs API 24 )
-     *
-     *      @param x    Number from which calculate its equivalent
-     *      @param y    Module
-     *      @return     An equivalent number of x mod y
+     *      Calcolo di un numero equivalente da x mod y.
+
+     *      @param x    Numero da cui calcolare il suo equivalente
+     *      @param y    Modulo
+     *      @return     Un numero equivalente di x mod y
      */
     private int mod(int x, int y)
     {

@@ -10,12 +10,15 @@ import android.widget.TextView;
 import com.nullpointerexception.retrogames.R;
 
 /**
- *      View che mostra una riga della lista della classifica
+ * View che mostra una riga della lista della classifica
  */
 public class UserScoreView extends FrameLayout
 {
     private ImageView profileImageView;
 
+    /**
+     * Costruttori
+     */
     public UserScoreView(Context context)
     {
         super(context);
