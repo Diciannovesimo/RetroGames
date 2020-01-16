@@ -119,6 +119,9 @@ public class GamesFragment extends Fragment
         }
     }
 
+    /**
+     * Imposta gli highscores quando la schermata è in portait
+     */
     private void setPortraitHighscores()
     {
         tetrisHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.TETRIS) ));
@@ -128,6 +131,9 @@ public class GamesFragment extends Fragment
         breakoutHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.BREAKOUT) ));
     }
 
+    /**
+     * Imposta il listener sui pulsanti play quando è in portait
+     */
     private void setOnPlayButtonClickListenerPortrait()
     {
         playButtonTetris.setOnTouchListener(new OnTouchAnimatedListener()
@@ -198,6 +204,9 @@ public class GamesFragment extends Fragment
         });
     }
 
+    /**
+     * Imposta il listener sulla cardview quando sono in portait
+     */
     private void setOnCardClickListenersPortrait()
     {
         tetrisCard.setOnTouchListener(new OnTouchAnimatedListener()
@@ -336,6 +345,9 @@ public class GamesFragment extends Fragment
         });
     }
 
+    /**
+     * Imposta il listener sulla cardview quando sono in landscape
+     */
     private void setOnCardClickListenersLandscape()
     {
         tetrisCard.setOnTouchListener(new OnTouchAnimatedListener()

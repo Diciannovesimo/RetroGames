@@ -163,7 +163,7 @@ public class AuthenticationManager
         currentLoginAttempt = new LoginAttempt();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(context.getString(R.string.default_web_client_id))
+                .requestIdToken(context.getString(R.string.server_client_id))
                 .requestEmail()
                 .build();
         GoogleSignInClient mGoogleSignInClient;

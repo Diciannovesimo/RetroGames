@@ -289,6 +289,9 @@ public class LeaderboardFragment extends Fragment
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    /**
+     * Adapter per la recyclerView
+     */
     public class RecyclerViewAdapter extends RecyclerView.Adapter<UserScoreViewItem>
     {
         private List<Scoreboard> dataSet;
@@ -346,7 +349,7 @@ public class LeaderboardFragment extends Fragment
     }
 
     /**
-     *      Adattamento della UserScoreView per la recyclerView
+     *  Adattamento della UserScoreView per la recyclerView
      */
     public class UserScoreViewItem extends RecyclerView.ViewHolder
     {
