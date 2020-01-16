@@ -5,24 +5,20 @@ import android.graphics.RectF;
 
 class Player {
 
-    /*
-    grandezza dei rettangoli
-     */
-    int paddleWidth;
-    int paddleHeight;
-    /*
-    stile dei rettangoli
-     */
-    Paint paint;
-    int score;
-    RectF bounds;
-    int collision;
+    int paddleWidth;    //larghezza del paddle
+    int paddleHeight;   //altezza del paddle
+    int collision;      //numero delle collisioni
+    int score;          //punteggio
+    //stile dei rettangoli
+    Paint paint;   //stile dei rettangoli
+    RectF bounds;  //limiti
+
 
     /**
-     *
-     * @param paddleWidth
-     * @param paddleHeight
-     * @param paint
+     * Costruttore del player
+     * @param paddleWidth larghezza del paddle
+     * @param paddleHeight  altezza del paddle
+     * @param paint stile del rettangolo
      */
     Player(int paddleWidth, int paddleHeight, Paint paint) {
         this.paddleWidth = paddleWidth;

@@ -26,6 +26,7 @@ public class MainActivityPong extends AppCompatActivity {
     private AlertDialog mDlgMsg = null;
     private Context context;
 
+    //Variabili per soundpool
     private SoundPool soundPool;
     private final int NUMBER_OF_SIMULTANEOUS_SOUNDS = 5;
     private final float LEFT_VOLUME_VALUE = 1.0f;
@@ -65,9 +66,8 @@ public class MainActivityPong extends AppCompatActivity {
     }
 
     /**
-     * salva lo stato del gioco nella variabile
-     * save
-     * @param outState
+     * salva lo stato del gioco nella variabile save
+     * @param outState lo stato da salvare
      */
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -78,10 +78,8 @@ public class MainActivityPong extends AppCompatActivity {
 
 
     /**
-     * quando il gioco viene ripreso
-     * parte il metodo game con il
-     * salvataggio(save) di
-     * onSaveInstanceState
+     * quando il gioco viene ripreso parte il metodo game con il
+     * salvataggio(save) di onSaveInstanceState
      */
     @Override
     protected void onResume() {
@@ -128,8 +126,8 @@ public class MainActivityPong extends AppCompatActivity {
 
     /**
      * mostra il dialog quando la partita finisce
-     * @param score
-     * @param exit_mode
+     * @param score punteggio ottenuto
+     * @param exit_mode modo d'uscita
      */
     private void showDialog_GameOver(int score, int exit_mode) {
         runOnUiThread(new Runnable() {
@@ -191,6 +189,9 @@ public class MainActivityPong extends AppCompatActivity {
 
     }
 
+    /**
+     * Resetta le textview degli score
+     */
     private void resetScoreTv() {
         mHighScore.setText(getResources().getString(R.string.highscore) + highScore);
         mScore.setText(getResources().getString(R.string.score) + score);
@@ -198,10 +199,9 @@ public class MainActivityPong extends AppCompatActivity {
 
 
     /**
-     * setta i layout di pong per poi
-     * creare una nuova partita o riprende
+     * setta i layout di pong per poi creare una nuova partita o riprende
      * quella avviata in precedenza se esiste
-     * @param savedInstanceState
+     * @param savedInstanceState stato precedente
      */
     private void game(Bundle savedInstanceState){
         setContentView(R.layout.pong_layout);
@@ -209,7 +209,6 @@ public class MainActivityPong extends AppCompatActivity {
         final PongView mPongView = findViewById(R.id.main);
         mPongView.setStatusView(findViewById(R.id.status));
         mPongView.setScoreView(findViewById(R.id.score));
-
 
         mGameThread = mPongView.getGameThread();
 
@@ -224,6 +223,7 @@ public class MainActivityPong extends AppCompatActivity {
         } else {
             mGameThread.restoreState(savedInstanceState);
         }
+        
         mGameThread.setOnEndGameListener((score, exit_mode) -> showDialog_GameOver(score,exit_mode));
         mGameThread.setOnAddScoreListener(new PongThread.OnAddScoreListener() {
             @Override

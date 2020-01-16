@@ -4,26 +4,18 @@ import android.graphics.Paint;
 
 class Ball {
 
-    /*
-        posizione palla
-    */
+    Paint paint;    //stile della palla
+    int radius;     //angolo della palla
+    //posizione della palla
     float cx;
     float cy;
     float dx;
     float dy;
-    /*
-        angolo
-    */
-    int radius;
-    /*
-        stile della palla
-    */
-    Paint paint;
 
     /**
-     *
-     * @param radius
-     * @param paint
+     *  Costruttore della palla
+     * @param radius raggio della palla
+     * @param paint stile della palla
      */
     Ball(int radius, Paint paint) {
         this.radius = radius;

@@ -15,15 +15,14 @@ import android.widget.TextView;
 public class PongView extends SurfaceView implements SurfaceHolder.Callback {
 
     private PongThread mGameThread;
-
     private TextView mStatusView;
-
     private TextView mScoreView;
+    private boolean moving;
+    private float mLastTouchY;
 
     /**
-     * crea la view di pong passandogli
-     * il contesto e lo stato del gioco
-     * @param context
+     * Crea la view di pong
+     * @param context contesto
      * @param attributeSet
      */
     public PongView(Context context, AttributeSet attributeSet) {
@@ -32,6 +31,7 @@ public class PongView extends SurfaceView implements SurfaceHolder.Callback {
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
 
+        //Riceve il messaggio dall'handler per la statusView
         mGameThread = new PongThread(holder, context,
                 new Handler() {
                     @Override
@@ -45,8 +45,7 @@ public class PongView extends SurfaceView implements SurfaceHolder.Callback {
                     public void handleMessage(Message m) {
                         mScoreView.setText(m.getData().getString("text"));
                     }
-                },
-                attributeSet
+                }
         );
 
         setFocusable(true);
@@ -55,7 +54,7 @@ public class PongView extends SurfaceView implements SurfaceHolder.Callback {
     /**
      * setta lo stato della partita
      * (win,lose,pause)
-     * @param textView
+     * @param textView textview
      */
     public void setStatusView(TextView textView) {
         mStatusView = textView;
@@ -63,10 +62,14 @@ public class PongView extends SurfaceView implements SurfaceHolder.Callback {
 
     /**
      * setta lo score
-     * @param textView
+     * @param textView textview
      */
     public void setScoreView(TextView textView) {
         mScoreView = textView;
+    }
+
+    public PongThread getGameThread() {
+        return mGameThread;
     }
 
     @Override
@@ -101,9 +104,6 @@ public class PongView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    private boolean moving;
-    private float   mLastTouchY;
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -137,12 +137,5 @@ public class PongView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
-    /**
-     * ritorna il thread
-     * @return
-     */
-    public PongThread getGameThread() {
-        return mGameThread;
-    }
 
 }
