@@ -23,40 +23,30 @@ import com.nullpointerexception.retrogames.R;
 
 public class AuthenticationManager
 {
-    /*
-            Singleton declaration
-     */
-    /**  Instance of this class   */
+
+    //Istanza di questa classe
     private static final AuthenticationManager ourInstance = new AuthenticationManager();
-    /**  Used to access to this class   */
+    //Utilizzato per accedere a questa classe
     public static AuthenticationManager get() { return ourInstance; }
-    /**  Private constructor to permit a single instance of this class   */
-    private AuthenticationManager() {  }
-
-    /** Request code for google sign-in intent */
+    //Codice richiesta per la richiesta di accesso a Google
     private final int GOOGLE_SIGNIN_REQUEST = 10;
-
-    /*
-            Vars
-     */
-    /** Stores instance of Firebase auth */
-    private FirebaseAuth auth;
-    /** Stores context, used for some actions of this class that requires it */
-    private Context context;
-    /** Current user logged in app */
-    private User currentUser;
-    /** Stores a LoginAttempt instance used when shared by more than one method */
-    private LoginAttempt currentLoginAttempt;
+    private FirebaseAuth auth;  //Memorizza l'istanza dell'autent Firebase
+    private Context context;    //Memorizza il contesto, utilizzato per alcune azioni di questa classe che lo richiedono
+    private User currentUser;   //Utente loggato
+    private LoginAttempt currentLoginAttempt; //Memorizza un'istanza di LoginAttempt quando è condivisa da più di un metodo
 
     /**
-     *      Initialize all fields required to use this class
-     *
-     *      @param context Context that will be used by this class
-     *
-     *      @return null: if there aren't users logged, an instance of login attempt otherwise.
+     * Costruttore privato per consentire una singola istanza di questa classe
      */
-    public LoginAttempt initialize(Activity context)
-     {
+    private AuthenticationManager() {  }
+
+
+    /**
+     *  Inizializza i campi richiesti per usare questa classe
+     * @param context contesto che verrà usato da questa classe
+     * @return null se non ì èresente un utente loggato, altrimenti un istanza di loginAttempt
+     */
+    public LoginAttempt initialize(Activity context) {
         this.context = context;
         FirebaseApp.initializeApp(context);
         auth = FirebaseAuth.getInstance();
@@ -77,19 +67,17 @@ public class AuthenticationManager
     }
 
     /**
-     *      Tries to access to an account with specified credentials.
+     *      Prova ad accedere con un account google
      *
-     *      @param email    User's Email
-     *      @param password User's Password
+     *      @param email    email dell'utente
+     *      @param password password dell'utente
      *
-     *      @return An instance of LoginAttempt with allows to add
-     *      a callback method for this given attempt.
+     *      @return Un istanza di loginAttempt
      */
-    public LoginAttempt login(String email, String password)
-    {
+    public LoginAttempt login(String email, String password) {
         final LoginAttempt loginAttempt = new LoginAttempt();
 
-        //  Don't allow to login if before signed out with current account.
+        //  Non consentire l'accesso se prima si è disconnessi con l'account corrente.
         if(currentUser != null)
             logout();
 
@@ -121,19 +109,17 @@ public class AuthenticationManager
     }
 
     /**
-     *      Tries to get Uid of an account with specified credentials.
+     * Tenta di ottenere un UI di un account con le credenziali specificate.
      *
-     *      @param email    User's Email
-     *      @param password User's Password
-     *
-     *      @return An instance of LoginAttempt with allows to add
-     *      a callback method for this given attempt.
+     * @param email    email dell'utente
+     * @param password password dell'utente
+     * @return Un'istanza di LoginAttempt con consente di aggiungere
+     *  un metodo di callback per questo tentativo specificato.
      */
-    public LoginAttempt getUIdOf(String email, String password)
-    {
+    public LoginAttempt getUIdOf(String email, String password) {
         final LoginAttempt loginAttempt = new LoginAttempt();
 
-        //  Don't allow to login if before signed out with current account.
+        // Non consentire l'accesso se prima si è disconnessi con l'account corrente.
         if(currentUser != null)
             logout();
 
@@ -168,62 +154,12 @@ public class AuthenticationManager
     }
 
     /**
-     *      Tries to delete an account sending requests until work is done successfully.
-     *
-     *      @param email        Email of account to delete
-     *      @param password     Password of account to delete
-     */
-    public void deleteUser(final String email, final String password)
-    {
-        if(email == null || password == null)
-            return;
+     *  Mostra il dialog di Google sign-in.
 
-        if(auth.getCurrentUser() != null)
-        {
-            if(auth.getCurrentUser().getEmail() == null)
-                return;
-            else if(auth.getCurrentUser().getEmail().equals(email))
-            {
-                auth.getCurrentUser().delete().addOnCompleteListener(task -> {
-                    if( ! task.isSuccessful())
-                    {
-                        deleteUser(email, password);
-                    }
-                    else
-                        logout();
-                });
-            }
-            else
-            {
-                logout();
-                deleteUser(email, password);
-            }
-        }
-        else
-            login(email, password).addOnLoginResultListener(new LoginAttempt.OnLoginResultListener()
-            {
-                @Override
-                public void onLoginResult(boolean result)
-                {
-                    deleteUser(email, password);
-                }
-            });
-    }
-
-    /**
-     *      Show dialog of Google sign-in.
-     *
-     *      NOTE: Calling this method requires call also loginWithGoogle(...) in
-     *      onActivityResult(...) of the activity passed with parameters
-     *      or this method will do nothing.
-     *
-     *      @param activity Activity that will manage intent launched by this method.
-     *
-     *      @return         An instance of LoginAttempt with allows to add
-     *                      a callback method for this given attempt.
+     * @param activity Activity che gestirà l'intent lanciato da questo metodo.
+     * @return Un'istanza di LoginAttempt con consente di aggiungere un metodo di callback per questo dato tentativo.
      */
-    public LoginAttempt requestLoginWithGoogle(Activity activity)
-    {
+    public LoginAttempt requestLoginWithGoogle(Activity activity) {
         currentLoginAttempt = new LoginAttempt();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -240,17 +176,13 @@ public class AuthenticationManager
     }
 
     /**
-     *      Manage result of intent launched with requestLoginWithGoogle(...) method:
-     *      Set current user with data of google account which user has just signed-in.
-     *
-     *      NOTE: Call this method only if called also before requestLoginWithGoogle(...) and only
-     *      in onActivityResult(...) of the activity where has been called the previous method.
+     * Gestire il risultato dell'intenzione avviata con il metodo requestLoginWithGoogle(...):
+     *      Imposta l'utente corrente con i dati dell'account Google dell'utente ha appena effettuato l'accesso.
      *
      *      @param requestCode  Request code provided by onActivityResult(...)
      *      @param data         Intent provided by onActivityResult(...)
      */
-    public void loginWithGoogle(int requestCode, Intent data)
-    {
+    public void loginWithGoogle(int requestCode, Intent data) {
         //  Check if got a null intent
         if(data == null)
             return;
@@ -308,7 +240,8 @@ public class AuthenticationManager
     }
 
     /**
-     *     @return User currently logged.
+     * Ritorna l'utente attualmente loggato
+     * @return ritorna l'utente attualmente loggato
      */
     public User getUserLogged()
     {
@@ -316,10 +249,9 @@ public class AuthenticationManager
     }
 
     /**
-     *      @return true: if user is logged, false otherwise
+     *      @return vero se l'utente è loggato, altrimenti falso
      */
-    public boolean isUserLogged()
-    {
+    public boolean isUserLogged() {
         if(auth == null)
             return false;
 
@@ -327,35 +259,31 @@ public class AuthenticationManager
     }
 
     /**
-     *      User sign out
+     * Permette di far uscire l'utente
      */
-    public void logout()
-    {
+    public void logout() {
         auth.signOut();
         currentUser = null;
     }
 
     /**
-     *  Create a new createAccount method which takes in an email address and password,
-     *  validates them and then creates a new user
+     *  Crea un nuovo account con email e password su firebase
      *
-     *  @param email of the user who has registered
-     *  @param password of the user who has registered
-     *  @param onCompleteListener Callback method to manage actions for different results
+     *  @param email email dell'utente
+     *  @param password password dell'utente
+     *  @param onCompleteListener gestisce le azioni differenti
      */
-    public void createFirebaseUser(String email, String password, OnCompleteListener<AuthResult> onCompleteListener)
-    {
+    public void createFirebaseUser(String email, String password, OnCompleteListener<AuthResult> onCompleteListener) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener((Activity) context, onCompleteListener);
     }
 
     /**
-     *     Send a registration confirmation email
+     *     Invia l'email di conferma
      *
-     *     @param onCompleteListener Callback method to manage actions for different results
+     *     @param onCompleteListener gestisce le azioni different
      */
-    public void sendVerificationEmail(OnCompleteListener<Void> onCompleteListener)
-    {
+    public void sendVerificationEmail(OnCompleteListener<Void> onCompleteListener) {
         if (auth.getCurrentUser() != null)
             auth.getCurrentUser().sendEmailVerification().addOnCompleteListener(onCompleteListener);
     }
@@ -363,60 +291,56 @@ public class AuthenticationManager
     /**
      *      LoginAttempt
      *
-     *      Class that allows to set callback methods for a login attempt.
+     *      Classe che consente di impostare i metodi di callback per un tentativo di accesso.
      */
-    public static class LoginAttempt
-    {
-        /** Interface with the mentioned callback method */
-        public interface OnLoginResultListener
-        {
+    public static class LoginAttempt {
+
+        //Archivia l'implementazione fornita di OnLoginResultListener
+        private OnLoginResultListener onLoginResultListener;
+        //Archivia l'implementazione fornita di OnUIDListener
+        private OnUIDListener onUidListener;
+
+
+        public interface OnLoginResultListener {
             /**
-             *      Callback method called after a login attempt.
-             *      @param result true if user logged successfully, false else.
+             *      Metodo di callback chiamato dopo un tentativo di accesso.
+             *      @param result vero se l'utente è loggato, altrimenti falso
              */
             void onLoginResult(boolean result);
         }
 
-        /** Interface with the mentioned callback method */
-        public interface OnUIDListener
-        {
+        public interface OnUIDListener {
             /**
-             *      Callback method called after a login attempt.
-             *      @param uid User Id provided by FireBase
+             *       Metodo di callback chiamato dopo un tentativo di accesso.
+             *      @param uid ID utente fornito da FireBase
              */
             void onIdObtained(String uid);
 
-            /**     Callback method called after a failed login attempt. */
+            /**     Metodo di callback chiamato dopo un tentativo di accesso non riuscito. */
             void onError();
         }
 
-        /** Stores the implementation provided of OnLoginResultListener */
-        private OnLoginResultListener onLoginResultListener;
-
-        /** Stores the implementation provided of OnUIDListener */
-        private OnUIDListener onUidListener;
 
         /**
-         *      Add an implementation for the method called after a login result.
-         *      @param onLoginResultListener implementation to provide.
+         *      Aggiungere un'implementazione per il metodo chiamato dopo un risultato di accesso.
+         *      @param onLoginResultListener implementazione del metodo
          * */
-        public void addOnLoginResultListener(OnLoginResultListener onLoginResultListener)
-        {
+        public void addOnLoginResultListener(OnLoginResultListener onLoginResultListener) {
             this.onLoginResultListener = onLoginResultListener;
         }
 
-        public OnLoginResultListener getOnLoginResultListener() { return onLoginResultListener; }
+        OnLoginResultListener getOnLoginResultListener() {
+            return onLoginResultListener; }
 
         /**
-         *      Add an implementation for the method called after a login result.
-         *      @param onUidListener implementation to provide.
+         *      Aggiungere un'implementazione per il metodo chiamato dopo un risultato di accesso.
+         *      @param onUidListener implementazione del metodo.
          * */
-        public void addOnUidListener(OnUIDListener onUidListener)
-        {
+        public void addOnUidListener(OnUIDListener onUidListener) {
             this.onUidListener = onUidListener;
         }
 
-        public OnUIDListener getOnUidListener() { return onUidListener; }
+        OnUIDListener getOnUidListener() { return onUidListener; }
 
     }
 }
