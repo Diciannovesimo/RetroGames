@@ -5,13 +5,24 @@ import android.view.View;
 
 public abstract class OnTouchAnimatedListener implements View.OnTouchListener
 {
-    private float deltaScale = 0.03f;
-    private float deltaAlpha = 0.15f;
+    private float deltaScale = 0.03f;   //differenza di grandezza della view
+    private float deltaAlpha = 0.15f;   //differenza di  trasparenza della view
 
     /**
      * Costruttore vuoto necessario per mantenere le variabili invariate
      */
     public OnTouchAnimatedListener() {}
+
+    public OnTouchAnimatedListener(float deltaScale, float deltaAlpha)
+    {
+        this.deltaScale = deltaScale;
+        this.deltaAlpha = deltaAlpha;
+
+        if(deltaScale > 1f) deltaScale = 1f;
+        if(deltaAlpha > 1f) deltaAlpha = 1f;
+        if(deltaScale < 0f) deltaScale = 0f;
+        if(deltaAlpha < 0f) deltaAlpha = 0f;
+    }
 
 
     @Override
