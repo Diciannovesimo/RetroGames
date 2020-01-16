@@ -52,6 +52,7 @@ public class LoginFragment extends Fragment
 
         TextView dontLogin = view.findViewById(R.id.textView_dont_log_first);
 
+        //se è il primo accesso
         if(isFirstAccess)
             dontLogin.setOnTouchListener(new OnTouchAnimatedListener()
             {

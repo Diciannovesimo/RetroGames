@@ -35,7 +35,6 @@ import com.nullpointerexception.retrogames.Components.UserScoreView;
 import com.nullpointerexception.retrogames.R;
 
 import java.util.List;
-import java.util.Vector;
 
 public class LeaderboardFragment extends Fragment
 {
@@ -280,6 +279,9 @@ public class LeaderboardFragment extends Fragment
                                 }));
     }
 
+    /**
+     * Controlla se la connessione è disponibile
+     */
     public boolean isNetworkAvailable()
     {
         ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -289,7 +291,7 @@ public class LeaderboardFragment extends Fragment
 
     public class RecyclerViewAdapter extends RecyclerView.Adapter<UserScoreViewItem>
     {
-        private List<Scoreboard> dataSet = new Vector<>();
+        private List<Scoreboard> dataSet;
 
         public RecyclerViewAdapter(List<Scoreboard> scoreboardList)
         {

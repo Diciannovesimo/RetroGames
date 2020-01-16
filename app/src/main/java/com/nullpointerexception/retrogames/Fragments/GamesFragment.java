@@ -25,18 +25,14 @@ import com.nullpointerexception.retrogames.Tetris.MainActivityTetris;
 
 public class GamesFragment extends Fragment
 {
-    /*
-            Constants
-     */
+    //Costanti
     private final int TETRIS = 0;
     private final int SNAKE = 1;
     private final int PONG = 2;
     private final int HOLE = 3;
     private final int BREAKOUT = 4;
 
-    /*
-           UI Components Portrait
-     */
+    //UI Components Portrait
     private View lastViewSelected1, lastViewSelected2;
     private View playButtonTetris, playButtonSnake, playButtonPong, playButtonHole, playButtonBreakout;
     private TextView tetrisText, snakeText, pongText, holeText, breakoutText,
@@ -44,14 +40,10 @@ public class GamesFragment extends Fragment
             pongHighscoreText, holeHighscoreText, breakoutHighscoreText;
     private ViewGroup clickViewTetris, clickViewSnake, clickViewPong, clickViewHole, clickViewBreakout;
 
-    /*
-           UI Components Portrait / Landscape
-     */
+    //UI Components Portrait / Landscape
     private ViewGroup tetrisCard, snakeCard, pongCard, holeCard, breakoutCard;
 
-    /*
-            UI Components Landscape
-     */
+    //UI Components Landscape
     private ViewGroup gamesCard, playButton;
     private TextView gamesTitleTextview, gamesHighscoreTextview;
 
@@ -83,6 +75,10 @@ public class GamesFragment extends Fragment
         return view;
     }
 
+    /**
+     * Inizializza gli elementi dell'interfaccia grafica
+     * @param view
+     */
     private void initUI(View view)
     {
         tetrisCard = view.findViewById(R.id.CardView_tetris);
@@ -388,6 +384,10 @@ public class GamesFragment extends Fragment
         });
     }
 
+    /**
+     * Mostra le CardView personalizzate per ogni gioco
+     * @param game Una stirnga contenente il nome del gioco
+     */
     private void showCardOfGame(String game)
     {
         if(gamesCard == null || game == null)
