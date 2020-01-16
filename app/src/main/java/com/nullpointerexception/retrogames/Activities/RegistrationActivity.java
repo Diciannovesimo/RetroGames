@@ -63,8 +63,7 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new AlertDialog.Builder(RegistrationActivity.this)
-                        .setMessage("La password può contenere tutti i tipi di caratteri " +
-                                "ma deve essere lunga almeno 8 caratteri")
+                        .setMessage(getResources().getString(R.string.info_registraion))
                         .show();
             }
         });
