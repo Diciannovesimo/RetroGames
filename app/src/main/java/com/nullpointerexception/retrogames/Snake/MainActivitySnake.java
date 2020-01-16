@@ -26,6 +26,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
     private TextView mScore, mHighScore;
     private ImageView mDpad;
 
+    private int directionPressed;
     //Drawable per ogni direzione premuta
     private Drawable leftDrw, rightDrw, upDrw, downDrw, dpadDrw;
     //Stringa contenente l'highscore caricato dal database
@@ -88,11 +89,11 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
 
         //Inizializza le risorse per evitare chiamate inutili
         Resources resources = getResources();
-        leftDrw = resources.getDrawable(R.drawable.ouya_dpad_left);
-        rightDrw = resources.getDrawable(R.drawable.ouya_dpad_right);
-        upDrw = resources.getDrawable(R.drawable.ouya_dpad_up);
-        downDrw = resources.getDrawable(R.drawable.ouya_dpad_down);
-        dpadDrw = resources.getDrawable(R.drawable.ouya_dpad);
+        leftDrw = resources.getDrawable(R.drawable.dpad_left);
+        rightDrw = resources.getDrawable(R.drawable.dpad_right);
+        upDrw = resources.getDrawable(R.drawable.dpad_up);
+        downDrw = resources.getDrawable(R.drawable.dpad_down);
+        dpadDrw = resources.getDrawable(R.drawable.dpad);
         mDpad.setImageDrawable(dpadDrw);
 
         findViewById(R.id.left_btn).setOnTouchListener(this);
@@ -107,12 +108,11 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         //Non permette di premere di entrare nello switch prima di ms predefiniti
-        if (!mBlocker.block(ms)) {
             switch (view.getId()) {
                 case R.id.top_btn:
                     switch (motionEvent.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            mSnakePanelView.setSnakeDirection(GameType.TOP);
+                            directionPressed = GameType.TOP;
                             mDpad.setImageDrawable(upDrw);
                             break;
                         case MotionEvent.ACTION_UP:
@@ -123,7 +123,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
                 case R.id.bottom_btn:
                     switch (motionEvent.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            mSnakePanelView.setSnakeDirection(GameType.BOTTOM);
+                            directionPressed = GameType.BOTTOM;
                             mDpad.setImageDrawable(downDrw);
                             break;
                         case MotionEvent.ACTION_UP:
@@ -134,7 +134,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
                 case R.id.left_btn:
                     switch (motionEvent.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            mSnakePanelView.setSnakeDirection(GameType.LEFT);
+                            directionPressed = GameType.LEFT;
                             mDpad.setImageDrawable(leftDrw);
                             break;
                         case MotionEvent.ACTION_UP:
@@ -145,7 +145,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
                 case R.id.right_btn:
                     switch (motionEvent.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            mSnakePanelView.setSnakeDirection(GameType.RIGHT);
+                            directionPressed = GameType.RIGHT;
                             mDpad.setImageDrawable(rightDrw);
                             break;
                         case MotionEvent.ACTION_UP:
@@ -154,8 +154,24 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
                     }
                     break;
             }
+
+        if (!mBlocker.block(ms)) {
+            switch (directionPressed) {
+                case GameType.TOP:
+                    mSnakePanelView.setSnakeDirection(GameType.TOP);
+                    break;
+                case GameType.BOTTOM:
+                    mSnakePanelView.setSnakeDirection(GameType.BOTTOM);
+                    break;
+                case GameType.RIGHT:
+                    mSnakePanelView.setSnakeDirection(GameType.RIGHT);
+                    break;
+                case GameType.LEFT:
+                    mSnakePanelView.setSnakeDirection(GameType.LEFT);
+                    break;
+            }
         }
-        return false;
+        return true;
     }
 
     /**
@@ -218,4 +234,9 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
         game.save(App.SNAKE, point, this);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mSnakePanelView.setmIsEndGame(true);
+    }
 }
