@@ -119,6 +119,9 @@ public class GamesFragment extends Fragment
         }
     }
 
+    /**
+     *
+     */
     private void setPortraitHighscores()
     {
         tetrisHighscoreText.setText( String.valueOf(App.scoreboardDao.getScore(App.TETRIS) ));
