@@ -10,7 +10,7 @@ import android.graphics.RectF;
 import com.nullpointerexception.retrogames.R;
 
 
-public class Brick
+class Brick
 {
     //Colori del brick
     static final int GREEN = 0;
@@ -19,9 +19,14 @@ public class Brick
 
     static Context context;
 
-    private int x,y,width,height,resistance, oldResistance;
-    private RectF rect;
-    private boolean isVisible;
+    private int x; //posizione asse x del blocco
+    private int y;  //posizione asse y del blocco
+    private int width; //larghezza del blocco
+    private int height; //altezza del blocco
+    private int resistance; //resistenza del blocco
+    private int oldResistance;  //vecchia resistenza del blocco
+    private RectF rect; //rettangolo del blocco
+    private boolean isVisible;  //indica se blocco è visibile
     private int padding = 5;
     private Bitmap bitmap;
     private int res;
@@ -35,8 +40,7 @@ public class Brick
      * @param width larghezza
      * @param height peso
      */
-    Brick(int x, int y, int width, int height)
-    {
+    Brick(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -53,51 +57,11 @@ public class Brick
         p = new Paint();
     }
 
-    int getX(){return this.x;}
-    int getRes(){return this.resistance;}
-    int getY(){return this.y;}
-    int getWidth(){return this.width;}
-    int getHeight(){return this.height;}
-    int getPadding(){return this.padding;}
-    RectF getRect(){
-        return this.rect;
-    }
-    boolean getVisibility(){return this.isVisible;}
-
-    void setX(int x){this.x = x;}
-    void setRes(){
-        oldResistance = this.resistance;
-        this.resistance -= 1;
-    }
-    void setY(int y){this.y = y;}
-    void setWidth(int width){this.width = width;}
-    void setHeight(int height){this.height = height;}
-    void setPadding(int p){this.padding = p;}
-    void setVisibility(boolean v){this.isVisible = v;}
-    void setInvisible(){
-        this.isVisible = false;
-    }
-
-    int getColor()
-    {
-        return color;
-    }
-
-    void setColor(int color)
-    {
-        this.color = color;
-    }
-
-    static void setContext(Context ctx) { context = ctx; }
-
-    static Context getContext() { return context; }
-
     /**
      *  Disegna il blocco in base alla resistenza
-     * @param c
+     * @param c canvas
      */
-    void draw(Canvas c)
-    {
+    void draw(Canvas c) {
         if (this.resistance == 2)
         {
             if(res != getResourceForResistance(2))
@@ -143,8 +107,7 @@ public class Brick
      * @param resistance indice di resistenza del blocco
      * @return intero contenente la risorsa dell'immagine del blocco
      */
-    private int getResourceForResistance(int resistance)
-    {
+    private int getResourceForResistance(int resistance) {
         int res = 0;
 
         switch (color)
@@ -186,6 +149,57 @@ public class Brick
 
         return res;
     }
+
+    int getX(){return this.x;}
+
+    int getRes(){return this.resistance;}
+
+    int getY(){return this.y;}
+
+    int getWidth(){return this.width;}
+
+    int getHeight(){return this.height;}
+
+    int getPadding(){return this.padding;}
+
+    RectF getRect(){
+        return this.rect;
+    }
+
+    boolean getVisibility(){return this.isVisible;}
+
+    void setX(int x){this.x = x;}
+
+    void setRes(){
+        oldResistance = this.resistance;
+        this.resistance -= 1;
+    }
+
+    void setY(int y){this.y = y;}
+
+    void setWidth(int width){this.width = width;}
+
+    void setHeight(int height){this.height = height;}
+
+    void setPadding(int p){this.padding = p;}
+
+    void setVisibility(boolean v){this.isVisible = v;}
+
+    void setInvisible(){
+        this.isVisible = false;
+    }
+
+    int getColor() {
+        return color;
+    }
+
+    void setColor(int color) {
+        this.color = color;
+    }
+
+    static void setContext(Context ctx) { context = ctx; }
+
+    static Context getContext() { return context; }
 
 }
 

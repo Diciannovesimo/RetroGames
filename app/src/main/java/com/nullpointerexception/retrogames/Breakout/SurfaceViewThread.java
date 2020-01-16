@@ -26,29 +26,32 @@ import com.nullpointerexception.retrogames.R;
 
 import java.util.Random;
 
-public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Callback, Runnable
-{
+public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Callback, Runnable {
+
     private SurfaceHolder surfaceHolder;
     private Thread thread = null;
+    private boolean threadRunning = false;
     private Paint paint = new Paint();
     private Canvas canvas = null;
     private Circle ball;
     private Paddle paddle;
     private Brick[] bricks = new Brick[200];
-    private int nbBricks, brickWidth, brickHeight, screenWidth, screenHeight;
-    private int CdistX, CdistY, nearestX, nearestY;
+    private int nbBricks;       //numero di blocchi
+    private int brickWidth;     //lunghezza del blocco
+    private int brickHeight;    //altezza del blocco
+    private int screenWidth;    //lunghezza di schermo
+    private int screenHeight;   //altezza di schermo
+    private int CdistX;         //distanza sull'asse x tra la palla e la vicinanza sull'asse x
+    private int CdistY;         //distanza sull'asse y tra la palla e la vicinanza sull'asse y
+    private int nearestX;       //vicinanza della palla sull'asse x
+    private int nearestY;       //vicinanza della palla sull'asse y
     private int fps = 1;
-    private boolean threadRunning = false;
     boolean paused = true;
     private int score = 0;
     private int lives = 3;
-
     private long highscore;
-    private long calculatedFps = 0;
     private int level = 1;
     private boolean newLevel = false;
-    private static final int TARGET_FPS = 60;
-    private float fpsDelay = 1f;
     private int totalScore = 48;
     private Bitmap backgroundBitmap;
     private Bitmap lifeBitmap;
@@ -69,27 +72,26 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
 
 
     /**
-     *
-     * @param context
+     *  Costruttore del SurfaceViewThread
+     * @param context contesto
      */
-    public SurfaceViewThread(Context context)
-    {
+    public SurfaceViewThread(Context context) {
         super(context);
 
-        // Get SurfaceHolder object.
         surfaceHolder = this.getHolder();
         surfaceHolder.addCallback(this);
 
         //  Setta il context alla classe brick, usata per accedere alle risorse grafiche
         Brick.setContext(context);
 
-        //  Create soundPool
         initSoundpool();
 
-        // Get width and height screen
+        // Ottiene la larghezza e l'altezza schermo
         Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         screenWidth= display.getWidth();
         screenHeight= display.getHeight();
+
+
 
         backgroundBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
                 context.getResources(), R.drawable.breakout_background), screenWidth, screenHeight, false);
@@ -101,53 +103,13 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
 
         // Inizializzazione paddle, ball, bricks
         paddle = new Paddle(screenWidth, screenHeight, 25);
-        //paddle = new Paddle(screenWidth, screenHeight, 9);
         paddle.createPaddleDrawable(context);
         ball = new Circle(screenWidth, screenHeight, 55, 15);
-        //ball = new Circle(screenWidth, screenHeight, 55, 6);
         ball.setBall(context);
         buildWall(true);
 
-        // Set the SurfaceView object at the top of View object.
+        // Impostare l'oggetto SurfaceView nella parte superiore dell'oggetto View.
         setZOrderOnTop(true);
-    }
-
-    /**
-     *      Inizializza la soundPool, usata per riprodurre effetti sonori
-     */
-    private void initSoundpool()
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            soundPool= new SoundPool.Builder()
-                    .setMaxStreams(NUMBER_OF_SIMULTANEOUS_SOUNDS)
-                    .build();
-        }
-        else
-            // Deprecated way of creating a SoundPool before Android API 21.
-            soundPool= new SoundPool(NUMBER_OF_SIMULTANEOUS_SOUNDS, AudioManager.STREAM_MUSIC, 0);
-
-        sounds = new int[4];
-
-        //inserisce i suoni
-        sounds[HIT_SOUND] = soundPool.load(getContext(), R.raw.breakout_hit, 1);
-        sounds[NEW_WALL_SOUND] = soundPool.load(getContext(), R.raw.breakout_hurt, 1);
-        sounds[HURT_SOUND] = soundPool.load(getContext(), R.raw.breakout_loose, 2);
-        sounds[BREAK_SOUND] = soundPool.load(getContext(), R.raw.breakout_break, 0);
-    }
-
-    /**
-     *      Riproduce un effetto sonoro
-     *      @param sound intero identificativo del suono da riprodurre
-     */
-    private void playSound(int sound)
-    {
-        soundPool.play( sounds[sound],
-                LEFT_VOLUME_VALUE,
-                RIGHT_VOLUME_VALUE,
-                SOUND_PLAY_PRIORITY,
-                MUSIC_LOOP,
-                PLAY_RATE);
     }
 
     /**
@@ -157,9 +119,10 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
      *  @param brick Mattoni
      *  @return  Se c'è stata una collisione
      */
-    public boolean collisionBrick(Circle ball, Brick brick)
-    {
+    public boolean collisionBrick(Circle ball, Brick brick) {
+        //prende il massimo tra la parte sinistra del blocco e il minimo tra la posizione della palla sull'asse x la parte destra del blocco
         nearestX = (int) Math.max(brick.getRect().left,Math.min(ball.getX(),brick.getRect().right));
+        //prende il massimo tra la parte superiore del blocco e il minimo tra la posizione della palla sull'asse y la parte inferiore del blocco
         nearestY = (int) Math.max(brick.getRect().top,Math.min(ball.getY(),brick.getRect().bottom));
 
         CdistX = ball.getX() - nearestX;
@@ -169,14 +132,12 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     }
 
     /**
-     *      Controlla se c'è stata una collisione tra il giocatore (paddle) e la palla.
-     *
-     *      @param ball     Palla
-     *      @param paddle   Giocatore
-     *       @return        Se c'è stata una collisione.
+     * Controlla se c'è stata una collisione tra il giocatore (paddle) e la palla.
+     * @param ball palla
+     * @param paddle    giocatore
+     * @return  se c'è stata una collisione
      */
-    public boolean collisionPaddle(Circle ball, Paddle paddle)
-    {
+    public boolean collisionPaddle(Circle ball, Paddle paddle) {
         nearestX = (int) Math.max(paddle.getRect().left,Math.min(ball.getX(),paddle.getRect().right));
         nearestY = (int) Math.max(paddle.getRect().top,Math.min(ball.getY(),paddle.getRect().bottom));
 
@@ -189,8 +150,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     /**
             Controlla la collisione con i mattoni da destra/sinistra.
      */
-    public void collisionLeftRight(Circle palla, Brick brick)
-    {
+    public void collisionLeftRight(Circle palla, Brick brick) {
         if(palla.getX() + palla.getXSpeed() < brick.getRect().left ||
                 palla.getX() + palla.getXSpeed() > (brick.getRect().right - palla.getRadius()))
             palla.reverseXVelocity();
@@ -198,12 +158,10 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
             palla.reverseYVelocity();
     }
 
-
     /**
-     *      Metodo principale, di aggiornamento dello stato del gioco.
+     *  Metodo principale, di aggiornamento dello stato del gioco.
      */
-    public void update()
-    {
+    public void update() {
         // Aggiorna la posizione della palla
         paddle.update(screenWidth);
         ball.move(fps);
@@ -303,8 +261,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     /**
      *      Genera il muro di blocchi da distruggere
      */
-    public void buildWall(boolean paused)
-    {
+    public void buildWall(boolean paused) {
         // Dimensione dell'area del muro
         brickWidth = screenWidth / 8;
         brickHeight = screenHeight / 30;
@@ -362,33 +319,56 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         }
     }
 
-    @Override
-    public void run()
-    {
-        while(threadRunning)
+    /**
+     *      Inizializza la soundPool, usata per riprodurre effetti sonori
+     */
+    private void initSoundpool() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-            long startms = System.currentTimeMillis();
-
-            if ( ! paused)
-                update();
-
-            draw();
-
-            long frameTime = System.currentTimeMillis() - startms;
-            if(frameTime != 0)
-                calculatedFps = 1000 / frameTime;
-
-            if(calculatedFps != TARGET_FPS)
-                fpsDelay = (TARGET_FPS / (float) calculatedFps);
+            soundPool= new SoundPool.Builder()
+                    .setMaxStreams(NUMBER_OF_SIMULTANEOUS_SOUNDS)
+                    .build();
         }
+        else
+            // Deprecated way of creating a SoundPool before Android API 21.
+            soundPool= new SoundPool(NUMBER_OF_SIMULTANEOUS_SOUNDS, AudioManager.STREAM_MUSIC, 0);
+
+        sounds = new int[4];
+
+        //inserisce i suoni
+        sounds[HIT_SOUND] = soundPool.load(getContext(), R.raw.breakout_hit, 1);
+        sounds[NEW_WALL_SOUND] = soundPool.load(getContext(), R.raw.breakout_hurt, 1);
+        sounds[HURT_SOUND] = soundPool.load(getContext(), R.raw.breakout_loose, 2);
+        sounds[BREAK_SOUND] = soundPool.load(getContext(), R.raw.breakout_break, 0);
     }
 
+    /**
+     *      Riproduce un effetto sonoro
+     *      @param sound intero identificativo del suono da riprodurre
+     */
+    private void playSound(int sound) {
+        soundPool.play( sounds[sound],
+                LEFT_VOLUME_VALUE,
+                RIGHT_VOLUME_VALUE,
+                SOUND_PLAY_PRIORITY,
+                MUSIC_LOOP,
+                PLAY_RATE);
+    }
+
+    @Override
+    public void run() {
+        while(threadRunning)
+        {
+            if ( ! paused)
+                update();
+            draw();
+        }
+    }
 
     /**
      *      Metodo principale dove viene disegnato tutto il canvas ad ogni frame
      */
-    private void draw()
-    {
+    private void draw() {
         long startms = System.currentTimeMillis();
 
         int left = 0;
@@ -476,12 +456,8 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         Log.i("Performance", "draw(): " + (System.currentTimeMillis() - startms) + "ms.\n");
     }
 
-    //|---------------------------------------|//
-    // METHODE DETECTION DE TOUCHER DE L'ECRAN //
-    //|---------------------------------------|//
     @Override
-    public boolean onTouchEvent(MotionEvent motionEvent)
-    {
+    public boolean onTouchEvent(MotionEvent motionEvent) {
 
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK)
         {
@@ -506,9 +482,10 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         return true;
     }
 
-    //Metodo pausa per la game activity
-    public void pause()
-    {
+    /**
+     * Quando il gioco va in pausa
+     */
+    public void pause() {
         paused = true;
         threadRunning = false;
         try
@@ -521,12 +498,10 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         }
     }
 
-
-    //|-----------------------------------|//
-    // METHODE START POUR LA GAME_ACTIVITY //
-    //|-----------------------------------|//
-    public void start()
-    {
+    /**
+     * Quando il gioco inizia
+     */
+    public void start() {
         // Create the child thread when SurfaceView is created.
         thread = new Thread(this);
 
@@ -540,13 +515,8 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         screenWidth = getWidth();
     }
 
-
-    //|---------------------|//
-    // OVERRIDE SURFACE_VIEW //
-    //|---------------------|//
     @Override
-    public void surfaceCreated(SurfaceHolder holder)
-    {
+    public void surfaceCreated(SurfaceHolder holder) {
         // Start the game !
         start();
     }
@@ -555,10 +525,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {}
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder)
-    {
-        // Set threadrunning flag to false when Surface is destroyed.
-        // Then the thread will jump out the while loop and complete.
+    public void surfaceDestroyed(SurfaceHolder holder) {
         pause();
     }
 }
