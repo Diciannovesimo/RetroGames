@@ -36,8 +36,10 @@ public class SnakePanelView extends View {
     //Lista creata per contenere le coordinate della mappa
     private Set<Point> mapCoordinates = new HashSet<>();
 
+    //Istanza del del database locale
     SaveScore game;
 
+    //Istanza del thread principale del gioco
     GameMainThread thread = new GameMainThread();
 
     //Listener per restituire score, highscore, e punteggio resettato
@@ -47,7 +49,7 @@ public class SnakePanelView extends View {
     private GridPosition mSnakeHeader;                         //posizione della testa del serpente
     private GridPosition mFoodPosition;                        //posizione del cibo
     private int mSnakeLength = 3;                              //lunghezza del serpente
-    private int mDifficulty;
+    private int mDifficulty;                                   //Difficoltà del gioco
     private int mSpeed = 8;                                    //velocità del serpente
     private int mSnakeDirection = GameType.RIGHT;              //direzione iniziale serpente
     private boolean mIsEndGame = false;                        //Il gioco finisce
@@ -59,7 +61,7 @@ public class SnakePanelView extends View {
     private int mPoint;                                        //Segna il punteggio attuale
     private int mHighScore;                                    //Segna l'highscore attuale
 
-    //SoundPool costants
+    //SoundPool costanti
     private SoundPool soundPool;
     private final int NUMBER_OF_SIMULTANEOUS_SOUNDS = 5;
     private final float LEFT_VOLUME_VALUE = 1.0f;
@@ -69,6 +71,9 @@ public class SnakePanelView extends View {
     private final float PLAY_RATE= 1.0f;
     static int[] sm;
 
+    /**
+     * COSTRUTTORI
+     */
     public SnakePanelView(Context context) {
         this(context, null);
     }
@@ -148,6 +153,14 @@ public class SnakePanelView extends View {
         soundPool = null;
     }
 
+    /**
+     * Gestisce la grandezza della griglia in pixel
+     *
+     * @param w Larghezza corrente della view
+     * @param h Altezza corrente della view
+     * @param oldw Larghezza precedente della view
+     * @param oldh Altezza precedente della view
+     */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -155,9 +168,17 @@ public class SnakePanelView extends View {
         mStartY = dp2px(getContext(), 1);
     }
 
+    /**
+     * Misura la view e il suo contenuto per determinare larghezza e altezza
+     *
+     * @param widthMeasureSpec requisiti di spazio orizzontale imposti dalla view
+     * @param heightMeasureSpec requisiti di spazio verticale imposti dalla view
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        //Modifico l'altezza personalizzandola
         int height = mStartY * 2 + mGridSize * mRectSize;
+        //Se il metodo onMeasure è chiamato, la chiamata a setMeasuredDimension è obbligatoria
         setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec), height);
     }
 
@@ -174,6 +195,7 @@ public class SnakePanelView extends View {
         mGridPaint.setStyle(Paint.Style.FILL);
         mGridPaint.setAntiAlias(true);
 
+        //Pennello per le righe
         mStrokePaint.reset();
         mStrokePaint.setColor(Color.BLACK);
         mStrokePaint.setStyle(Paint.Style.STROKE);
@@ -293,6 +315,10 @@ public class SnakePanelView extends View {
                 //Il serpente si è morso
                 playSound(GameType.SNAKE_LOOSE);
                 mIsEndGame = true;
+                if(mPoint > mHighScore) {
+                    mHighScore = mPoint;
+                    game.save(App.SNAKE, mPoint, getContext());
+                }
                 showMessageDialog();
                 return;
             }
@@ -325,10 +351,6 @@ public class SnakePanelView extends View {
                 break;
         }
 
-        if(mPoint > mHighScore) {
-            mHighScore = mPoint;
-            game.save(App.SNAKE, mPoint, getContext());
-        }
         if(onEatListener != null)
             onEatListener.onEat(mPoint, mHighScore);
     }
@@ -345,6 +367,7 @@ public class SnakePanelView extends View {
                         .setCancelable(false)
                         .setMessage(getResources().getString(R.string.your_score_is) + " " + mPoint)
                         .setPositiveButton(getResources().getString(R.string.again), (dialog, which) -> {
+                            //Resetta i punti
                             dialog.dismiss();
                             mPoint = 0;
                             if(onResetListener != null)
@@ -445,27 +468,34 @@ public class SnakePanelView extends View {
      */
     private void generateFood() {
 
+        //Una lista contenente le eventuali celle da eliminare da mapCoordinates
         List<Point> cellsToDelete = new ArrayList<>();
 
         for(int i = 0; i < mSnakePositions.size(); i++) {
             for (Point point : mapCoordinates) {
+                /*Se la coordinata di mapCoordinates coincide con la coordinata presente in mSnakePosition
+                  questa viene aggiunta in cellsToDelete*/
                 if (point.x == mSnakePositions.get(i).getX() && point.y == mSnakePositions.get(i).getY())
                     cellsToDelete.add(point);
             }
         }
 
+        //Rimuove le celle trovate precedentemente da mapCoordinates
         for(int i = 0; i < cellsToDelete.size(); i++) {
             mapCoordinates.remove(cellsToDelete.get(i));
         }
 
         Random random = new Random();
 
+        //Genera un numero casuale da 0 alla taglia di mapCoordinates
         int cellNumber = random.nextInt(mapCoordinates.size());
         int iterator = 0;
         Point randomCell = new Point(0, 0);
 
         for(Point point : mapCoordinates) {
+            //Se l'iteratore ha raggiunto il numero generato precedentemente
             if(iterator == cellNumber) {
+                //la randomCell si riempie con la posizione di mapCoordinates
                 randomCell = point;
                 break;
             }
@@ -473,6 +503,7 @@ public class SnakePanelView extends View {
             iterator++;
         }
 
+        //Posizione del cibo sicura per il serpente
         int foodX = randomCell.x;
         int foodY = randomCell.y;
 
@@ -590,6 +621,8 @@ public class SnakePanelView extends View {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpVal,
                 context.getResources().getDisplayMetrics());
     }
+
+
 
     /**
      * Imposta il listener per quando il serpente mangia
