@@ -7,22 +7,23 @@ import com.google.firebase.auth.FirebaseUser;
 /**
  *      User
  *
- *      Stores informations of an account.
+ *      Memorizza le informazioni dell'account
  */
 public class User
 {
-    /**  Id of account (generally provided by FireBase)   */
+    /** Id of account (generally provided by FireBase)   */
     protected String id;
-    protected String /** Email of account */
-    email;
-    protected String /** URL of profile picture */
+    /** Email of account */
+    private String email;
+    /** URL of profile picture */
+    private String
     profileImageUrl;
     /** Name of user */
     protected String nickname;
 
+    /** Costruttore user */
     public User() {}
 
-    /** Costruttore user */
     public User(@NonNull FirebaseUser user) {
         id = user.getUid();
         email = user.getEmail();
@@ -36,19 +37,7 @@ public class User
         return email;
     }
 
-    //Getters e Setters
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
-
-    public void setProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
-    }
-
+    /** Getters and setters**/
     public void setNickname(String nickname)
     {
         this.nickname = nickname;
@@ -60,14 +49,6 @@ public class User
 
     public String getId() {
         return id;
-    }
-
-    public String getFieldId() {
-        return id;
-    }
-
-    public void restoreId(String id) {
-        this.id = id;
     }
 
     public String getNickname() {

@@ -2,18 +2,17 @@ package com.nullpointerexception.retrogames.Components;
 import android.os.Handler;
 
     /**
-     * Blocker
-     *
-     * Allow to control if the button is already been pressed in the specific time
+     * Permette di controllare se il bottone è stato premuto in un tempo specifico
      */
     public class Blocker {
         private static final int DEFAULT_BLOCK_TIME = 1000;
         private boolean mIsBlockClick;
 
         /**
-         * Block any event occurs in x milliseconds to prevent spam action
-         * @param blockInMillis: time to control
-         * @return false if not in blocks state, otherwise return true.
+         * Blocca ogni evento accaduto in x millisecondi per prevenire azioni di spam
+
+         * @param blockInMillis: tempo di controllo
+         * @return false se non in stato bloccato, altrimenti restituisce true.
          */
         public boolean block(int blockInMillis) {
             if (!mIsBlockClick) {
