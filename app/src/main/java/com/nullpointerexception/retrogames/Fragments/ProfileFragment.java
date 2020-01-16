@@ -155,6 +155,9 @@ public class ProfileFragment extends Fragment
         return view;
     }
 
+    /**
+     * Carica le posizioni e le scrive nelle textview
+     */
     @SuppressLint("DefaultLocale")
     private void updatePositions()
     {
@@ -318,6 +321,12 @@ public class ProfileFragment extends Fragment
     /*
             Aggiorna il database locale con la nuova posizione per il gioco passato
             come parametro.
+     */
+
+    /**
+     * Aggiorna il database locale con la nuova posizione per il gioco passato come parametro.
+     * @param game Stringa con il nome del gioco
+     * @param position Posizione dell'utente nel gioco
      */
     private void updateDatabase(String game, int position)
     {

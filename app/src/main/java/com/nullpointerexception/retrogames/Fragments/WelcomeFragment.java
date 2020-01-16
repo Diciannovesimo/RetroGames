@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment;
 import com.nullpointerexception.retrogames.Components.OnTouchAnimatedListener;
 import com.nullpointerexception.retrogames.R;
 
+/**
+ * Fragment usato solamente al primo avvio dell'applicazione per introduzione all'App
+ */
 public class WelcomeFragment extends Fragment
 {
 
