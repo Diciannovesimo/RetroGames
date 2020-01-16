@@ -8,6 +8,9 @@ import androidx.room.Update;
 
 import java.util.List;
 
+/**
+ * Interfaccia dello strato intermedio tra il databaseManager e la classe Scoreboard
+ */
 @Dao
 public interface ScoreboardDao {
 
@@ -64,9 +67,10 @@ public interface ScoreboardDao {
     @Update
     void update(Scoreboard... scoreboards);
 
-    @Delete
-    void delete(Scoreboard user);
-
+    /**
+     * Elimina il record o i record dal database
+     * @param usersList
+     */
     @Delete
     void delete(List<Scoreboard> usersList);
 }

@@ -11,18 +11,18 @@ public class Scoreboard {
 
     @PrimaryKey @NonNull
     @ColumnInfo(name = "game")
-    private String game;
+    private String game;    //Nome del gioco
 
     @ColumnInfo(name = "score")
-    private long score;
+    private long score;     //Punteggio oggenuto nel gioco
 
     @ColumnInfo(name = "totalscore")
-    private long totalscore;
+    private long totalscore;    //Totalscore
 
     @ColumnInfo(name = "position")
-    private int position;
+    private int position;   //Posizione dell'utente
 
-    private String nickname;
+    private String nickname;    //nickname dell'utente
 
     @Ignore
     public Scoreboard() { }

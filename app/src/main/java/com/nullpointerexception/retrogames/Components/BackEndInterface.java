@@ -23,7 +23,6 @@ public class BackEndInterface
     private static BackEndInterface instance = new BackEndInterface();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
-
     private static Context context;
 
     private BackEndInterface() { }

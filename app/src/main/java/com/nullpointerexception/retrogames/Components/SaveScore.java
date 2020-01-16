@@ -5,10 +5,14 @@ import android.content.SharedPreferences;
 
 import com.nullpointerexception.retrogames.App;
 
+/**
+ * Classe che permette di salvare un punteggio, lo salva sia sul database locale sia sul database di firebase
+ * Inoltre determina anche il nuovo totalscore.
+ */
 public class SaveScore {
 
-    private String nameGame;
-    private long newScore;
+    private String nameGame;    //Nome del gioco
+    private long newScore;      //Nuovo punteggio ottenuto nel gioco
 
 
     public SaveScore(){
