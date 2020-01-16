@@ -70,7 +70,6 @@
     <string name="level">Livello: %d</string>
     <string name="high_score_">Punteggio più alto:</string>
     <plurals name="life">
-        <item quantity="zero">Vite:</item>
         <item quantity="one">Vita:</item>
         <item quantity="other">Vite:</item>
     </plurals>
@@ -80,4 +79,6 @@
     <string name="you_hit_the_wall">Hai colpito il muro!</string>
     <string name="leaderboard_noConnection">Non è possibile caricare la classifica senza connessione.\nRiprova dopo.</string>
     <string name="info_registraion">La password può contenere tutti i tipi di caratteri ma deve essere lunga almeno 8 caratteri</string>
+    <string name="breakout_welcome">Benvenuto in Breakout!</string>
+    <string name="breakout_tutorial">L\'obbiettivo del gioco e rompere più mattoni che puoi facendo rimbalzare la palla.\nMa stai attento! Se la palla raggiunge il fondo dello schermo perderai una vita!\nPerdendo tutte le tre vite a disposizione la partita finisce.\n\nCOMANDI:\nTocca la metà di sinistra o di destra dello schermo per muoverti rispettivamente verso sinistra o destra.</string>
 </resources>

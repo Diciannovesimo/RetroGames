@@ -61,8 +61,9 @@ class Brick
      *  Disegna il blocco in base alla resistenza
      * @param c canvas
      */
-    void draw(Canvas c) {
-        if (this.resistance == 2)
+    void draw(Canvas c)
+    {
+        if (this.resistance >= 2)
         {
             if(res != getResourceForResistance(2))
             {
@@ -98,8 +99,6 @@ class Brick
 
             c.drawBitmap(bitmap, rect.left, rect.top, p);
         }
-        else
-            c.drawBitmap(bitmap, rect.left, rect.top, p);
     }
 
     /**
@@ -166,13 +165,18 @@ class Brick
         return this.rect;
     }
 
-    boolean getVisibility(){return this.isVisible;}
+    boolean isVisible(){return this.isVisible;}
 
     void setX(int x){this.x = x;}
 
-    void setRes(){
+    //  Il mattone subisce un colpo e riduce la sua resistenza
+    void hit()
+    {
         oldResistance = this.resistance;
-        this.resistance -= 1;
+        this.resistance--;
+
+        if(resistance < 0)
+            setInvisible();
     }
 
     void setY(int y){this.y = y;}
@@ -185,7 +189,8 @@ class Brick
 
     void setVisibility(boolean v){this.isVisible = v;}
 
-    void setInvisible(){
+    void setInvisible()
+    {
         this.isVisible = false;
     }
 

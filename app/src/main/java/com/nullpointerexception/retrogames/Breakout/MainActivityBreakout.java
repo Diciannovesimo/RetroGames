@@ -1,12 +1,15 @@
 package com.nullpointerexception.retrogames.Breakout;
 
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.R;
 
 public class MainActivityBreakout extends AppCompatActivity
@@ -27,6 +30,18 @@ public class MainActivityBreakout extends AppCompatActivity
         surfaceViewThread = new SurfaceViewThread(this);
         LinearLayout drawCanvas = findViewById(R.id.drawCanvas);
         drawCanvas.addView(surfaceViewThread);
+
+        SharedPreferences prefs = getSharedPreferences(App.APP_VARIABLES, MODE_PRIVATE);
+        if(prefs.getBoolean(App.BREAKOUT_TUTORIAL, true))
+        {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.breakout_welcome)
+                    .setMessage(R.string.breakout_tutorial)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.dialog_ok, (a, b) ->
+                            prefs.edit().putBoolean(App.BREAKOUT_TUTORIAL, false).apply())
+                    .show();
+        }
 
         startMusic();
     }

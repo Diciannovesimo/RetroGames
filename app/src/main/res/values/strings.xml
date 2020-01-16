@@ -123,6 +123,10 @@
     <string name="life_3">Life: 3</string>
     <string name="you_hit_the_wall">You hit the wall!</string>
 
+    <!-- Breakout -->
+    <string name="breakout_welcome">Welcome to Breakout!</string>
+    <string name="breakout_tutorial">The goal of the game is to break as many bricks as you can by bouncing the ball.\nIf the ball reaches the bottom of the screen you will lose a life!\nLosing all three lives, the game ends.\n\nCOMMANDS:\nTap the left or right half of the screen to move left or right respectively.</string>
+
     <plurals name="life">
         <item quantity="zero">Life:</item>
         <item quantity="one">Life:</item>
