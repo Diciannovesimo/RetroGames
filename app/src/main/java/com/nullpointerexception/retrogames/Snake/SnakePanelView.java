@@ -48,6 +48,7 @@ public class SnakePanelView extends View {
 
     private GridPosition mSnakeHeader;                         //posizione della testa del serpente
     private GridPosition mFoodPosition;                        //posizione del cibo
+    private static final int GRID_SIZE = 225;                   //cardinalità di mapCoordinates
     private int mSnakeLength = 3;                              //lunghezza del serpente
     private int mDifficulty;                                   //Difficoltà del gioco
     private int mSpeed = 8;                                    //velocità del serpente
@@ -63,13 +64,13 @@ public class SnakePanelView extends View {
 
     //SoundPool costanti
     private SoundPool soundPool;
-    private final int NUMBER_OF_SIMULTANEOUS_SOUNDS = 5;
-    private final float LEFT_VOLUME_VALUE = 1.0f;
-    private final float RIGHT_VOLUME_VALUE = 1.0f;
-    private final int MUSIC_LOOP = 0;
-    private final int SOUND_PLAY_PRIORITY = 1;
-    private final float PLAY_RATE= 1.0f;
-    static int[] sm;
+    private static final int NUMBER_OF_SIMULTANEOUS_SOUNDS = 5;
+    private static final float LEFT_VOLUME_VALUE = 1.0f;
+    private static final float RIGHT_VOLUME_VALUE = 1.0f;
+    private static final int MUSIC_LOOP = 0;
+    private static final int SOUND_PLAY_PRIORITY = 1;
+    private static final float PLAY_RATE= 1.0f;
+    private static int[] sm;
 
     /**
      * COSTRUTTORI
@@ -308,8 +309,9 @@ public class SnakePanelView extends View {
     private void checkCollision() {
         //Ottiene la posizione della testa
         GridPosition headerPosition = mSnakePositions.get(mSnakePositions.size() - 1);
+        int sizeSnakePositions = mSnakePositions.size() - 2;
 
-        for (int i = 0; i < mSnakePositions.size() - 2; i++) {
+        for (int i = 0; i < sizeSnakePositions; i++) {
             GridPosition position = mSnakePositions.get(i);
             if (headerPosition.getX() == position.getX() && headerPosition.getY() == position.getY()) {
                 //Il serpente si è morso
@@ -419,10 +421,10 @@ public class SnakePanelView extends View {
 
         //if (!mIsEndGame) return;
         for (List<GridSquare> squares : mGridSquare) {
-            for (GridSquare square : squares) {
+            for (GridSquare square : squares)
                 square.setType(GameType.GRID);
-            }
         }
+
         if (mSnakeHeader != null) {
             mSnakeHeader.setX(10);
             mSnakeHeader.setY(10);
@@ -471,19 +473,19 @@ public class SnakePanelView extends View {
         //Una lista contenente le eventuali celle da eliminare da mapCoordinates
         List<Point> cellsToDelete = new ArrayList<>();
 
-        for(int i = 0; i < mSnakePositions.size(); i++) {
+
+        for(GridPosition gridPosition : mSnakePositions) {
             for (Point point : mapCoordinates) {
                 /*Se la coordinata di mapCoordinates coincide con la coordinata presente in mSnakePosition
                   questa viene aggiunta in cellsToDelete*/
-                if (point.x == mSnakePositions.get(i).getX() && point.y == mSnakePositions.get(i).getY())
+                if (point.x == gridPosition.getX() && point.y == gridPosition.getY())
                     cellsToDelete.add(point);
             }
         }
 
         //Rimuove le celle trovate precedentemente da mapCoordinates
-        for(int i = 0; i < cellsToDelete.size(); i++) {
-            mapCoordinates.remove(cellsToDelete.get(i));
-        }
+        for(Point cell : cellsToDelete)
+            mapCoordinates.remove(cell);
 
         Random random = new Random();
 
@@ -521,7 +523,7 @@ public class SnakePanelView extends View {
         int x = 0;
         int y = 0;
 
-        for(int i = 0; i < 225; i++) {
+        for(int i = 0; i < GRID_SIZE; i++) {
             Point p = new Point(x, y);
             mapCoordinates.add(p);
             x++;
@@ -596,7 +598,9 @@ public class SnakePanelView extends View {
      */
     private void handleSnakeTail() {
         int snakeLength = mSnakeLength;
-        for (int i = mSnakePositions.size() - 1; i >= 0; i--) {
+        int sizeSnakePositions = mSnakePositions.size() - 1;
+
+        for (int i = sizeSnakePositions; i >= 0; i--) {
             if (snakeLength > 0) {
                 snakeLength--;
             } else {
@@ -605,7 +609,7 @@ public class SnakePanelView extends View {
             }
         }
         snakeLength = mSnakeLength;
-        for (int i = mSnakePositions.size() - 1; i >= 0; i--) {
+        for (int i = sizeSnakePositions; i >= 0; i--) {
             if (snakeLength > 0) {
                 snakeLength--;
             } else {
@@ -621,7 +625,6 @@ public class SnakePanelView extends View {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpVal,
                 context.getResources().getDisplayMetrics());
     }
-
 
 
     /**

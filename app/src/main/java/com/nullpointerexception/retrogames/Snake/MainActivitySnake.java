@@ -11,8 +11,6 @@ import com.nullpointerexception.retrogames.Components.Blocker;
 import com.nullpointerexception.retrogames.Components.SaveScore;
 import com.nullpointerexception.retrogames.R;
 
-import static com.nullpointerexception.retrogames.Breakout.Brick.getContext;
-
 public class MainActivitySnake extends AppCompatActivity implements View.OnClickListener,
         CustomSnakeDialog.CustomSnakeDialogListener {
 
@@ -154,6 +152,6 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
     protected void onPause() {
         super.onPause();
         SaveScore game = new SaveScore();
-        game.save(App.SNAKE, point, getContext());
+        game.save(App.SNAKE, point, this);
     }
 }
