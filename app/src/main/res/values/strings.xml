@@ -83,6 +83,7 @@
     <string name="error_short_username">Too short username</string>
     <string name="error_short_password">The password is too short</string>
     <string name="error_match_password">Password doesn\'t match</string>
+    <string name="info_registraion">The password can contain all types of characters but must be at least 8 characters long</string>
     <string name="dialog_ok" translatable="false">Ok</string>
 
 

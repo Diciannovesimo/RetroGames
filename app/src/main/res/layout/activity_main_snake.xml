@@ -24,24 +24,31 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
+  <ImageView
+      android:id="@+id/dpad_iv"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="@+id/guideline3" />
+
   <Button
       android:id="@+id/top_btn"
-      android:layout_width="60dp"
-      android:layout_height="60dp"
-      android:layout_marginTop="16dp"
-      android:background="@drawable/direction_arrove"
-      android:rotation="90"
-      android:textColor="@android:color/white"
+      android:layout_width="70dp"
+      android:layout_height="70dp"
+      android:layout_marginTop="12dp"
+      android:background="@android:color/transparent"
       app:layout_constraintEnd_toEndOf="@+id/right_btn"
+      app:layout_constraintHorizontal_bias="0.503"
       app:layout_constraintStart_toStartOf="@+id/left_btn"
       app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
   <Button
       android:id="@+id/left_btn"
       android:layout_width="70dp"
-      android:layout_height="120dp"
-      android:background="@drawable/direction_arrove"
-      android:textColor="@android:color/white"
+      android:layout_height="70dp"
+      android:background="@android:color/transparent"
       app:layout_constraintBottom_toTopOf="@+id/bottom_btn"
       app:layout_constraintEnd_toStartOf="@+id/right_btn"
       app:layout_constraintHorizontal_bias="0.5"
@@ -51,10 +58,8 @@
   <Button
       android:id="@+id/right_btn"
       android:layout_width="70dp"
-      android:layout_height="120dp"
-      android:background="@drawable/direction_arrove"
-      android:rotation="180"
-      android:textColor="@android:color/white"
+      android:layout_height="70dp"
+      android:background="@android:color/transparent"
       app:layout_constraintBottom_toTopOf="@+id/bottom_btn"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
@@ -63,15 +68,15 @@
 
   <Button
       android:id="@+id/bottom_btn"
-      android:layout_width="60dp"
-      android:layout_height="60dp"
+      android:layout_width="70dp"
+      android:layout_height="70dp"
       android:layout_marginBottom="16dp"
-      android:background="@drawable/direction_arrove"
-      android:rotation="-90"
-      android:textColor="@android:color/white"
+      android:background="@android:color/transparent"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent" />
+
+
 
   <androidx.constraintlayout.widget.Guideline
       android:id="@+id/guideline3"

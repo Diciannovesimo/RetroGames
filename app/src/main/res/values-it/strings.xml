@@ -79,4 +79,5 @@
     <string name="start_game">INIZIA GIOCO</string>
     <string name="you_hit_the_wall">Hai colpito il muro!</string>
     <string name="leaderboard_noConnection">Non è possibile caricare la classifica senza connessione.\nRiprova dopo.</string>
+    <string name="info_registraion">La password può contenere tutti i tipi di caratteri ma deve essere lunga almeno 8 caratteri</string>
 </resources>
