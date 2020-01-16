@@ -257,6 +257,14 @@ public class SnakePanelView extends View {
     }
 
     /**
+     * Imposta se il gioco è finito o meno
+     * @param mIsEndGame se true, il gioco è temrinato altrimenti no
+     */
+    public void setmIsEndGame(boolean mIsEndGame) {
+        this.mIsEndGame = mIsEndGame;
+    }
+
+    /**
      * Fuznione che gestisce la direzione del serpente.
      * Se la posizione ricevuta è opposta a quella attuale allora non fa niente.
      *
@@ -616,14 +624,6 @@ public class SnakePanelView extends View {
                 mSnakePositions.remove(i);
             }
         }
-    }
-
-    public boolean ismIsEndGame() {
-        return mIsEndGame;
-    }
-
-    public void setmIsEndGame(boolean mIsEndGame) {
-        this.mIsEndGame = mIsEndGame;
     }
 
     /**

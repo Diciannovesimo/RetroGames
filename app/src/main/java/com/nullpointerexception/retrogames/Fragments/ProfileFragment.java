@@ -26,31 +26,45 @@ import com.nullpointerexception.retrogames.R;
 public class ProfileFragment extends Fragment
 {
     private String nickname;
-    private ImageView profileImage, logoutButton;
-    private TextView profileName, totalScore, scoreTetris, scorePong, scoreBreakout, scoreSnake, scoreHole,
-                    totalscorePosition, positionTetris, positionPong, positionBreakout, positionSnake, positionHole;
 
-    /**
-     * Imposta il nickname prendedolo dall'utente loggato su AuthenticationManager
+    /*
+            UI Components
      */
-    public ProfileFragment() {
+    private ImageView profileImage, logoutButton;
+    private TextView profileName,
+                    totalScore,
+                    scoreTetris,
+                    scorePong,
+                    scoreBreakout,
+                    scoreSnake,
+                    scoreHole,
+                    totalscorePosition,
+                    positionTetris,
+                    positionPong,
+                    positionBreakout,
+                    positionSnake,
+                    positionHole;
+
+    public ProfileFragment()
+    {
         nickname = AuthenticationManager.get().getUserLogged().getNickname();
     }
 
-    /**
-     * Imposta il nickname  prendendolo dalla stringa passata come parametro
-     * @param nickname stringa contenente  il nickname dell'utente
-     */
-    public ProfileFragment(String nickname) {
+    public ProfileFragment(String nickname)
+    {
         this.nickname = nickname;
     }
 
     @SuppressLint({"ClickableViewAccessibility", "DefaultLocale"})
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        /*
+                UI Assignment
+         */
         profileImage = view.findViewById(R.id.imageView_profile);
         profileName = view.findViewById(R.id.textView_profile_name);
         logoutButton = view.findViewById(R.id.imageView_logout);
@@ -67,9 +81,9 @@ public class ProfileFragment extends Fragment
         positionBreakout = view.findViewById(R.id.textView_position_brick_breaker);
         positionHole = view.findViewById(R.id.textView_position_hole);
 
-
-        //Assegnazione contenuti grafici
-
+        /*
+                Assegnazione contenuti grafici
+         */
 
         //  Generazione immagine profilo
         if(getContext() != null)
@@ -110,7 +124,6 @@ public class ProfileFragment extends Fragment
                 positionBreakout.setText( String.format("#%d", App.scoreboardDao.getPosition(App.BREAKOUT)));
         }
 
-
         logoutButton.setOnTouchListener(new OnTouchAnimatedListener()
         {
             Blocker mBlocker = new Blocker();
@@ -142,8 +155,12 @@ public class ProfileFragment extends Fragment
         return view;
     }
 
+    /**
+     * Carica le posizioni e le scrive nelle textview
+     */
     @SuppressLint("DefaultLocale")
-    private void updatePositions() {
+    private void updatePositions()
+    {
         //  Total score
         BackEndInterface.get().readAllScoresFirebase(App.TOTALSCORE,
         (success, scoreboardList) ->
@@ -301,15 +318,22 @@ public class ProfileFragment extends Fragment
                 });
     }
 
-    /**
-     * Aggiorna il database locale con la nuova posizione
-     * @param game stringa contenente il nome del gioco
-     * @param position intero contenente la nuova posizione ottenuta dal giocatore
+    /*
+            Aggiorna il database locale con la nuova posizione per il gioco passato
+            come parametro.
      */
-    private void updateDatabase(String game, int position) {
+
+    /**
+     * Aggiorna il database locale con la nuova posizione per il gioco passato come parametro.
+     * @param game Stringa con il nome del gioco
+     * @param position Posizione dell'utente nel gioco
+     */
+    private void updateDatabase(String game, int position)
+    {
         //  Controlla se il profilo mostrato è quello dell'utente loggato
         if(AuthenticationManager.get().isUserLogged())
-        if( ! nickname.equals(AuthenticationManager.get().getUserLogged().getNickname()))
+        if( ! nickname.equals(
+                AuthenticationManager.get().getUserLogged().getNickname()))
             return;
 
         Scoreboard localScore = App.scoreboardDao.getScoreboard(game);
