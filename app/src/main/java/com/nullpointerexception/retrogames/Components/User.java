@@ -11,14 +11,9 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class User
 {
-    /** Id of account (generally provided by FireBase)   */
     protected String id;
-    /** Email of account */
     private String email;
-    /** URL of profile picture */
-    private String
-    profileImageUrl;
-    /** Name of user */
+    private String profileImageUrl;
     protected String nickname;
 
     /** Costruttore user */
