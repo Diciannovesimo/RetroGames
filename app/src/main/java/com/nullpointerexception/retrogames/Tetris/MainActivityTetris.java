@@ -1,5 +1,6 @@
 package com.nullpointerexception.retrogames.Tetris;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -10,8 +11,10 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.R;
 
 public class MainActivityTetris extends AppCompatActivity {
@@ -31,6 +34,16 @@ public class MainActivityTetris extends AppCompatActivity {
         textViewScore = findViewById(R.id.textViewScore);
         textViewTotalscore = findViewById(R.id.textViewTotalscore);
 
+        SharedPreferences prefs = getSharedPreferences(App.APP_VARIABLES, MODE_PRIVATE);
+        if(prefs.getBoolean(App.TETRIS_TUTORIAL, true))
+        {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.tetris_welcome)
+                    .setMessage(R.string.tetris_tutorial)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.dialog_ok, (a, b) -> prefs.edit().putBoolean(App.TETRIS_TUTORIAL, false).apply())
+                    .show();
+        }
 
         //Gestione musica
         startMusic();
@@ -90,7 +103,6 @@ public class MainActivityTetris extends AppCompatActivity {
                 break;
         }
     }
-
 
     @Override
     protected void onRestart() {

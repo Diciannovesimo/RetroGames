@@ -2,12 +2,15 @@ package com.nullpointerexception.retrogames.Hole;
 
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.nullpointerexception.retrogames.App;
 import com.nullpointerexception.retrogames.R;
@@ -31,6 +34,19 @@ public class MainActivityHole extends Activity implements SensorEventListener {
 
         contentView = findViewById(R.id.fullscreen_content);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
+        SharedPreferences prefs = getSharedPreferences(App.APP_VARIABLES, MODE_PRIVATE);
+        if(prefs.getBoolean(App.HOLE_TUTORIAL, true))
+        {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.hole_welcome)
+                    .setMessage(R.string.hole_tutorial)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.dialog_ok, (a, b) ->
+                            prefs.edit().putBoolean(App.HOLE_TUTORIAL, false).apply())
+                    .show();
+        }
+
 
 
         //Prendo il topscore dal database locale

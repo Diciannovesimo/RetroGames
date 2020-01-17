@@ -83,4 +83,11 @@
     <string name="breakout_tutorial">L\'obbiettivo del gioco e rompere più mattoni che puoi facendo rimbalzare la palla.\nMa stai attento! Se la palla raggiunge il fondo dello schermo perderai una vita!\nPerdendo tutte le tre vite a disposizione la partita finisce.\n\nCOMANDI:\nTocca la metà di sinistra o di destra dello schermo per muoverti rispettivamente verso sinistra o destra.</string>
     <string name="snake_welcome">Benvenuto in Snake!</string>
     <string name="snake_tutorial">Lo scopo del gioco è di controllare il serpente cercando di mangiare quanti più frutti possibile.\nMa attenzione a non mangiare te stesso! Le pareti possono essere attraversate e sono disponibili 3 difficoltà.\n\nCOMANDI:\nUsa le freccie direzionali per muovere il serpente! Facile no?!</string>
+    <string name="tetris_welcome">Benvenuto su Tetris!</string>
+    <string name="tetris_tutorial">L’obiettivo del gioco è fare più punti possibili creando una riga orizzontale di blocchi senza interruzioni.\nMa stai attento! Se i blocchi piazzati raggiungono la parte superiore dello schermo la partita finisce.\n\nCOMANDI:\nTasto destro per spostare il blocco a destra\nTasto sinistro per spostare il blocco a sinistra\nTasto giù per aumentare la velocità del blocco\nTasto ruota per ruotare il blocco</string>
+    <string name="pong_welcome">Benvenuto su Pong!</string>
+    <string name="pong_tutorial">"L’obiettivo del gioco è muovere la racchetta blu per evitare di subire gol e per cercare di fare gol.\nIl punteggio è determinato dal numero di gol fatti meno il numero di gol subiti.\n\nCOMANDI:\nTenere premuto sullo schermo e muovere il dito per determinare la posizione della racchetta "</string>
+    <string name="hole_welcome">Benvenuto su Hole!</string>
+    <string name="hole_tutorial">L’obiettivo del gioco è muovere la racchetta blu per evitare di subire gol e per cercare di fare gol.\nIl punteggio è determinato dal numero di gol fatti meno il numero di gol subiti.\n\nCOMANDI:\nTenere premuto sullo schermo e muovere il dito per determinare la posizione della racchetta </string>
+
 </resources>

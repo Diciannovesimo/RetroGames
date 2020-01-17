@@ -106,12 +106,15 @@
     <string name="exit">Exit</string>
     <string name="high_score">High Score: </string>
     <string name="score">Score : </string>
+    <string name="tetris_welcome">Welcome to Tetris!</string>
+    <string name="tetris_tutorial">The goal of the game is to make as many points as possible by creating a horizontal row of blocks without interruption.\nBut be careful! If the blocks placed reach the top of the screen the game ends.\n\nCOMMANDS:\nRight button to move the block to the right\nLeft button to move the block to the left\nButton down to increase block speed\nWheel button to rotate the block</string>
+
 
     <!-- Snake -->
     <string name="default_highscore_snake">Highscore: 0</string>
     <string name="default_score_snake">Score: 0</string>
     <string name="snake_welcome">Welcome to Snake!</string>
-    <string name="snake_tutorial">The object of the game is to control the snake by trying to eat as many fruits as possible.\nBut be careful not to eat yourself! The walls can be crossed and 3 difficulties are available.\n\nCOMMANDS:\nUse the Directional pad to move the Snake! Easy not?!</string>
+    <string name="snake_tutorial">The goal of the game is to control the snake by trying to eat as many fruits as possible.\nBut be careful not to eat yourself! The walls can be crossed and 3 difficulties are available.\n\nCOMMANDS:\nUse the Directional pad to move the Snake! Easy not?!</string>
 
     <!-- Snake dialog -->
     <string name="snake_dialog_title">Select the difficulty of the game</string>
@@ -126,6 +129,9 @@
     <string name="score_0">Score: 0</string>
     <string name="life_3">Life: 3</string>
     <string name="you_hit_the_wall">You hit the wall!</string>
+    <string name="hole_welcome">Welcome to Hole!</string>
+    <string name="hole_tutorial">The goal of the game is to move the blue racket to avoid goals and to try to score goals.\nThe score is determined by the number of goals scored minus the number of goals conceded.\n\nCOMMANDS:\nHold down on the screen and move your finger to determine the position of the racket</string>
+
 
     <!-- Breakout -->
     <string name="breakout_welcome">Welcome to Breakout!</string>
@@ -136,6 +142,10 @@
         <item quantity="one">Life:</item>
         <item quantity="other">Lifes:</item>
     </plurals>
+
+    <!-- Pong -->
+    <string name="pong_welcome">Welcome to Pong!</string>
+    <string name="pong_tutorial">The goal of the game is to move the blue racket to avoid goals and to try to score goals.\nThe score is determined by the number of goals scored minus the number of goals conceded.\n\nCOMMANDS:\nHold down on the screen and move your finger to determine the position of the racket</string>
 
 
 </resources>

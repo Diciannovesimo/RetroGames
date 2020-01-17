@@ -2,6 +2,7 @@ package com.nullpointerexception.retrogames.Pong;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
@@ -52,6 +53,19 @@ public class MainActivityPong extends AppCompatActivity {
         context = this;
 
         initSound();
+
+
+        SharedPreferences prefs = getSharedPreferences(App.APP_VARIABLES, MODE_PRIVATE);
+        if(prefs.getBoolean(App.PONG_TUTORIAL, true))
+        {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle(R.string.pong_welcome)
+                    .setMessage(R.string.pong_tutorial)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.dialog_ok, (a, b) ->
+                            prefs.edit().putBoolean(App.PONG_TUTORIAL, false).apply())
+                    .show();
+        }
 
     }
 
@@ -220,7 +234,7 @@ public class MainActivityPong extends AppCompatActivity {
         } else {
             mGameThread.restoreState(savedInstanceState);
         }
-        
+
         mGameThread.setOnEndGameListener((score, exit_mode) -> showDialog_GameOver(score,exit_mode));
         mGameThread.setOnAddScoreListener(new PongThread.OnAddScoreListener() {
             @Override
