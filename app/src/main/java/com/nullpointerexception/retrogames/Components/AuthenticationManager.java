@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -229,8 +228,6 @@ public class AuthenticationManager
             }
             catch (ApiException e)
             {
-                Log.e("Error", e.toString());
-
                 if(currentLoginAttempt != null && currentLoginAttempt.getOnLoginResultListener() != null)
                     currentLoginAttempt.getOnLoginResultListener().onLoginResult(false);
 

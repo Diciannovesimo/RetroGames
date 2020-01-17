@@ -399,8 +399,6 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
             //  Disegna il background
             canvas.drawBitmap(backgroundBitmap, screenRect.left, screenRect.top, new Paint());
 
-            Log.i("Performance", "[background - draw()]: " + (System.currentTimeMillis() - startms) + "ms.");
-
             // Disegna la parte superiore dove vengono mostrati i punteggi
             paint.setColor(Color.argb(240, 20, 20, 20));
             canvas.drawRect(topRect, paint);
@@ -428,12 +426,10 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
             // Draw the paddle
             paddle.draw(canvas);
 
-            long startms2 = System.currentTimeMillis();
             // Draw the bricks
             for (int i = 0; i < nbBricks; i++)
                 if (bricks[i].isVisible())
                     bricks[i].draw(canvas);
-            Log.i("Performance", "[ bricks draw()]: " + (System.currentTimeMillis() - startms2) + "ms.");
 
             // Draw the ball
             ball.draw(canvas);
@@ -460,8 +456,6 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
             // Send message to main UI thread to update the drawing to the main view special area.
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
-
-        Log.i("Performance", "draw(): " + (System.currentTimeMillis() - startms) + "ms.\n");
     }
 
     @Override
@@ -502,7 +496,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
         }
         catch (InterruptedException e)
         {
-            Log.e("Error:", "joining thread");
+            Log.e("Error:", e.toString());
         }
     }
 

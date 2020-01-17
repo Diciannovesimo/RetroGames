@@ -6,7 +6,6 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -133,8 +132,6 @@ public class MainActivityPong extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.i("lol", String.valueOf(playSound()));
-
                 if (exit_mode == 1)
                 {
                     mDlgMsg = new AlertDialog.Builder(context)

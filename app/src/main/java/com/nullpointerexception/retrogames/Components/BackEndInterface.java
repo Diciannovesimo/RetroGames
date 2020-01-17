@@ -63,7 +63,7 @@ public class BackEndInterface
                 .addOnFailureListener(e ->
                 {
                     // Write failed
-                    Log.d("writeScoreFirebase", "Elemento non scritto");
+                    Log.e("writeScoreFirebase", "Elemento non scritto");
                 });
 
         //Scrittura del nuovo totalscore
@@ -76,7 +76,7 @@ public class BackEndInterface
                 .addOnFailureListener(e ->
                 {
                     // Write failed
-                    Log.d("writeScoreFirebase", "Elemento non scritto");
+                    Log.e("writeScoreFirebase", "Elemento non scritto");
                 });
     }
 
@@ -104,7 +104,7 @@ public class BackEndInterface
                 .addOnFailureListener(e ->
                 {
                     // Write failed
-                    Log.d("writeScoreFirebase", "Elemento non scritto");
+                    Log.e("writeScoreFirebase", "Elemento non scritto");
                 });
 
     }
@@ -135,7 +135,7 @@ public class BackEndInterface
                     .addOnFailureListener(e ->
                     {
                         // Write failed
-                        Log.d("writeScoreFirebase", "Elemento non scritto");
+                        Log.e("writeScoreFirebase", "Elemento non scritto");
                     });
         }
 
@@ -152,7 +152,7 @@ public class BackEndInterface
                     .addOnFailureListener(e ->
                     {
                         // Write failed
-                        Log.d("writeScoreFirebase", "Elemento non scritto");
+                        Log.e("writeScoreFirebase", "Elemento non scritto");
                     });
         }
 
@@ -169,7 +169,7 @@ public class BackEndInterface
                     .addOnFailureListener(e ->
                     {
                         // Write failed
-                        Log.d("writeScoreFirebase", "Elemento non scritto");
+                        Log.e("writeScoreFirebase", "Elemento non scritto");
                     });
         }
 
@@ -186,7 +186,7 @@ public class BackEndInterface
                     .addOnFailureListener(e ->
                     {
                         // Write failed
-                        Log.d("writeScoreFirebase", "Elemento non scritto");
+                        Log.e("writeScoreFirebase", "Elemento non scritto");
                     });
         }
 
@@ -203,7 +203,7 @@ public class BackEndInterface
                     .addOnFailureListener(e ->
                     {
                         // Write failed
-                        Log.d("writeScoreFirebase", "Elemento non scritto");
+                        Log.e("writeScoreFirebase", "Elemento non scritto");
                     });
         }
 
@@ -312,7 +312,7 @@ public class BackEndInterface
                 .addOnFailureListener(e ->
                 {
                     // Write failed
-                    Log.d("writeUserFirebase", "Elemento non scritto");
+                    Log.e("writeUserFirebase", "Elemento non scritto");
                 });
     }
 

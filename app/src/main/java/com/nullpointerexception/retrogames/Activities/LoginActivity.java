@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,8 +90,6 @@ public class LoginActivity extends AppCompatActivity
                                     //Se il result è vero allora l'utente ha loggato con successo
                                     if (result)
                                     {
-                                        Log.i("claudio", "Loggato con successo");
-
                                         //currenUser si riempie con i dati dell'utente loggato
                                         currentUser = AuthenticationManager.get().getUserLogged();
 
@@ -118,7 +115,6 @@ public class LoginActivity extends AppCompatActivity
                                     }
                                     else
                                     {   //Il login non ha avuto successo in quanto l'utente ha sbagliato le credenziali
-                                        Log.i("claudio", "errore nel log in");
                                         mDlgMsg = new AlertDialog.Builder(LoginActivity.this)
                                                 .setTitle(getResources().getString(R.string.error_dialog_title))
                                                 .setMessage(getResources().getString(R.string.error_dialog_content))
@@ -143,7 +139,6 @@ public class LoginActivity extends AppCompatActivity
                     AuthenticationManager.get().requestLoginWithGoogle(LoginActivity.this)
                             .addOnLoginResultListener(result -> {
                                 if (result) { //Luetente si è loggato con successo
-                                    Log.i("claudio", "Loggato con successo");
                                     //currentUser si riempie con le informazioni
                                     currentUser = AuthenticationManager.get().getUserLogged();
                                     //Salva il nickname nelle SharedPreferences
@@ -155,7 +150,6 @@ public class LoginActivity extends AppCompatActivity
                                     loginProcedures();
 
                                 } else { //Se l'accesso con Google non è andato a buon fine
-                                    Log.i("claudio", "errore nel log in");
                                     mDlgMsg = new AlertDialog.Builder(LoginActivity.this)
                                             .setTitle(getResources().getString(R.string.error_dialog_title))
                                             .setMessage(getResources().getString(R.string.error_google_dialog_content))

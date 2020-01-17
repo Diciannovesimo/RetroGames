@@ -6,7 +6,7 @@
     <string name="press_to_continue">Tap to continue</string>
     <string name="level">Level: %d</string>
 
-    <string name="server_client_id" translatable="false">53291687012-3307u89m0km7mv0va5qt3q5o7n2u74bk.apps.googleusercontent.com</string>
+    <string name="server_client_id" translatable="false">53291687012-d9m50t310lovh7mhb8np09qkm8r936ef.apps.googleusercontent.com</string>
 
     <!--MainActivityPong -->
     <string name="mode_ready">Touch to play</string>
