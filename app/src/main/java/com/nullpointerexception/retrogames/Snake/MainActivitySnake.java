@@ -25,7 +25,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
     private SnakePanelView mSnakePanelView;
     //Millisecondi e punteggio corrente
     private int ms, point;
-    private TextView mScore, mHighScore;
+    private TextView mScore, mHighScore, mPause;
     private ImageView mDpad;
 
     private int directionPressed;
@@ -99,6 +99,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
         mScore = findViewById(R.id.score_tv);
         mHighScore = findViewById(R.id.highscore_tv);
         mDpad = findViewById(R.id.dpad_iv);
+        mPause = findViewById(R.id.pause_tv);
         mScore.setText(getResources().getString(R.string.default_score_snake));
 
         //Inizializza le risorse per evitare chiamate inutili
@@ -188,6 +189,17 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
         return true;
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if(mSnakePanelView.isInPause()) {
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                mSnakePanelView.setInPause(false);
+                mPause.setVisibility(View.GONE);
+            }
+        }
+        return false;
+    }
+
     /**
      * Quando un pulsante viene premuto, lo individua e cambia la direzione del serpente
      * @param v View di ogni bottone dell'interfaccia
@@ -246,11 +258,19 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
         super.onPause();
         SaveScore game = new SaveScore();
         game.save(App.SNAKE, point, this);
+        mSnakePanelView.setInPause(true);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         mSnakePanelView.setmIsEndGame(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mSnakePanelView.isInPause())
+            mPause.setVisibility(View.VISIBLE);
     }
 }

@@ -37,10 +37,10 @@ public class SnakePanelView extends View {
     private Set<Point> mapCoordinates = new HashSet<>();
 
     //Istanza del del database locale
-    SaveScore game;
+    private SaveScore game;
 
     //Istanza del thread principale del gioco
-    GameMainThread thread = new GameMainThread();
+    private GameMainThread thread = new GameMainThread();
 
     //Listener per restituire score, highscore, e punteggio resettato
     private OnEatListener onEatListener;
@@ -53,6 +53,7 @@ public class SnakePanelView extends View {
     private int mDifficulty;                                   //Difficoltà del gioco
     private int mSpeed = 8;                                    //velocità del serpente
     private int mSnakeDirection = GameType.RIGHT;              //direzione iniziale serpente
+    private boolean inPause = false;                           //Il gioco è in pause
     private boolean mIsEndGame = false;                        //Il gioco finisce
     private int mGridSize = 15;                                //Taglia della griglia
     private Paint mGridPaint = new Paint();                    //colore paint
@@ -264,6 +265,14 @@ public class SnakePanelView extends View {
         this.mIsEndGame = mIsEndGame;
     }
 
+    public boolean isInPause() {
+        return inPause;
+    }
+
+    public void setInPause(boolean inPause) {
+        this.inPause = inPause;
+    }
+
     /**
      * Fuznione che gestisce la direzione del serpente.
      * Se la posizione ricevuta è opposta a quella attuale allora non fa niente.
@@ -286,12 +295,14 @@ public class SnakePanelView extends View {
         @Override
         public void run() {
             while (!mIsEndGame) {
-                moveSnake(mSnakeDirection);
-                checkCollision();
-                refreshGridSquare();
-                handleSnakeTail();
-                postInvalidate();     //Ridisegna l'interfaccia
-                handleSpeed();
+                if(!inPause) {
+                    moveSnake(mSnakeDirection);
+                    checkCollision();
+                    refreshGridSquare();
+                    handleSnakeTail();
+                    postInvalidate();     //Ridisegna l'interfaccia
+                    handleSpeed();
+                }
             }
         }
 
