@@ -83,4 +83,5 @@
     <string name="breakout_tutorial">L\'obbiettivo del gioco e rompere più mattoni che puoi facendo rimbalzare la palla.\nMa stai attento! Se la palla raggiunge il fondo dello schermo perderai una vita!\nPerdendo tutte le tre vite a disposizione la partita finisce.\n\nCOMANDI:\nTocca la metà di sinistra o di destra dello schermo per muoverti rispettivamente verso sinistra o destra.</string>
     <string name="snake_welcome">Benvenuto in Snake!</string>
     <string name="snake_tutorial">Lo scopo del gioco è di controllare il serpente cercando di mangiare quanti più frutti possibile.\nMa attenzione a non mangiare te stesso! Le pareti possono essere attraversate e sono disponibili 3 difficoltà.\n\nCOMANDI:\nUsa le freccie direzionali per muovere il serpente! Facile no?!</string>
+    <string name="game_pause_snake">Gioco in pausa\nPremi per riprendere</string>
 </resources>
