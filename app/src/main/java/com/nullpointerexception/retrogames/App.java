@@ -25,6 +25,7 @@ public class App
      */
     public static final String APP_VARIABLES = "app_variables";
     public static final String BREAKOUT_TUTORIAL = "breakout_tutorial";
+    public static final String SNAKE_TUTORIAL = "snake_tutorial";
     public static final String APP_FIRST_OPENING = "app_first_opening";
     public static final String APP_NO_USER_FINDED = "app_no_user_finded";
     public static final String NICKNAME = "nickname";

@@ -1,6 +1,7 @@
 package com.nullpointerexception.retrogames.Snake;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.nullpointerexception.retrogames.App;
@@ -75,6 +77,18 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
                 });
             }
         });
+
+        SharedPreferences prefs = getSharedPreferences(App.APP_VARIABLES, MODE_PRIVATE);
+        if(prefs.getBoolean(App.SNAKE_TUTORIAL, true))
+        {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.snake_welcome)
+                    .setMessage(R.string.snake_tutorial)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.dialog_ok, (a, b) ->
+                            prefs.edit().putBoolean(App.SNAKE_TUTORIAL, false).apply())
+                    .show();
+        }
 
     }
     /**

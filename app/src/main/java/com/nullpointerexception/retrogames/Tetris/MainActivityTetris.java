@@ -51,10 +51,20 @@ public class MainActivityTetris extends AppCompatActivity {
     void initTetrisCtrl() {
         mTetrisCtrl = new TetrisCtrl(this, textViewScore, textViewTotalscore);
         //Crea le bitmap delle 8 immagini relative agli 8 tipi di cell.png
-        for(int i=0; i <= 7; i++) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cell0 + i);
-            mTetrisCtrl.addCellImage(i, bitmap);
-        }
+        Bitmap[] bitmaps = new Bitmap[8];
+        bitmaps[0] = BitmapFactory.decodeResource(getResources(), R.drawable.cell0);
+        bitmaps[1] = BitmapFactory.decodeResource(getResources(), R.drawable.cell1);
+        bitmaps[2] = BitmapFactory.decodeResource(getResources(), R.drawable.cell2);
+        bitmaps[3] = BitmapFactory.decodeResource(getResources(), R.drawable.cell3);
+        bitmaps[4] = BitmapFactory.decodeResource(getResources(), R.drawable.cell4);
+        bitmaps[5] = BitmapFactory.decodeResource(getResources(), R.drawable.cell5);
+        bitmaps[6] = BitmapFactory.decodeResource(getResources(), R.drawable.cell6);
+        bitmaps[7] = BitmapFactory.decodeResource(getResources(), R.drawable.cell7);
+
+
+        for(int i=0; i <= 7; i++)
+            mTetrisCtrl.addCellImage(i, bitmaps[i]);
+
         RelativeLayout layoutCanvas = findViewById(R.id.layoutCanvas);
         layoutCanvas.addView(mTetrisCtrl);
     }
