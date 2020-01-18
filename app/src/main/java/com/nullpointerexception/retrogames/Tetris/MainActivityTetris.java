@@ -131,10 +131,10 @@ public class MainActivityTetris extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(mTetrisCtrl.isInPause()) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                mPause.setVisibility(View.GONE);
-                mTetrisCtrl.setInPause(false);
+        if(mTetrisCtrl.isInPause()) { //Se il gioco è in pausa...
+            if (event.getAction() == MotionEvent.ACTION_UP) { //se tocchi lo schermo...
+                mPause.setVisibility(View.GONE);   //setta la textview invisibile
+                mTetrisCtrl.setInPause(false);     //Mette il gioco in esecuzione
                 startMusic();
             }
         }
@@ -151,7 +151,9 @@ public class MainActivityTetris extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        //Mette il gioco in pausa
         mTetrisCtrl.setInPause(true);
+        //Stoppa la musica
         if(player.isPlaying())
             player.pause();
     }

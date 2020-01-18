@@ -8,6 +8,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -19,7 +20,7 @@ import com.nullpointerexception.retrogames.R;
 public class MainActivityHole extends Activity implements SensorEventListener {
     private SensorManager sensorManager;
     private CanvasView contentView;
-    private TextView textViewTopScore, textViewScore, textViewLife;
+    private TextView textViewTopScore, textViewScore, textViewLife, mPause;
     private long topScore;
 
 
@@ -31,6 +32,7 @@ public class MainActivityHole extends Activity implements SensorEventListener {
         textViewTopScore = findViewById(R.id.textViewTopScore);
         textViewScore = findViewById(R.id.textViewScore);
         textViewLife = findViewById(R.id.textViewLife);
+        mPause = findViewById(R.id.pause_tv);
 
         contentView = findViewById(R.id.fullscreen_content);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -61,9 +63,6 @@ public class MainActivityHole extends Activity implements SensorEventListener {
         textViewScore.setText(getResources().getString(R.string.score_0));
         textViewLife.setText(getResources().getString(R.string.life_3));
 
-
-
-
         contentView.setOnChangeScoreListener(new CanvasView.OnChangeScoreListener() {
             @Override
             public void onChangeScore(long score, int life) {
@@ -79,8 +78,15 @@ public class MainActivityHole extends Activity implements SensorEventListener {
             }
         });
 
-    }
+        //Listener textview pausa
+        mPause.setOnClickListener(view -> {
+            if(contentView.isInPause()) {   //se il gioco è in pausa...
+                mPause.setVisibility(View.GONE);   //La textview diventa invisibile
+                contentView.setInPause(false);     //il gioco riprende
+            }
+        });
 
+    }
 
     @Override
     protected void onResume()
@@ -89,7 +95,16 @@ public class MainActivityHole extends Activity implements SensorEventListener {
         // Registrare questa classe come listener per il sensore accelerometro
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_GAME);
+        //Se il gioco è in pause, setta la textView in visibile
+        if(contentView.isInPause())
+            mPause.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //Mette in pausa il gioco
+        contentView.setInPause(true);
     }
 
     @Override

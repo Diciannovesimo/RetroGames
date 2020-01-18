@@ -46,6 +46,7 @@ public class CanvasView extends View implements View.OnTouchListener {
     private long lastInvalidate; //contiene il tempo in ms dell'ultima volta che è stato refreshato lo schermo
     private int life; //vita
     private final Rect textBounds = new Rect(); //don't new this up in a draw method
+    private boolean inPause = false;  //indica se il gioco è in pausa o meno
     private boolean gameStarted; //indica se il game è iniziato
     private boolean gameOverDisplayed; //indica se il game over è mostrato
     private float fontSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()); //dimensione del testo
@@ -192,51 +193,54 @@ public class CanvasView extends View implements View.OnTouchListener {
      * Gestisce il movimento della palla
      */
     private void move() {
-        //determina la nuova posizione della pallina
-        y = y + vy;
-        x = x + vx;
+        //Procede solo se il gioco non è in pausa
+        if(!inPause) {
+            //determina la nuova posizione della pallina
+            y = y + vy;
+            x = x + vx;
 
-        //determina un range per il buco della pallina
-        double distance = Math.sqrt(Math.pow(x - holeX, 2) + Math.pow(y - holeY, 2));
+            //determina un range per il buco della pallina
+            double distance = Math.sqrt(Math.pow(x - holeX, 2) + Math.pow(y - holeY, 2));
 
-        if (distance < 50) {
-            //genera una nunova posizione per il buco
-            holeX = random.nextInt(getWidth() - ballRadius * 2) + ballRadius;
-            holeY = random.nextInt((getHeight() - 20) - ballRadius * 2) + (ballRadius - 20);
-            score ++;
-            playSound(0);
-            if(onChangeScoreListener != null)
-                onChangeScoreListener.onChangeScore(score, life);
-        }
+            if (distance < 50) {
+                //genera una nunova posizione per il buco
+                holeX = random.nextInt(getWidth() - ballRadius * 2) + ballRadius;
+                holeY = random.nextInt((getHeight() - 20) - ballRadius * 2) + (ballRadius - 20);
+                score++;
+                playSound(0);
+                if (onChangeScoreListener != null)
+                    onChangeScoreListener.onChangeScore(score, life);
+            }
 
-        //la palla prende la posizione della buca
-        if (x < ballRadius)
-            x = ballRadius;
+            //la palla prende la posizione della buca
+            if (x < ballRadius)
+                x = ballRadius;
 
-        if (y < ballRadius)
-            y = ballRadius;
+            if (y < ballRadius)
+                y = ballRadius;
 
-        if (x >= getWidth() - ballRadius)
-            x = getWidth() - ballRadius;
+            if (x >= getWidth() - ballRadius)
+                x = getWidth() - ballRadius;
 
-        if (y >= getHeight() - ballRadius)
-            y = getHeight() - ballRadius;
+            if (y >= getHeight() - ballRadius)
+                y = getHeight() - ballRadius;
 
-        //determino se la palla ha toccato il muro
-        if (x >= getWidth() - ballRadius) {
-            wallCrash();
-        } else if (y >= getHeight() - ballRadius) {
-            wallCrash();
-        } else if (x <= ballRadius) {
-            wallCrash();
-        } else if (y <= ballRadius) {
-            wallCrash();
-        }
+            //determino se la palla ha toccato il muro
+            if (x >= getWidth() - ballRadius) {
+                wallCrash();
+            } else if (y >= getHeight() - ballRadius) {
+                wallCrash();
+            } else if (x <= ballRadius) {
+                wallCrash();
+            } else if (y <= ballRadius) {
+                wallCrash();
+            }
 
-        //Refresh dello schermo solo dopo 5ms,
-        if (System.currentTimeMillis() - lastInvalidate > 5) {
-            invalidate(); //Refresh della schermata
-            lastInvalidate = System.currentTimeMillis();
+            //Refresh dello schermo solo dopo 5ms,
+            if (System.currentTimeMillis() - lastInvalidate > 5) {
+                invalidate(); //Refresh della schermata
+                lastInvalidate = System.currentTimeMillis();
+            }
         }
     }
 
@@ -358,5 +362,14 @@ public class CanvasView extends View implements View.OnTouchListener {
         sm = null;
         soundPool.release();
         soundPool = null;
+    }
+
+    //GETTER AND SETTER
+    public boolean isInPause() {
+        return inPause;
+    }
+
+    public void setInPause(boolean inPause) {
+        this.inPause = inPause;
     }
 }

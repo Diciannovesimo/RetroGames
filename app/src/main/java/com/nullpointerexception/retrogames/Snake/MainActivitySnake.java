@@ -183,10 +183,10 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(mSnakePanelView.isInPause()) {
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                mSnakePanelView.setInPause(false);
-                mPause.setVisibility(View.GONE);
+        if(mSnakePanelView.isInPause()) {   //Se il gioco è in pausa...
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {    //se premi lo schermo in un qualsiasi punto
+                mSnakePanelView.setInPause(false);    //il gioco non è più in pausa
+                mPause.setVisibility(View.GONE);      //Rende invisibile la textview
             }
         }
         return false;
@@ -250,6 +250,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
         super.onPause();
         SaveScore game = new SaveScore();
         game.save(App.SNAKE, point, this);
+        //Mette il gioco in pausa
         mSnakePanelView.setInPause(true);
     }
 
@@ -262,6 +263,7 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
     @Override
     protected void onResume() {
         super.onResume();
+        //Se il gioco è in pausa, setta la textview su visibile
         if(mSnakePanelView.isInPause())
             mPause.setVisibility(View.VISIBLE);
     }

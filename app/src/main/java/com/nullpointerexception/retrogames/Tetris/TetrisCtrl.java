@@ -551,6 +551,7 @@ public class TetrisCtrl extends View {
     @SuppressLint("HandlerLeak")
     private Handler mTimerFrame = new Handler() {
         public void handleMessage(Message msg) {
+            //Se il gioco non è in pausa procede
             if(!inPause) {
                 mPause.setVisibility(View.GONE);
                 canMove = moveNewBlock(DirDown);
