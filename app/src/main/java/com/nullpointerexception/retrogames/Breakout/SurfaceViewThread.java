@@ -26,7 +26,8 @@ import com.nullpointerexception.retrogames.R;
 
 import java.util.Random;
 
-public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Callback, Runnable {
+public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Callback, Runnable
+{
 
     private SurfaceHolder surfaceHolder;
     private Thread thread = null;
@@ -52,6 +53,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
     private long highscore;
     private int level = 1;
     private boolean newLevel = false;
+    private boolean lifeLoss = false;
     private int totalScore = 48;
     private Bitmap backgroundBitmap;
     private Bitmap lifeBitmap;
@@ -261,6 +263,17 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
                                 })
                                 .show());
             }
+            else
+            {
+                //      TODO: Eliminare questo blocco
+                // Reset posizione palla
+                ball.reset(screenWidth, (int) paddle.getRect().top + 140);
+                //  Reset posizione giocatore
+                paddle.setX( (int) ((screenWidth/2) - (paddle.getRect().width()/2)));
+                draw();
+                this.paused = true;
+                this.lifeLoss = true;
+            }
         }
     }
 
@@ -382,8 +395,6 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
      */
     private void draw()
     {
-        long startms = System.currentTimeMillis();
-
         int left = 0;
         int top = 0;
         int right = screenWidth;
@@ -435,7 +446,7 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
             ball.draw(canvas);
 
             //  Disegna la scritta 'in pausa' o 'nuovo livello'
-            if(paused)
+            if(paused && ! lifeLoss)
             {
                 // Disegna un contorno alla scritta 'pausa'
                 paint.setColor(Color.argb(178, 0, 0, 0));
@@ -467,14 +478,11 @@ public class SurfaceViewThread extends SurfaceView implements SurfaceHolder.Call
             case MotionEvent.ACTION_DOWN:
                 paused = false;
                 newLevel = false;
+                lifeLoss = false;
                 if (motionEvent.getX() > screenWidth / 2)
-                {
                     paddle.setMovementState(paddle.RIGHT);
-                }
                 else
-                {
                     paddle.setMovementState(paddle.LEFT);
-                }
                 break;
             // Player has removed finger from screen
             case MotionEvent.ACTION_UP:

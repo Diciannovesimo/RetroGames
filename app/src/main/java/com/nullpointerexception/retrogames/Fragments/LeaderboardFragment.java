@@ -320,6 +320,8 @@ public class LeaderboardFragment extends Fragment
                 if(dataSet.get(position).getNickname().equals(
                         AuthenticationManager.get().getUserLogged().getNickname()))
                     holder.userScoreView.setBackgroundColor(Color.parseColor("#4c00aa00"));
+                else
+                    holder.userScoreView.setBackgroundColor(Color.TRANSPARENT);
 
             holder.userScoreView
                     .getProfileImageView()
