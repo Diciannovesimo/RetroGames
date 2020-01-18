@@ -36,7 +36,8 @@ public class TetrisCtrl extends View {
     private int TimerGapFast = 100;
     private int mTimerGap = TimerGapNormal;
 
-
+    private boolean canMove;
+    private boolean inPause = false;
     private double mBlockSize = 0; //Dimensione del blocco
     private int mNewBlockArea = 5; //Area massima del blocco
     private int[][] mArMatrix = new int[MatrixSizeV][MatrixSizeH]; //Matrice del gioco
@@ -48,7 +49,7 @@ public class TetrisCtrl extends View {
     private AlertDialog mDlgMsg = null;
     private int mScore = 0; //Punteggio corrente
     private long mTopScore;
-    private TextView score, totalscore;
+    private TextView score, totalscore, mPause;
 
 
     /**
@@ -81,11 +82,12 @@ public class TetrisCtrl extends View {
      * Viene istanziato il MainActivityTetris Controller e recupera il topscore dal database locale
      * @param context contesto
      */
-    public TetrisCtrl(Context context, TextView score, TextView totalscore) {
+    public TetrisCtrl(Context context, TextView score, TextView totalscore, TextView pause) {
         super(context);
         this.context = context;
         this.score = score;
         this.totalscore = totalscore;
+        mPause = pause;
 
         /**
         //Prende il totalscore dalle sharedPreferences
@@ -100,9 +102,6 @@ public class TetrisCtrl extends View {
         else
             //Non esiste un topscore
             mTopScore = 0;
-
-
-
 
     }
 
@@ -379,22 +378,6 @@ public class TetrisCtrl extends View {
     }
 
     /**
-     * Mostra lo score in ullo schermo, non è usata
-     * @param canvas foglio da disegno
-     */
-    private void showScore(Canvas canvas) {
-        int fontSize = mScreenSize.x / 20;
-        Paint pnt = new Paint();
-        pnt.setTextSize(fontSize);
-        pnt.setARGB(128, 0, 255,0);
-        int posX = (int)(fontSize * 0.5);
-        int poxY = (int)(fontSize * 1.5);
-        canvas.drawText("Score : " + mScore, posX, poxY, pnt);
-        poxY += (int)(fontSize * 1.2);
-        canvas.drawText("Top Score : " + mTopScore, posX, poxY, pnt);
-    }
-
-    /**
      * Scrive sulle textView lo score e il totalscore
      */
     private void showScore(){
@@ -568,22 +551,26 @@ public class TetrisCtrl extends View {
     @SuppressLint("HandlerLeak")
     private Handler mTimerFrame = new Handler() {
         public void handleMessage(Message msg) {
-            boolean canMove = moveNewBlock(DirDown);
-            if( !canMove ) {
-                copyBlock2Matrix(mArNewBlock, mNewBlockPos);
-                checkLineFilled();
-                copyBlockArray(mArNextBlock, mArNewBlock);
-                addNewBlock(mArNextBlock);
-                TimerGapNormal -= 2;
-                mTimerGap = TimerGapNormal;
-                if( isGameOver() ) {
-                    //Salva il punteggio sul database
-                    SaveScore tetris = new SaveScore();
-                    tetris.save(App.TETRIS, mScore,getContext());
-                    showDialog_GameOver();
-                    return;
+            if(!inPause) {
+                mPause.setVisibility(View.GONE);
+                canMove = moveNewBlock(DirDown);
+                if( !canMove ) {
+                    copyBlock2Matrix(mArNewBlock, mNewBlockPos);
+                    checkLineFilled();
+                    copyBlockArray(mArNextBlock, mArNewBlock);
+                    addNewBlock(mArNextBlock);
+                    TimerGapNormal -= 2;
+                    mTimerGap = TimerGapNormal;
+                    if (isGameOver()) {
+                        //Salva il punteggio sul database
+                        SaveScore tetris = new SaveScore();
+                        tetris.save(App.TETRIS, mScore, getContext());
+                        showDialog_GameOver();
+                        return;
+                    }
                 }
-            }
+            }else
+                mPause.setVisibility(View.VISIBLE);
             this.sendEmptyMessageDelayed(0, mTimerGap);
         }
     };
@@ -648,6 +635,22 @@ public class TetrisCtrl extends View {
         pnt.setStyle(Paint.Style.FILL);
         pnt.setColor(crBlock);
         canvas.drawRect(rtBlock, pnt);  //Disegno la figura associandoli un paint
+    }
+
+    public boolean isCanMove() {
+        return canMove;
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
+    }
+
+    public boolean isInPause() {
+        return inPause;
+    }
+
+    public void setInPause(boolean inPause) {
+        this.inPause = inPause;
     }
 
 }
