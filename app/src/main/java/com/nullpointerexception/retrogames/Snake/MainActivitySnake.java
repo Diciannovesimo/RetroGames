@@ -65,18 +65,10 @@ public class MainActivitySnake extends AppCompatActivity implements View.OnClick
             mHighScore.setText(highscore_string);
         }));
 
-        mSnakePanelView.setOnResetListener(new SnakePanelView.OnResetListener() {
-            @Override
-            public void onReset(int point) {
-                MainActivitySnake.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String score = MainActivitySnake.this.getResources().getString(R.string.score) + point;
-                        mScore.setText(score);
-                    }
-                });
-            }
-        });
+        mSnakePanelView.setOnResetListener(point -> runOnUiThread(() -> {
+            String score = getResources().getString(R.string.score) + point;
+            mScore.setText(score);
+        }));
 
         SharedPreferences prefs = getSharedPreferences(App.APP_VARIABLES, MODE_PRIVATE);
         if(prefs.getBoolean(App.SNAKE_TUTORIAL, true))

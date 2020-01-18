@@ -115,6 +115,7 @@
     <string name="default_score_snake">Score: 0</string>
     <string name="snake_welcome">Welcome to Snake!</string>
     <string name="snake_tutorial">The goal of the game is to control the snake by trying to eat as many fruits as possible.\nBut be careful not to eat yourself! The walls can be crossed and 3 difficulties are available.\n\nCOMMANDS:\nUse the Directional pad to move the Snake! Easy not?!</string>
+    <string name="game_pause_snake">Game in pause.\nTouch to resume</string>
 
     <!-- Snake dialog -->
     <string name="snake_dialog_title">Select the difficulty of the game</string>
