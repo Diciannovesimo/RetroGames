@@ -115,7 +115,7 @@ public class MainActivityHole extends Activity implements SensorEventListener {
     }
 
     /**
-     * Acquisisce i dati dal sensore accelerometro
+     * Acquisisce i dati dal sensore accelerometro ed eventualmente giroscopio
      * @param sensorEvent evento del sensore
      */
     @Override
