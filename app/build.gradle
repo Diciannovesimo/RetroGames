@@ -67,9 +67,4 @@ dependencies
     implementation 'androidx.room:room-runtime:2.2.3'
     annotationProcessor 'androidx.room:room-compiler:2.2.3'
 
-    /*
-            Gson
-            https://github.com/google/gson
-     */
-    implementation 'com.google.code.gson:gson:2.8.5'
 }
