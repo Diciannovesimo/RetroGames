@@ -43,6 +43,7 @@ public class HomeActivity extends AppCompatActivity
             Variables
      */
     private boolean newLogin = false;
+    private boolean isUserLogged = false;
 
     /*
             UI Components
@@ -59,6 +60,8 @@ public class HomeActivity extends AppCompatActivity
         gamesButton = findViewById(R.id.buttonGames);
         leaderboardButton = findViewById(R.id.buttonLeaderBoard);
         profileButton = findViewById(R.id.buttonProfile);
+
+        isUserLogged = AuthenticationManager.get().isUserLogged();
 
         if(getIntent() != null && getIntent().hasExtra("newLogin"))
             newLogin = true;
@@ -86,7 +89,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                if(AuthenticationManager.get().isUserLogged())
+                if(isUserLogged)
                     placeFragment(new ProfileFragment());
                 else
                     placeFragment(new LoginFragment(false));
@@ -111,7 +114,7 @@ public class HomeActivity extends AppCompatActivity
                     placeFragment(new ProfileFragment());
                     break;
                 case ACCESS_FRAGMENT:
-                    placeFragment(new LoginFragment());
+                    placeFragment(new LoginFragment(isUserLogged));
                     break;
             }
         }
