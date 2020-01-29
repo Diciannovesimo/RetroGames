@@ -21,19 +21,21 @@
             android:theme="@style/AppTheme.SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Activities.RegistrationActivity"
-            android:theme="@style/AppTheme.StatusBar" />
+            android:theme="@style/AppTheme.StatusBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.WelcomeActivity"
-            android:theme="@style/AppTheme.StatusBar" />
+            android:theme="@style/AppTheme.StatusBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activities.LoginActivity"
-            android:theme="@style/AppTheme.StatusBar" />
+            android:theme="@style/AppTheme.StatusBar"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Tetris.MainActivityTetris"
             android:screenOrientation="portrait" />

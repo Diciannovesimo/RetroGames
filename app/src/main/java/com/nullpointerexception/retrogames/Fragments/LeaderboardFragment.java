@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -258,7 +257,6 @@ public class LeaderboardFragment extends Fragment
      */
     private void hideUserCard()
     {
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
         if(cardProfile.getVisibility() == View.VISIBLE)
             if(getActivity() != null)
                 getActivity().runOnUiThread(() ->
