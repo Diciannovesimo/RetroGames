@@ -36,8 +36,8 @@ public class CanvasView extends View implements View.OnTouchListener {
     private Bitmap background; //Immagine dello sfondo
     private Bitmap hole;    //Immagine della buca
     private int ballRadius; //Raggio della palla
-    private int holeX = 700;   //Dimensione della buca asse x
-    private int holeY = 600;    //Dimensione della buca asse y
+    private int holeX = 300;   //Posizione della buca asse x
+    private int holeY = 300;    //Posizione della buca asse y
     private Random random = new Random();
     private int score;  //punteggio
     private boolean warningVisible; //serve per rendere immuni
